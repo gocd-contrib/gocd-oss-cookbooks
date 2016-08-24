@@ -1,0 +1,3 @@
+# icewm cookbook
+
+Installs icewm

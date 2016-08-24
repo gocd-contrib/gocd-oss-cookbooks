@@ -1,0 +1,61 @@
+{
+  "name": "gauge",
+  "description": "Installs/Configures gauge",
+  "long_description": "Gauge Cookbook\n==============\n[Gauge](http://getgauge.io/) Test automation in the business language (from ThoughtWorks, Inc.)\n\nRequirements\n============\n\n## Supported Platforms\n\nThis cookbook has been tested on the following platforms:\n\n* CentOS\n* RedHat\n* Fedora\n* Amazon Linux\n* Oracle Linux\n* Debian\n* Ubuntu\n* openSUSE\n* SUSE\n\nUsage\n=====\n\nInclude the default recipe on a node's runlist to ensure that gauge is installed.\n\n\nResources/Providers\n-------------------\n\n### `gauge_plugin`\n\nThis LWRP provides an easy way to manage additional gauge plugins.\n\n#### Actions\n\n- `:install` - installs a gauge plugin\n- `:remove` - removes the gauge plugin\n\n#### Attribute Parameters\n\n- `name` - the name of the plugin\n- `version` - the version of the plugin\n- `user` - the user under which the plugin should be installed\n- `group` - the group under which the plugin should be installed\n- `password` - needed only for windows, the windows account password for `user`\n\n#### Examples\n\nInstall the gauge `java` plugin\n\n```ruby\ninclude_recipe 'gauge'\n\ngauge_plugin 'java' do\n  user  'alice'\n  group 'alice'\n  password 'p@ssw0rd' # only on windows\n  version '0.3.1'\nend\n```\n\nRemove the gauge `html-report` plugin\n\n```ruby\ngauge_plugin 'html-report' do\n  action :remove\n  user  'alice'\n  group 'alice'\nend\n```\n",
+  "maintainer": "Ketan Padegaonkar",
+  "maintainer_email": "ketanpadegaonkar@gmail.com",
+  "license": "MIT",
+  "platforms": {
+    "redhat": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "scientific": ">= 0.0.0",
+    "fedora": ">= 0.0.0",
+    "amazon": ">= 0.0.0",
+    "oracle": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "suse": ">= 0.0.0",
+    "opensuse": ">= 0.0.0",
+    "windows": ">= 0.0.0"
+  },
+  "dependencies": {
+    "windows": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "1.5.0",
+  "source_url": "",
+  "issues_url": "",
+  "privacy": false,
+  "chef_versions": [
+
+  ],
+  "ohai_versions": [
+
+  ],
+  "gems": [
+
+  ]
+}

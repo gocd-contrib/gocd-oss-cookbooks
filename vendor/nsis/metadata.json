@@ -1,0 +1,52 @@
+{
+  "name": "nsis",
+  "description": "Installs/Configures NSIS",
+  "long_description": "# NSIS Cookbook\n\n[NSIS](http://nsis.sourceforge.net/) - A scriptable win32 installer/uninstaller system.\n\n\n# Requirements\n\n## Platforms\n\n* CentOS/RedHat (may perhaps work with other RPM distros, but is not tested)\n\n## Dependent Cookbooks\n\n* yum\n\n\n# Usage\n\n## Recipes\n\n* default - Include the default recipe on a node's runlist to ensure that NSIS is installed.\n\n## Attributes\n\nThe following attributes can be used to change behavior:\n\n* ```node['nsis']['version']```\n    - Setting it to \"latest\" (default) always upgrades nsis to the latest available revision in the repository.\n    - It can be set to any available version (such as: \"2.50-15.el6\") to pin it to that revision.\n\n\n# Contributing\n\nWe encourage you to contribute to GoCD. For information on contributing to this\nproject, please see our [contributor's guide](http://www.go.cd/contribute).  A\nlot of useful information like links to user documentation, design\ndocumentation, mailing lists etc. can be found in the\n[resources](http://www.go.cd/community/resources.html) section.\n\n## License\n\n```plain\nCopyright 2016 ThoughtWorks, Inc.\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n```\n",
+  "maintainer": "Ketan Padegaonkar",
+  "maintainer_email": "ketanpadegaonkar@gmail.com",
+  "license": "Apache v2.0",
+  "platforms": {
+    "centos": ">= 0.0.0",
+    "redhat": ">= 0.0.0"
+  },
+  "dependencies": {
+    "yum": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.4.0",
+  "source_url": "",
+  "issues_url": "",
+  "privacy": false,
+  "chef_versions": [
+
+  ],
+  "ohai_versions": [
+
+  ],
+  "gems": [
+
+  ]
+}

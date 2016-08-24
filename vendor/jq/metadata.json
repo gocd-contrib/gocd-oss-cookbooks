@@ -1,0 +1,52 @@
+{
+  "name": "jq",
+  "description": "Installs/Configures jq",
+  "long_description": "",
+  "maintainer": "ThoughtWorks, Inc.",
+  "maintainer_email": "go-cd-dev@googlegroups.com",
+  "license": "MIT",
+  "platforms": {
+    "centos": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+    "yum-epel": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.1.0",
+  "source_url": "",
+  "issues_url": "",
+  "privacy": false,
+  "chef_versions": [
+
+  ],
+  "ohai_versions": [
+
+  ],
+  "gems": [
+
+  ]
+}

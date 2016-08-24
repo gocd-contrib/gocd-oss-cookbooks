@@ -1,0 +1,83 @@
+DEPENDENCIES
+  build-essential
+  gauge
+  git
+  icewm
+  java
+  jq
+  maven
+  mercurial
+  nodejs
+  nsis
+  software-collections
+  subversion
+  yum-epel
+  zip
+
+GRAPH
+  apache2 (3.2.2)
+  apt (4.0.2)
+    compat_resource (>= 12.10)
+  ark (1.2.0)
+    build-essential (>= 0.0.0)
+    seven_zip (>= 0.0.0)
+    windows (>= 0.0.0)
+  build-essential (6.0.4)
+    compat_resource (>= 12.10)
+    mingw (>= 1.1)
+    seven_zip (>= 0.0.0)
+  chef_handler (1.4.0)
+  compat_resource (12.10.7)
+  dmg (2.4.0)
+  gauge (1.5.0)
+    windows (>= 0.0.0)
+  git (4.6.0)
+    build-essential (>= 0.0.0)
+    dmg (>= 0.0.0)
+    windows (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  homebrew (2.1.0)
+    build-essential (>= 2.1.2)
+  icewm (0.1.0)
+    yum-epel (>= 0.0.0)
+  java (1.42.0)
+    apt (>= 0.0.0)
+    homebrew (>= 0.0.0)
+    windows (>= 0.0.0)
+  jq (0.1.0)
+    yum-epel (>= 0.0.0)
+  maven (2.2.0)
+    ark (>= 1.0)
+    java (>= 1.38)
+    windows (>= 1.39.1)
+  mercurial (2.0.4)
+    build-essential (>= 0.0.0)
+    python (>= 0.0.0)
+    windows (>= 0.0.0)
+  mingw (1.2.4)
+    compat_resource (>= 0.0.0)
+    seven_zip (>= 0.0.0)
+  nodejs (2.4.4)
+    apt (>= 0.0.0)
+    ark (>= 0.0.0)
+    build-essential (>= 0.0.0)
+    homebrew (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  nsis (0.4.0)
+    yum (>= 0.0.0)
+  python (1.4.6)
+    build-essential (>= 0.0.0)
+    yum-epel (>= 0.0.0)
+  seven_zip (2.0.1)
+    windows (>= 1.2.2)
+  software-collections (0.1.0)
+    yum (>= 0.0.0)
+  subversion (1.4.0)
+    apache2 (>= 2.0.0)
+    windows (~> 1.44)
+  windows (1.44.3)
+    chef_handler (>= 0.0.0)
+  yum (3.11.0)
+  yum-epel (0.7.1)
+    yum (>= 3.6.3)
+  zip (1.1.0)

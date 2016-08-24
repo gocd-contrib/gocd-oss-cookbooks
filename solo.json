@@ -1,0 +1,35 @@
+{
+  "run_list": [
+    "recipe[yum-epel]",
+    "recipe[software-collections]",
+
+    "recipe[git]",
+    "recipe[mercurial]",
+    "recipe[subversion]",
+    "recipe[perforce]",
+
+    "recipe[java]",
+    "recipe[nodejs]",
+    "recipe[ruby]",
+
+    "recipe[compression]",
+    "recipe[gocd-build-essentials]",
+    "recipe[vnc]",
+    "recipe[icewm]",
+    "recipe[go-user]",
+    "recipe[zip]",
+    "recipe[gocd-gauge-wrapper]",
+
+    "recipe[jq]",
+    "recipe[phantomjs]",
+
+    "recipe[maven]",
+    "recipe[nsis]"
+  ],
+  "java": {
+    "jdk_version": "7"
+  },
+  "perforce": {
+    "release": "09.2"
+  }
+}

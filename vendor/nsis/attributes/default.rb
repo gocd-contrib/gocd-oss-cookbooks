@@ -1,0 +1,1 @@
+default['nsis']['version'] = 'latest'
