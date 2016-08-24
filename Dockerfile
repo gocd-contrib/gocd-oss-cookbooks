@@ -12,4 +12,4 @@ RUN chef-solo
 RUN yum clean all
 
 USER go
-CMD ['/go/go-agent.sh']
+CMD '/go/go-agent'

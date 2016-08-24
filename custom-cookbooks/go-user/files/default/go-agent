@@ -1,10 +1,10 @@
-#!/usr/bin/env ruby
+#!/opt/chef/embedded/bin/ruby
 
 require 'rake'
 
 include FileUtils
 
-cd '/tmp/foo' do
+cd '/go' do
   if ENV['AUTO_REGISTER_CONTENTS'].to_s.strip.empty?
     abort     <<-HEREDOC
 [WARN] The variable AUTO_REGISTER_CONTENTS must be set, and should contain the contents of the autoregister.properties file
@@ -28,7 +28,7 @@ cd '/tmp/foo' do
   ENV.delete('AUTO_REGISTER_CONTENTS')
 
   $stderr.puts "Getting checksums of agent.jar and agent-plugins.zip"
-  sh("curl --insecure --location --fail 'https://localhost:8154/go/admin/latest-agent.status' --head --dump-header latest-agent.status")
+  sh("curl --insecure --location --fail '#{ENV['GO_SERVER_URL']}/admin/latest-agent.status' --head --dump-header latest-agent.status")
 
   agent_md5 = File.read('latest-agent.status').lines.grep(/Agent-Content-MD5/).first.split(/:/).last.strip
   agent_plugins_md5 = File.read('latest-agent.status').lines.grep(/Agent-Plugins-Content-MD5/).first.split(/:/).last.strip
@@ -37,9 +37,10 @@ cd '/tmp/foo' do
   File.open('go-agent-log4j.properties', 'w') do |f|
     f.puts <<-HEREDOC
 
+# default to INFO logging on stdout and tcp
 log4j.rootLogger=INFO, stdout, tcp
-log4j.logger.com.thoughtworks.go=INFO
 
+# write logs to stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.conversionPattern=%d{ISO8601} [%-9t] %-5p %-16c{4}:%L %x- %m%n
@@ -51,6 +52,8 @@ log4j.appender.tcp.ReconnectionDelay=10000
 log4j.appender.tcp.Application=#{ENV['HOSTNAME']}
     HEREDOC
   end
+
+  cp 'go-agent-log4j.properties', 'log4j.properties'
 
   while true do
     $stderr.puts "Downloading agent.jar and agent-plugins.zip"
