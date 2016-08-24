@@ -1,0 +1,85 @@
+#!/usr/bin/env ruby
+
+require 'rake'
+
+include FileUtils
+
+cd '/tmp/foo' do
+  if ENV['AUTO_REGISTER_CONTENTS'].to_s.strip.empty?
+    abort     <<-HEREDOC
+[WARN] The variable AUTO_REGISTER_CONTENTS must be set, and should contain the contents of the autoregister.properties file
+[WARN] See https://docs.go.cd/current/advanced_usage/agent_auto_register.html for more information.
+    HEREDOC
+  end
+
+  if ENV['GO_SERVER_URL'].to_s.strip.empty?
+    abort <<-HEREDOC
+[WARN] The variable GO_SERVER_URL must be set, and should point to the URL of the go server.
+[WARN] Example GO_SERVER_URL=https://192.168.0.100:8154/go
+    HEREDOC
+  end
+
+  rm_rf 'config'
+  mkdir_p 'config'
+  File.open('config/autoregister.properties', 'w') do |f|
+    f.puts ENV['AUTO_REGISTER_CONTENTS']
+  end
+
+  ENV.delete('AUTO_REGISTER_CONTENTS')
+
+  $stderr.puts "Getting checksums of agent.jar and agent-plugins.zip"
+  sh("curl --insecure --location --fail 'https://localhost:8154/go/admin/latest-agent.status' --head --dump-header latest-agent.status")
+
+  agent_md5 = File.read('latest-agent.status').lines.grep(/Agent-Content-MD5/).first.split(/:/).last.strip
+  agent_plugins_md5 = File.read('latest-agent.status').lines.grep(/Agent-Plugins-Content-MD5/).first.split(/:/).last.strip
+  agent_launcher_md5 = File.read('latest-agent.status').lines.grep(/Agent-Launcher-Content-MD5/).first.split(/:/).last.strip
+
+  File.open('go-agent-log4j.properties', 'w') do |f|
+    f.puts <<-HEREDOC
+
+log4j.rootLogger=INFO, stdout, tcp
+log4j.logger.com.thoughtworks.go=INFO
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.conversionPattern=%d{ISO8601} [%-9t] %-5p %-16c{4}:%L %x- %m%n
+
+# write logs to log server
+log4j.appender.tcp=org.apache.log4j.net.SocketAppender
+log4j.appender.tcp.RemoteHost=#{ENV.delete('LOGS_HOST')}
+log4j.appender.tcp.ReconnectionDelay=10000
+log4j.appender.tcp.Application=#{ENV['HOSTNAME']}
+    HEREDOC
+  end
+
+  while true do
+    $stderr.puts "Downloading agent.jar and agent-plugins.zip"
+    {
+      'agent.jar' => File.join(ENV['GO_SERVER_URL'], 'admin', 'agent'),
+      'agent-plugins.zip' => File.join(ENV['GO_SERVER_URL'], 'admin', 'agent-plugins.zip'),
+    }.each do |jar, url|
+      sh("curl --insecure --location --fail '#{url}' > #{jar}")
+    end
+
+    cmd = []
+    cmd << 'java'
+    cmd << '-Dcruise.console.publish.interval=10'
+    cmd << '-Xms128m'
+    cmd << '-Xmx256m'
+    cmd << '-Djava.security.egd=file:/dev/./urandom'
+    cmd << "-Dagent.plugins.md5=#{agent_plugins_md5}"
+    cmd << "-Dagent.binary.md5=#{agent_md5}"
+    cmd << "-Dagent.launcher.md5=#{agent_launcher_md5}"
+    cmd << "-jar"
+    cmd << "agent.jar"
+    cmd << "-serverUrl"
+    cmd << ENV['GO_SERVER_URL']
+
+    sh(cmd.join(' ')) do |ok, res|
+      $stderr.puts "The agent process exited #{res.inspect}."
+    end
+
+    $stderr.puts "The agent process will restart in a few seconds."
+    sleep 10
+  end
+end
