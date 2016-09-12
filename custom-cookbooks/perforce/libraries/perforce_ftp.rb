@@ -1,7 +1,7 @@
 
 module PerforceFtp
-  def get_ftp_path(version, executable_name)
-    'http://ftp.perforce.com/perforce/' + get_complete_p4_path(version) + "/#{executable_name}"
+  def get_ftp_path(base_url, version, executable_name)
+    base_url + get_complete_p4_path(version) + "/#{executable_name}"
   end
 
   private

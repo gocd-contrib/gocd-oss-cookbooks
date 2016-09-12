@@ -6,7 +6,7 @@ directory node['perforce']['bin_dir'] do
 end
 
 
-p4_exe_url = get_ftp_path(node['perforce']['version'], p4_exe)
+p4_exe_url = get_ftp_path(node['perforce']['base_url'], node['perforce']['version'], p4_exe)
 remote_file ::File.join(node['perforce']['bin_dir'], p4_exe) do
   source p4_exe_url
 
@@ -21,7 +21,7 @@ remote_file ::File.join(node['perforce']['bin_dir'], p4_exe) do
 
 end
 
-p4d_exe_url = get_ftp_path(node['perforce']['version'], p4d_exe)
+p4d_exe_url = get_ftp_path(node['perforce']['base_url'], node['perforce']['version'], p4d_exe)
 remote_file ::File.join(node['perforce']['bin_dir'], p4d_exe) do
   source p4d_exe_url
 

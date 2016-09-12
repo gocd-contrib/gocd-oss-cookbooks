@@ -30,6 +30,7 @@
     "jdk_version": "7"
   },
   "perforce": {
-    "release": "09.2"
+    "release": "09.2",
+    "base_url": "https://mirrors.go.cd/local/perforce/"
   }
 }
