@@ -3,14 +3,14 @@
     "recipe[yum-epel]",
     "recipe[software-collections]",
 
+    "recipe[nodejs]",
+    "recipe[ruby]",
+    "recipe[java]",
+
     "recipe[git]",
     "recipe[mercurial]",
     "recipe[subversion]",
     "recipe[perforce]",
-
-    "recipe[java]",
-    "recipe[nodejs]",
-    "recipe[ruby]",
 
     "recipe[compression]",
     "recipe[gocd-build-essentials]",
@@ -28,6 +28,15 @@
   ],
   "java": {
     "jdk_version": "7"
+  },
+  "nodejs": {
+    "install_method": "binary",
+    "version": "4.5.0",
+    "binary": {
+      "checksum": {
+        "linux_x64": "5678ad94ee35e40fc3a2c545e136a0dc946ac4c039fca5898e1ea51ecf9e7c39"
+      }
+    }
   },
   "perforce": {
     "release": "09.2",

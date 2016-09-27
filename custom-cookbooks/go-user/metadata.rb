@@ -7,3 +7,7 @@ version          '0.1.0'
 
 supports 'centos'
 supports 'ubuntu'
+
+depends 'java'
+depends 'vnc'
+depends 'icewm'

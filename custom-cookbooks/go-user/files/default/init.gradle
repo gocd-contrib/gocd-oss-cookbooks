@@ -1,0 +1,23 @@
+//
+// This file is managed by chef. Any changes will be lost.
+//
+
+buildscript {
+  repositories {
+    maven { url "https://repo-mirrors.go.cd/repositories/repo1.maven.org/maven2/"}
+    maven { url "https://repo-mirrors.go.cd/repositories/dl.bintray.com/gocd-maven-repo/generic/gocd" }
+    maven { url "https://repo-mirrors.go.cd/repositories/dl.bintray.com/gocd-google-code-mirror/generic/oauth" }
+    maven { url "https://repo-mirrors.go.cd/repositories/dl.bintray.com/gocd-google-code-mirror/generic/google-caja" }
+    maven { url "https://repo-mirrors.go.cd/repositories/rubygems-proxy.torquebox.org/releases/" }
+  }
+}
+
+allprojects {
+  repositories {
+    maven { url "https://repo-mirrors.go.cd/repositories/repo1.maven.org/maven2/"}
+    maven { url "https://repo-mirrors.go.cd/repositories/dl.bintray.com/gocd-maven-repo/generic/gocd" }
+    maven { url "https://repo-mirrors.go.cd/repositories/dl.bintray.com/gocd-google-code-mirror/generic/oauth" }
+    maven { url "https://repo-mirrors.go.cd/repositories/dl.bintray.com/gocd-google-code-mirror/generic/google-caja" }
+    maven { url "https://repo-mirrors.go.cd/repositories/rubygems-proxy.torquebox.org/releases/" }
+  }
+}
