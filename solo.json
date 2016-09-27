@@ -24,6 +24,7 @@
     "recipe[phantomjs]",
 
     "recipe[maven]",
+    "recipe[fpm]",
     "recipe[nsis]"
   ],
   "java": {
