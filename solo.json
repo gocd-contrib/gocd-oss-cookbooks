@@ -31,6 +31,6 @@
   },
   "perforce": {
     "release": "09.2",
-    "base_url": "https://mirrors.go.cd/local/perforce/"
+    "base_url": "https://old-download.go.cd/local/perforce/"
   }
 }
