@@ -1,5 +1,7 @@
 {
   "run_list": [
+    "recipe[tini]",
+
     "recipe[yum-epel]",
     "recipe[software-collections]",
 
