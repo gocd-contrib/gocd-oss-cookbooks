@@ -25,7 +25,7 @@ bash 'initialize gocd build' do
     cd /tmp
     git clone https://github.com/gocd/gocd --depth 1 --quiet
     cd gocd
-    ./gradlew clean -q prepare --max-workers > /dev/null
+    ./gradlew clean prepare --max-workers 4 > /dev/null 2>&1
     cd /
     rm -rf /tmp/gocd
   "
