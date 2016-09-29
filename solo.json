@@ -24,6 +24,7 @@
 
     "recipe[jq]",
     "recipe[phantomjs]",
+    "recipe[firefox-custom]",
 
     "recipe[maven]",
     "recipe[fpm]",
