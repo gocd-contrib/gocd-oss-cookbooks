@@ -18,7 +18,7 @@ bash 'initialize gocd build' do
   group 'go'
   environment('HOME' => '/go',
               'USER' => 'go')
-  cmd "
+  code "
     source /etc/bashrc
     source /etc/profile
 
