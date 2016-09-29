@@ -14,4 +14,4 @@ RUN yum clean all
 ENTRYPOINT ["/bin/tini", "--"]
 
 USER go
-CMD ["/bin/bash", "-lc", "vncserver :3 -geometry '1280×960' -depth 16; export DISPLAY=:3; exec /go/go-agent"]
+CMD ["/bin/bash", "-lc", "vncserver :3 -geometry '1280x960' -depth 16; export DISPLAY=:3; exec /go/go-agent"]
