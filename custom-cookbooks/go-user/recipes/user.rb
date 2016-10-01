@@ -9,6 +9,8 @@ ohai 'reload_passwd' do
   plugin 'etc'
 end
 
+package 'sudo'
+
 file '/etc/sudoers.d/go' do
   owner 'root'
   group 'root'
