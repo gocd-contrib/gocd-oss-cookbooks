@@ -1,5 +1,13 @@
 # this package is here, just to pull down any FF dependencies
-package 'firefox'
+pkgs = ['firefox']
+
+pkgs += %w(dbus dbus-x11 xauth liberation-sans-fonts liberation-serif-fonts liberation-mono-fonts mesa-dri-drivers)
+# plugins
+pkgs += %w(nspluginwrapper)
+# x11 stuff
+pkgs += %w(xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts)
+
+package pkgs
 
 zipfile                = ::File.join(Chef::Config[:file_cache_path], "firefox-#{node['firefox-custom']['version']}-bin.tar.bz2")
 firefox_executable     = ::File.join(node['firefox-custom']['install_dir'], "firefox-#{node['firefox-custom']['version']}/firefox")

@@ -14,4 +14,5 @@ RUN yum clean all
 ENTRYPOINT ["/bin/tini", "--"]
 
 USER go
-CMD ["/bin/bash", "-lc", "vncserver :3 -geometry '1280x960' -depth 16; export DISPLAY=:3; exec /go/go-agent"]
+# we need `messagebus` because otherwise FF throws a missing UUID
+CMD ["/bin/bash", "-lc", "sudo /etc/init.d/messagebus start; vncserver :3 -geometry '1280x960' -depth 16; export DISPLAY=:3; exec /go/go-agent"]
