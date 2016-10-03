@@ -1,6 +1,7 @@
 source 'https://supermarket.chef.io'
 
 cookbook 'yum-epel'
+cookbook 'yum-repoforge'
 cookbook 'software-collections'
 
 #languages
@@ -12,7 +13,6 @@ cookbook 'nodejs'
 # for SCM tests
 cookbook 'git'
 cookbook 'subversion'
-cookbook 'mercurial'
 
 cookbook 'jq'
 cookbook 'icewm'

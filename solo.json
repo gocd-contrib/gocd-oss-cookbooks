@@ -42,6 +42,20 @@
       }
     }
   },
+  "yum": {
+    "rpmforge-extras": {
+      "enabled": false,
+      "gpgkey": "http://repository.it4i.cz/mirrors/repoforge/RPM-GPG-KEY.dag.txt"
+    },
+    "rpmforge-testing": {
+      "enabled": false,
+      "gpgkey": "http://repository.it4i.cz/mirrors/repoforge/RPM-GPG-KEY.dag.txt"
+    },
+    "rpmforge": {
+      "enabled": false,
+      "gpgkey": "http://repository.it4i.cz/mirrors/repoforge/RPM-GPG-KEY.dag.txt"
+    }
+  },
   "perforce": {
     "release": "09.2",
     "base_url": "https://old-download.go.cd/local/perforce/"
