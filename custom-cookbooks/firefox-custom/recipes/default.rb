@@ -1,6 +1,8 @@
 # this package is here, just to pull down any FF dependencies
 pkgs = ['firefox']
 
+pkgs += %w(gnome-themes hicolor-icon-theme xdotool)
+
 pkgs += %w(dbus dbus-x11 xauth liberation-sans-fonts liberation-serif-fonts liberation-mono-fonts mesa-dri-drivers)
 # plugins
 pkgs += %w(nspluginwrapper)

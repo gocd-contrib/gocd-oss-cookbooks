@@ -13,7 +13,7 @@ bash 'initialize gocd build' do
     cd /tmp
     git clone https://github.com/gocd/gocd --depth 1 --quiet
     cd gocd
-    ./gradlew clean prepare --max-workers 4
+    ./gradlew prepare compileTestJava --max-workers 4
     cd /
     rm -rf /tmp/gocd
   "
