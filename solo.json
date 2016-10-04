@@ -27,6 +27,7 @@
     "recipe[firefox-custom]",
 
     "recipe[maven]",
+    "recipe[ant]",
     "recipe[fpm]",
     "recipe[nsis]"
   ],

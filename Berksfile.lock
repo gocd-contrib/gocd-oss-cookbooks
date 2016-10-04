@@ -1,4 +1,5 @@
 DEPENDENCIES
+  ant
   build-essential
   gauge
   git
@@ -15,6 +16,8 @@ DEPENDENCIES
   zip
 
 GRAPH
+  ant (1.0.3)
+    ark (>= 0.0.0)
   apache2 (3.2.2)
   apt (4.0.2)
     compat_resource (>= 12.10)
