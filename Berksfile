@@ -7,7 +7,6 @@ cookbook 'software-collections'
 #languages
 cookbook 'java'
 cookbook 'maven'
-cookbook 'ant'
 cookbook 'nsis'
 cookbook 'nodejs'
 
