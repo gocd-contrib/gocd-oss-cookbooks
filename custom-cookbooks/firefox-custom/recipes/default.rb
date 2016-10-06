@@ -1,4 +1,5 @@
 # this package is here, just to pull down any FF dependencies
+
 pkgs = ['firefox']
 
 pkgs += %w(gnome-themes hicolor-icon-theme xdotool)
@@ -11,37 +12,32 @@ pkgs += %w(xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-
 
 package pkgs
 
-zipfile                = ::File.join(Chef::Config[:file_cache_path], "firefox-#{node['firefox-custom']['version']}-bin.tar.bz2")
-firefox_executable     = ::File.join(node['firefox-custom']['install_dir'], "firefox-#{node['firefox-custom']['version']}/firefox")
-firefox_bin_executable = ::File.join(node['firefox-custom']['install_dir'], "firefox-#{node['firefox-custom']['version']}/firefox-bin")
+node['firefox-custom']['versions'].each do |ff_version|
+  firefox_url = "https://ftp.mozilla.org/pub/firefox/releases/#{ff_version}/linux-x86_64/en-US/firefox-#{ff_version}.tar.bz2"
 
-remote_file zipfile do
-  source   node['firefox-custom']['url']
-  checksum node['firefox-custom']['checksum']
-  not_if   { ::File.exist?(firefox_executable) }
-end
+  zipfile                = ::File.join(Chef::Config[:file_cache_path], "firefox-#{ff_version}-bin.tar.bz2")
+  firefox_executable     = ::File.join(node['firefox-custom']['install_dir'], "firefox-#{ff_version}/firefox")
+  firefox_bin_executable = ::File.join(node['firefox-custom']['install_dir'], "firefox-#{ff_version}/firefox-bin")
 
-directory ::File.join(node['firefox-custom']['install_dir'], "firefox-#{node['firefox-custom']['version']}") do
-  mode      '0755'
-  owner     'root'
-  group     'root'
-  recursive true
-end
+  remote_file zipfile do
+    source   firefox_url
+    not_if   { ::File.exist?(firefox_executable) }
+  end
 
-execute "install firefox v#{node['firefox-custom']['version']}" do
-  creates firefox_executable
-  command "tar -jxf #{zipfile} -C #{node['firefox-custom']['install_dir']}/firefox-#{node['firefox-custom']['version']} --strip-components=1"
-end
+  directory ::File.join(node['firefox-custom']['install_dir'], "firefox-#{ff_version}") do
+    mode      '0755'
+    owner     'root'
+    group     'root'
+    recursive true
+  end
 
-link '/usr/local/bin/firefox' do
-  to firefox_executable
-end
+  execute "install firefox v#{ff_version}" do
+    creates firefox_executable
+    command "tar -jxf #{zipfile} -C #{node['firefox-custom']['install_dir']}/firefox-#{ff_version} --strip-components=1"
+  end
 
-link '/usr/local/bin/firefox-bin' do
-  to firefox_bin_executable
-end
-
-file zipfile do
-  action :delete
-  backup false
+  file zipfile do
+    action :delete
+    backup false
+  end
 end
