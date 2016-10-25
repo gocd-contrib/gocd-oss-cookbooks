@@ -24,6 +24,20 @@ Usage
 
 Include the default recipe on a node's runlist to ensure that gauge is installed.
 
+Attributes
+----------
+
+`node['gauge']['version']` - the version of gauge that should be installed
+`node['gauge']['checksum']` — the sha256 checksum of the gauge binary that should be installed (computed using `sha256sum`)
+`node['gauge']['url']` — the URL from which gauge binary should be download from
+
+Setting up Gauge properties http://getgauge.io/documentation/user/current/advanced_readings/configuration/
+----------------
+
+`node['gauge']['properties']['runner_connection_timeout']`
+`node['gauge']['properties']['plugin_connection_timeout']`
+`node['gauge']['properties']['plugin_kill_timeout']`
+`node['gauge']['properties']['runner_request_timeout']`
 
 Resources/Providers
 -------------------
