@@ -19,3 +19,6 @@ plugin_kill_timeout = <%= node['gauge']['properties']['plugin_kill_timeout'] %>
 
 # Timeout in milliseconds for requests from the language runner.
 runner_request_timeout = <%= node['gauge']['properties']['runner_request_timeout'] %>
+
+# Allow Gauge and its plugin updates to be notified.
+check_updates = <%= node['gauge']['properties']['check_updates'] %>

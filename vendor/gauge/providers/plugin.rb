@@ -2,7 +2,7 @@ include Chef::Mixin::ShellOut
 
 action :install do
   existing_version = existing_plugin_version(new_resource)
-  resource_name = "install gauge plugin #{new_resource.name}#{(" v" << new_resource.version) if new_resource.version}"
+  resource_name = "install gauge plugin #{new_resource.name}#{(' v' << new_resource.version) if new_resource.version}"
 
   install_command = "#{gauge_executable} --install #{new_resource.name}"
 
@@ -27,8 +27,8 @@ action :install do
         user  new_resource.user
         group new_resource.group
         environment ({
-                       'HOME' => node['etc']['passwd'][new_resource.user]['dir'],
-                       'USER' => new_resource.user
+          'HOME' => node['etc']['passwd'][new_resource.user]['dir'],
+          'USER' => new_resource.user
         })
       end
     end
@@ -42,21 +42,19 @@ action :remove do
   new_resource.updated_by_last_action(removed)
 end
 
-def plugin_dir(user, plugin_name, version=nil)
+def plugin_dir(user, plugin_name, version = nil)
   plugin_dir = if platform_family?('windows')
-    "C:/Users/#{user}/AppData/Roaming/gauge/plugins/#{plugin_name}"
-  else
-    ::File.join(node['etc']['passwd'][user]['dir'], '.gauge', 'plugins', plugin_name)
+                 "C:/Users/#{user}/AppData/Roaming/gauge/plugins/#{plugin_name}"
+               else
+                 ::File.join(node['etc']['passwd'][user]['dir'], '.gauge', 'plugins', plugin_name)
   end
 
-  if version
-    plugin_dir = ::File.join(plugin_dir, version)
-  end
+  plugin_dir = ::File.join(plugin_dir, version) if version
 
   plugin_dir
 end
 
-def remove_plugin(user, plugin_name, version=nil)
+def remove_plugin(user, plugin_name, _version = nil)
   to_remove = plugin_dir(user, plugin_name)
 
   directory_resource = directory to_remove do
@@ -72,25 +70,23 @@ def gauge_executable
 end
 
 def shellout_options(new_resource)
-  opts = {user: new_resource.user, group: new_resource.group}
+  opts = { user: new_resource.user, group: new_resource.group }
 
   # windows needs a password, linux needs HOME and USER to be forced
   if platform_family?('windows')
-    opts.merge!({
-                  password:  new_resource.password,
-                  domain: new_resource.domain,
-                  env: {
-                    'APPDATA'     => "#{ENV['HOMEDRIVE']}\\Users\\#{new_resource.user}\\AppData\\Roaming",
-                    'USERPROFILE' => "#{ENV['HOMEDRIVE']}\\Users\\#{new_resource.user}",
-                    'HOMEDRIVE'   => ENV['HOMEDRIVE'],
-                    'HOMEPATH'    => "\\Users\\#{new_resource.user}"
-                  }
-    })
+    opts.merge!(password:  new_resource.password,
+                domain: new_resource.domain,
+                env: {
+                  'APPDATA' => "#{ENV['HOMEDRIVE']}\\Users\\#{new_resource.user}\\AppData\\Roaming",
+                  'USERPROFILE' => "#{ENV['HOMEDRIVE']}\\Users\\#{new_resource.user}",
+                  'HOMEDRIVE'   => ENV['HOMEDRIVE'],
+                  'HOMEPATH'    => "\\Users\\#{new_resource.user}"
+                })
   else
-    opts.merge!(env: {
-                  'HOME' => node['etc']['passwd'][new_resource.user]['dir'],
-                  'USER' => new_resource.user
-    })
+    opts[:env] = {
+      'HOME' => node['etc']['passwd'][new_resource.user]['dir'],
+      'USER' => new_resource.user
+    }
   end
 
   opts
@@ -98,9 +94,5 @@ end
 
 def existing_plugin_version(new_resource)
   version_stdout = shell_out!("#{gauge_executable} --version", shellout_options(new_resource)).stdout
-  if version_stdout =~ (/^#{new_resource.name} \((.*)\)/)
-    $1
-  else
-    nil
-  end
+  Regexp.last_match(1) if version_stdout =~ /^#{new_resource.name} \((.*)\)/
 end
