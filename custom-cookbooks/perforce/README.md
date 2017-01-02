@@ -39,7 +39,7 @@ Contributing
 
 License and Authors
 -------------------
-Authors: [GoCD team](http://go.cd)
+Authors: [GoCD team](https://gocd.io)
 
 Licensed under the MIT License
 
