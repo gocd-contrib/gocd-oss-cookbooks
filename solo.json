@@ -6,6 +6,7 @@
     "recipe[software-collections]",
 
     "recipe[nodejs]",
+    "recipe[yarn]",
     "recipe[ruby]",
     "recipe[java]",
 
@@ -33,15 +34,6 @@
   ],
   "java": {
     "jdk_version": "8"
-  },
-  "nodejs": {
-    "install_method": "binary",
-    "version": "6.9.5",
-    "binary": {
-      "checksum": {
-        "linux_x64": "d7fed1a354b29503f3e176d7fdb90b1a9de248e0ce9b3eb56cc26bb1f3d5b6b3"
-      }
-    }
   },
   "yum": {
     "rpmforge-extras": {

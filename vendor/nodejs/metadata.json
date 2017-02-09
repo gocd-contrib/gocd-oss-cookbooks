@@ -17,7 +17,7 @@
     "mac_os_x": ">= 0.0.0"
   },
   "dependencies": {
-    "yum-epel": ">= 0.0.0",
+    "yum": ">= 0.0.0",
     "build-essential": ">= 0.0.0",
     "ark": ">= 0.0.0",
     "apt": ">= 2.9.1",

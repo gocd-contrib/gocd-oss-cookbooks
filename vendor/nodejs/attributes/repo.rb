@@ -9,6 +9,8 @@ when 'node'
     default['nodejs']['key']       = '1655a0ab68576280'
   when 'rhel'
     default['nodejs']['install_repo'] = true
+
+    default['nodejs']['repo']      = 'https://rpm.nodesource.com/pub_6.x/el/$releasever/$basearch'
   end
 when 'iojs'
   case node['platform_family']
