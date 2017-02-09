@@ -36,10 +36,10 @@
   },
   "nodejs": {
     "install_method": "binary",
-    "version": "4.5.0",
+    "version": "6.9.5",
     "binary": {
       "checksum": {
-        "linux_x64": "5678ad94ee35e40fc3a2c545e136a0dc946ac4c039fca5898e1ea51ecf9e7c39"
+        "linux_x64": "d7fed1a354b29503f3e176d7fdb90b1a9de248e0ce9b3eb56cc26bb1f3d5b6b3"
       }
     }
   },
