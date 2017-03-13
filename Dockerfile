@@ -15,4 +15,4 @@ ENTRYPOINT ["/bin/tini", "--"]
 
 USER go
 # we need `messagebus` because otherwise FF throws a missing UUID
-CMD ["/bin/bash", "-lc", "sudo /etc/init.d/messagebus start; vncserver :3 -geometry '1280x960' -depth 16; export DISPLAY=:3; exec /go/go-agent"]
+CMD ["/bin/bash", "-lc", "/bootstrap.sh"]
