@@ -20,3 +20,5 @@ cookbook 'icewm'
 cookbook 'gauge'
 cookbook 'zip'
 cookbook 'build-essential'
+
+cookbook 'postgresql'

@@ -8,6 +8,7 @@ DEPENDENCIES
   maven
   nodejs
   nsis
+  postgresql
   software-collections
   subversion
   yum-epel
@@ -61,6 +62,11 @@ GRAPH
     yum-epel (>= 0.0.0)
   nsis (0.4.0)
     yum (>= 0.0.0)
+  openssl (7.0.1)
+  postgresql (5.2.0)
+    apt (>= 1.9.0)
+    build-essential (>= 2.0.0)
+    openssl (>= 4.0)
   seven_zip (2.0.1)
     windows (>= 1.2.2)
   software-collections (0.1.0)
