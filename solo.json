@@ -53,6 +53,7 @@
     }
   },
   "perforce": {
-    "release": "16.2"
+    "release": "09.2",
+    "base_url": "https://old-download.gocd.io/local/perforce/"
   }
 }
