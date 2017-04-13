@@ -32,7 +32,7 @@
     "recipe[fpm]",
     "recipe[nsis]",
 
-    "recipe[postgresql::server]"
+    "recipe[postgresql-custom]"
   ],
   "java": {
     "jdk_version": "8"
@@ -61,29 +61,6 @@
   "postgresql": {
     "enable_pgdg_yum": true,
     "version": "9.5",
-    "setup_script": "postgresql95-setup",
-    "password": {
-      "postgres": "3175bce1d3201d16594cebf9d7eb3f9d"
-    },
-    "client": {
-      "packages": ["postgresql95", "postgresql95-devel"]
-    },
-    "server": {
-      "packages": ["postgresql95-server"],
-      "service_name": "postgresql-9.5"
-    },
-    "contrib": {
-      "packages": ["postgresql95-contrib"]
-    },
-    "pg_hba": [
-      {
-        "comment": "# Allow all local users to log in using postgres user",
-        "type": "local",
-        "db": "all",
-        "user": "postgres",
-        "addr": "",
-        "method": "trust"
-      }
-    ]
+    "client": { "packages": [] }
   }
 }
