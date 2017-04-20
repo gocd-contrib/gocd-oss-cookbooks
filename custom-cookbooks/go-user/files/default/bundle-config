@@ -1,0 +1,6 @@
+# This file is managed by chef. Any changes will be lost.
+
+---
+BUNDLE_RETRY: "3"
+BUNDLE_JOBS: "4"
+BUNDLE_MIRROR__HTTPS://RUBYGEMS__ORG/: "https://maven-mirrors.gocd.io/repository/rubygems.org-proxy/"
