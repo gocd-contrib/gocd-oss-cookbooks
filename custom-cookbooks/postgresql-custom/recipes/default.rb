@@ -1,6 +1,6 @@
 include_recipe 'postgresql::yum_pgdg_postgresql'
 
-package %w(postgresql95 postgresql95-devel postgresql95-contrib postgresql95-server)
+package %w(postgresql96 postgresql96-devel postgresql96-contrib postgresql96-server)
 
 directory '/var/run/postgresql' do
   owner  'go'
