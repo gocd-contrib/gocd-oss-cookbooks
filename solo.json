@@ -57,7 +57,7 @@
   },
   "perforce": {
     "base_url": "https://s3.amazonaws.com/mirrors-archive/local/perforce",
-    "release": "15.1"
+    "version": "15.1"
   },
   "postgresql": {
     "enable_pgdg_yum": true,
