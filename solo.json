@@ -1,5 +1,6 @@
 {
   "run_list": [
+
     "recipe[tini]",
 
     "recipe[yum-epel]",
@@ -55,8 +56,8 @@
     }
   },
   "perforce": {
-    "release": "09.2",
-    "base_url": "https://old-download.gocd.io/local/perforce/"
+    "base_url": "https://s3.amazonaws.com/mirrors-archive/local/perforce",
+    "release": "15.1"
   },
   "postgresql": {
     "enable_pgdg_yum": true,
