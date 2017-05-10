@@ -56,7 +56,7 @@
     }
   },
   "perforce": {
-    "base_url": "https://s3.amazonaws.com/mirrors-archive/local/perforce",
+    "base_url": "https://s3.amazonaws.com/mirrors-archive/local/perforce/",
     "version": "15.1"
   },
   "postgresql": {
