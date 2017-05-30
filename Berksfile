@@ -22,3 +22,4 @@ cookbook 'zip'
 cookbook 'build-essential'
 
 cookbook 'postgresql'
+cookbook 'cloudcli'

@@ -32,6 +32,7 @@
     "recipe[ant]",
     "recipe[fpm]",
     "recipe[nsis]",
+    "recipe[cloudcli]",
 
     "recipe[postgresql-custom]"
   ],

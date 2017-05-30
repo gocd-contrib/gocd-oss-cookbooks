@@ -1,5 +1,6 @@
 DEPENDENCIES
   build-essential
+  cloudcli
   gauge
   git
   icewm
@@ -28,6 +29,8 @@ GRAPH
     mingw (>= 1.1)
     seven_zip (>= 0.0.0)
   chef_handler (1.4.0)
+  cloudcli (1.2.0)
+    poise-python (~> 1.6)
   compat_resource (12.10.7)
   dmg (2.4.0)
   gauge (1.8.0)
@@ -63,6 +66,15 @@ GRAPH
   nsis (0.4.0)
     yum (>= 0.0.0)
   openssl (7.0.1)
+  poise (2.8.1)
+  poise-archive (1.5.0)
+    poise (~> 2.6)
+  poise-languages (2.1.1)
+    poise (~> 2.5)
+    poise-archive (~> 1.0)
+  poise-python (1.6.0)
+    poise (~> 2.7)
+    poise-languages (~> 2.0)
   postgresql (5.2.0)
     apt (>= 1.9.0)
     build-essential (>= 2.0.0)
