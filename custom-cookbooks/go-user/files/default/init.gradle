@@ -8,18 +8,18 @@ addListener new BuildAdapter() {
     // As soon as the projects are loaded, we add our repository before any other repositories
     gradle.rootProject {
       buildscript.repositories {
-        maven { url "https://maven-mirrors.gocd.io/repository/internal" }
+        maven { url "https://maven-mirrors.gocd.org/repository/internal" }
       }
       repositories {
-        maven { url "https://maven-mirrors.gocd.io/repository/internal" }
+        maven { url "https://maven-mirrors.gocd.org/repository/internal" }
       }
     }
     gradle.rootProject.allprojects {
       buildscript.repositories {
-        maven { url "https://maven-mirrors.gocd.io/repository/internal" }
+        maven { url "https://maven-mirrors.gocd.org/repository/internal" }
       }
       repositories {
-        maven { url "https://maven-mirrors.gocd.io/repository/internal" }
+        maven { url "https://maven-mirrors.gocd.org/repository/internal" }
       }
     }
   }

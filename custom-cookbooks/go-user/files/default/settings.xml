@@ -2,8 +2,8 @@
   <mirrors>
   <mirror>
     <id>internal-repository</id>
-    <name>Maven Repository Manager running on maven-mirrors.gocd.io</name>
-    <url>https://maven-mirrors.gocd.io/repository/internal</url>
+    <name>Maven Repository Manager running on maven-mirrors.gocd.org</name>
+    <url>https://maven-mirrors.gocd.org/repository/internal</url>
     <mirrorOf>*</mirrorOf>
   </mirror>
 </mirrors>
