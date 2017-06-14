@@ -9,7 +9,8 @@ COPY solo.json /etc/chef/solo.json
 RUN rpm -ivh https://packages.chef.io/stable/el/6/chef-12.13.37-1.el6.x86_64.rpm && \
     chef-solo && \
     yum remove chef -y && \
-    yum clean all
+    yum clean all --enablerepo='*' && \
+    rm -rf /etc/chef/local-mode-cache
 
 ENTRYPOINT ["/bin/tini", "--"]
 
