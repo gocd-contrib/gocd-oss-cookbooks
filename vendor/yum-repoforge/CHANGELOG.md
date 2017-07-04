@@ -2,6 +2,16 @@
 
 This file is used to list changes made in each version of the yum-repoforge cookbook.
 
+## 2.0.1 (2016-12-22)
+
+- Depend on the latest compat_resource cookbook
+- Cookstyle fixes
+
+## 2.0.0 (2016-11-26)
+- Replace yum dependency with compat_resource
+- Use a working URL for the GPG key
+- Test with inspec
+
 ## 1.0.0 (2016-09-06)
 - Add chef_version to the metadata
 - Testing updates

@@ -1,9 +1,9 @@
 #
 # Author:: Seth Chisamore (<schisamo@chef.io>)
-# Cookbook Name:: windows
+# Cookbook:: windows
 # Library:: helper
 #
-# Copyright:: 2011-2015, Chef Software, Inc.
+# Copyright:: 2011-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ module Windows
     def cached_file(source, checksum = nil, windows_path = true)
       @installer_file_path ||= begin
 
-        if source =~ /^(file|ftp|http|https):\/\//
+        if source =~ %r{^(file|ftp|http|https):\/\/}
           uri = as_uri(source)
           cache_file_path = "#{Chef::Config[:file_cache_path]}/#{::File.basename(::URI.unescape(uri.path))}"
           Chef::Log.debug("Caching a copy of file #{source} at #{cache_file_path}")
@@ -122,6 +122,12 @@ module Windows
         installed_packages.merge!(extract_installed_packages_from_key(::Win32::Registry::HKEY_CURRENT_USER)) # rescue nil
         installed_packages
       end
+    end
+
+    # Returns an array
+    def to_array(var)
+      var = var.is_a?(Array) ? var : [var]
+      var.reject(&:nil?)
     end
 
     private

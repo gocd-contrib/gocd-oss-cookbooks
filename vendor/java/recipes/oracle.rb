@@ -1,9 +1,9 @@
 #
 # Author:: Bryan W. Berry (<bryan.berry@gmail.com>)
-# Cookbook Name:: java
+# Cookbook:: java
 # Recipe:: oracle
 #
-# Copyright 2011, Bryan w. Berry
+# Copyright:: 2011, Bryan w. Berry
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -46,8 +46,10 @@ when '8'
   bin_cmds = node['java']['jdk']['8']['bin_cmds']
 end
 
-if tarball_url =~ /example.com/
-  Chef::Application.fatal!('You must change the download link to your private repository. You can no longer download java directly from http://download.oracle.com without a web broswer')
+if tarball_url =~ /oracle.com/
+  log 'WARNING - Downloading directly from Oracle is unreliable. Change download url.' do
+    level :warn
+  end
 end
 
 include_recipe 'java::set_java_home'
@@ -69,6 +71,7 @@ java_ark 'jdk' do
   use_alt_suffix node['java']['use_alt_suffix']
   reset_alternatives node['java']['reset_alternatives']
   download_timeout node['java']['ark_download_timeout']
+  proxy node['java']['ark_proxy']
   action :install
   notifies :write, 'log[jdk-version-changed]', :immediately
 end

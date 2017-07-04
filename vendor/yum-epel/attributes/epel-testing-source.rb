@@ -1,11 +1,12 @@
 default['yum']['epel-testing-source']['repositoryid'] = 'epel-testing-source'
-default['yum']['epel-testing-source']['description'] = 'Extra Packages for $releasever - $basearch - Testing Source'
-if node['platform'] == 'amazon'
+default['yum']['epel-testing-source']['description'] = "Extra Packages for #{node['platform_version'].to_i} - $basearch - Testing Source"
+case node['platform']
+when 'amazon'
   default['yum']['epel-testing-source']['mirrorlist'] = 'http://mirrors.fedoraproject.org/mirrorlist?repo=testing-source-epel6&arch=$basearch'
-  default['yum']['epel-testing-source']['gpgkey'] = 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+  default['yum']['epel-testing-source']['gpgkey'] = 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
 else
   default['yum']['epel-testing-source']['mirrorlist'] = "http://mirrors.fedoraproject.org/mirrorlist?repo=testing-source-epel#{node['platform_version'].to_i}&arch=$basearch"
-  default['yum']['epel-testing-source']['gpgkey'] = (node['platform_version'].to_i == 5 ? 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL' : "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-#{node['platform_version'].to_i}")
+  default['yum']['epel-testing-source']['gpgkey'] = "https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-#{node['platform_version'].to_i}"
 end
 default['yum']['epel-testing-source']['failovermethod'] = 'priority'
 default['yum']['epel-testing-source']['gpgcheck'] = true

@@ -4,4 +4,4 @@ default['yum']['rpmforge-extras']['mirrorlist'] = (node['platform'] == 'amazon' 
 default['yum']['rpmforge-extras']['enabled'] = true
 default['yum']['rpmforge-extras']['managed'] = true
 default['yum']['rpmforge-extras']['gpgcheck'] = true
-default['yum']['rpmforge-extras']['gpgkey'] = 'http://apt.sw.be/RPM-GPG-KEY.dag.txt'
+default['yum']['rpmforge-extras']['gpgkey'] = 'https://repository.it4i.cz/mirrors/repoforge/RPM-GPG-KEY.dag.txt'

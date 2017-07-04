@@ -1,3 +1,4 @@
+# frozen_string_literal: false
 #
 # Cookbook:: postgresql
 # Recipe:: ruby
@@ -21,66 +22,44 @@
 begin
   require 'pg'
 rescue LoadError
-
-  if platform_family?('ubuntu', 'debian')
-    e = execute 'apt-get update' do
+  if platform_family?('debian')
+    e = apt_update 'update' do
       action :nothing
     end
-    e.run_action(:run) unless ::File.exist?('/var/lib/apt/periodic/update-success-stamp')
+    e.run_action(:update)
   end
 
   node.override['build-essential']['compile_time'] = true
   include_recipe 'build-essential'
 
-  if node['postgresql']['enable_pgdg_yum'] && platform_family?('redhat')
-    package 'ca-certificates' do
-      action :nothing
-    end.run_action(:upgrade)
-
+  if node['postgresql']['enable_pgdg_yum'] && platform_family?('rhel', 'fedora')
     include_recipe 'postgresql::yum_pgdg_postgresql'
 
     rpm_platform = node['platform']
-    rpm_platform_version = node['platform_version'].to_f.to_i.to_s
+    rpm_platform_version = node['platform_version'].to_i.to_s
     arch = node['kernel']['machine']
 
     resources("remote_file[#{Chef::Config[:file_cache_path]}/#{node['postgresql']['pgdg']['repo_rpm_url'][node['postgresql']['version']][rpm_platform][rpm_platform_version][arch]['package']}]").run_action(:create)
     resources("package[#{node['postgresql']['pgdg']['repo_rpm_url'][node['postgresql']['version']][rpm_platform][rpm_platform_version][arch]['package']}]").run_action(:install)
 
     ENV['PATH'] = "/usr/pgsql-#{node['postgresql']['version']}/bin:#{ENV['PATH']}"
-
-    node['postgresql']['client']['packages'].each do |pkg|
-      package pkg do
-        action :nothing
-      end.run_action(:install)
-    end
-
   end
 
   if node['postgresql']['enable_pgdg_apt'] && platform_family?('debian')
     include_recipe 'postgresql::apt_pgdg_postgresql'
     resources('apt_repository[apt.postgresql.org]').run_action(:add)
-
-    node['postgresql']['client']['packages'].each do |pkg|
-      package pkg do
-        action :nothing
-      end.run_action(:install)
-    end
-
   end
 
   include_recipe 'postgresql::client'
 
-  node['postgresql']['client']['packages'].each do |pkg|
-    package pkg do
-      action :nothing
-    end.run_action(:install)
-  end
+  package node['postgresql']['client']['packages'] do
+    action :nothing
+  end.run_action(:install)
 
   begin
     chef_gem 'pg' do
-      compile_time true if respond_to?(:compile_time)
-      # allow optional attribute to install specific version of pg gem
-      node['postgresql']['pg_gem']['version'] if node['postgresql']['pg_gem']['version']
+      compile_time true
+      version node['postgresql']['pg_gem']['version'] if node['postgresql']['pg_gem']['version']
     end
   rescue Gem::Installer::ExtensionBuildError, Mixlib::ShellOut::ShellCommandFailed => e
     # Are we an omnibus install?

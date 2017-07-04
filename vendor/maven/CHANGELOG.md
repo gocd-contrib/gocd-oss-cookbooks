@@ -2,6 +2,42 @@
 
 This file is used to list changes made in each version of the maven cookbook.
 
+## 5.0.1 (2017-05-28)
+
+- Close settings.xml file after writing.
+- Increase requirement to 12.6+ as we can't use action_class.class_eval at this point
+
+## 5.0.0 (2017-04-26)
+
+- Add new setup_bin attribute to allow you to skip adding mvn to the system's path
+- Test with delivery local mode
+- Convert default LWRP to a custom resource
+- Fix readme formatting
+- Use Maven 3.5.0 by default
+- Fix Chef 13 compat + why-run support in settings LWRP
+
+## 4.0.1 (2016-12-06)
+
+- Change provider so it only notifies when the artifact actaully changes
+- Add a matcher for the settings resource
+- Set the name property using the DSL
+- Properly set the repositories from attribute in the provider
+
+## 4.0.0 (2016-09-16)
+
+- Force update when downloading snapshots
+- Require Chef 12.1+
+- Testing updates
+
+## 3.0.0 (2016-09-03)
+
+- Resolve rubocop warnings
+- Add use_inline_resources to the providers
+- Testing updates
+- Use inspec and remove apt cookbook from testing
+- Require Chef 12
+- Remove the Windows cookbook dep which isn't needed in Chef 12
+
 ## v2.2.0 (2016-04-04)
 
 - Add timeout value to the maven resource

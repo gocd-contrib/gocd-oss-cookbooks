@@ -1,9 +1,9 @@
 #
-# Cookbook Name:: apt
+# Cookbook:: apt
 # Recipe:: default
 #
-# Copyright 2008-2016, Chef Software, Inc.
-# Copyright 2009, Bryan McLellan <btm@loftninjas.org>
+# Copyright:: 2008-2017, Chef Software, Inc.
+# Copyright:: 2009-2017, Bryan McLellan <btm@loftninjas.org>
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -31,11 +31,13 @@ end
 
 # If compile_time_update run apt-get update at compile time
 if node['apt']['compile_time_update'] && apt_installed?
-  apt_update('compile time').run_action(:periodic)
+  apt_update('compile time') do
+    frequency node['apt']['periodic_update_min_delay']
+  end.run_action(:periodic)
 end
 
 apt_update 'periodic' do
-  only_if { apt_installed? }
+  frequency node['apt']['periodic_update_min_delay']
 end
 
 # For other recipes to call to force an update
@@ -72,6 +74,14 @@ end
     action :create
     only_if { apt_installed? }
   end
+end
+
+template '/etc/apt/apt.conf.d/10dpkg-options' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  source '10dpkg-options.erb'
+  only_if { apt_installed? }
 end
 
 template '/etc/apt/apt.conf.d/10recommends' do

@@ -1,9 +1,9 @@
 #
-# Cookbook Name:: apache2
+# Cookbook:: apache2
 # Attributes:: default
 #
-# Copyright 2008-2013, Chef Software, Inc.
-# Copyright 2014, Viverae, Inc.
+# Copyright:: 2008-2013, Chef Software, Inc.
+# Copyright:: 2014, Viverae, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,6 +37,12 @@ default['apache']['mpm'] =
     else
       'prefork'
     end
+  when 'suse'
+    'prefork'
+  when 'rhel'
+    'prefork'
+  when 'amazon'
+    'prefork'
   else
     'prefork'
   end
@@ -54,6 +60,8 @@ default['apache']['version'] =
     else
       '2.4'
     end
+  when 'amazon'
+    node['platform_version'].to_f >= 2013.09 ? '2.4' : '2.2'
   when 'rhel'
     case node['platform']
     when 'amazon'
@@ -62,7 +70,7 @@ default['apache']['version'] =
       node['platform_version'].to_f >= 7.0 ? '2.4' : '2.2'
     end
   when 'fedora'
-    node['platform_version'].to_f >= 18 ? '2.4' : '2.2'
+    '2.4'
   when 'suse'
     case node['platform']
     when 'suse'
@@ -71,8 +79,6 @@ default['apache']['version'] =
       '2.4'
     end
   when 'freebsd'
-    node['platform_version'].to_f >= 10.0 ? '2.4' : '2.2'
-  else
     '2.4'
   end
 
@@ -124,7 +130,7 @@ when 'redhat', 'centos', 'scientific', 'fedora', 'amazon', 'oracle'
     end
   default['apache']['lib_dir'] = node['kernel']['machine'] =~ /^i[36]86$/ ? '/usr/lib/httpd' : '/usr/lib64/httpd'
   default['apache']['libexec_dir'] = "#{node['apache']['lib_dir']}/modules"
-when 'suse', 'opensuse'
+when 'suse', 'opensuse', 'opensuseleap'
   default['apache']['package']     = 'apache2'
   default['apache']['perl_pkg']    = 'perl'
   default['apache']['devel_package'] = 'httpd-devel'
@@ -209,29 +215,16 @@ when 'arch'
   default['apache']['lib_dir']     = '/usr/lib/httpd'
   default['apache']['libexec_dir'] = "#{node['apache']['lib_dir']}/modules"
 when 'freebsd'
-  if node['apache']['version'] == '2.4'
-    default['apache']['package']     = 'apache24'
-    default['apache']['dir']         = '/usr/local/etc/apache24'
-    default['apache']['conf_dir']    = '/usr/local/etc/apache24'
-    default['apache']['docroot_dir'] = '/usr/local/www/apache24/data'
-    default['apache']['cgibin_dir']  = '/usr/local/www/apache24/cgi-bin'
-    default['apache']['icondir']     = '/usr/local/www/apache24/icons'
-    default['apache']['cache_dir']   = '/var/cache/apache24'
-    default['apache']['run_dir']     = '/var/run'
-    default['apache']['lock_dir']    = '/var/run'
-    default['apache']['lib_dir']     = '/usr/local/libexec/apache24'
-  else
-    default['apache']['package']     = 'apache22'
-    default['apache']['dir']         = '/usr/local/etc/apache22'
-    default['apache']['conf_dir']    = '/usr/local/etc/apache22'
-    default['apache']['docroot_dir'] = '/usr/local/www/apache22/data'
-    default['apache']['cgibin_dir']  = '/usr/local/www/apache22/cgi-bin'
-    default['apache']['icondir']     = '/usr/local/www/apache22/icons'
-    default['apache']['cache_dir']   = '/var/cache/apache22'
-    default['apache']['run_dir']     = '/var/run'
-    default['apache']['lock_dir']    = '/var/run'
-    default['apache']['lib_dir']     = '/usr/local/libexec/apache22'
-  end
+  default['apache']['package']     = 'apache24'
+  default['apache']['dir']         = '/usr/local/etc/apache24'
+  default['apache']['conf_dir']    = '/usr/local/etc/apache24'
+  default['apache']['docroot_dir'] = '/usr/local/www/apache24/data'
+  default['apache']['cgibin_dir']  = '/usr/local/www/apache24/cgi-bin'
+  default['apache']['icondir']     = '/usr/local/www/apache24/icons'
+  default['apache']['cache_dir']   = '/var/cache/apache24'
+  default['apache']['run_dir']     = '/var/run'
+  default['apache']['lock_dir']    = '/var/run'
+  default['apache']['lib_dir']     = '/usr/local/libexec/apache24'
   default['apache']['devel_package'] = 'httpd-devel'
   default['apache']['perl_pkg']    = 'perl5'
   default['apache']['apachectl']   = '/usr/local/sbin/apachectl'
@@ -288,6 +281,7 @@ default['apache']['default_site_enabled'] = false
 default['apache']['default_site_port']    = '80'
 default['apache']['access_file_name'] = '.htaccess'
 default['apache']['default_release'] = nil
+default['apache']['log_level'] = 'warn'
 
 # Security
 default['apache']['servertokens']    = 'Prod'
@@ -347,15 +341,15 @@ default['apache']['default_modules'] = %w(
 )
 
 %w(log_config logio).each do |log_mod|
-  default['apache']['default_modules'] << log_mod if %w(rhel fedora suse arch freebsd).include?(node['platform_family'])
+  default['apache']['default_modules'] << log_mod if %w(rhel amazon fedora suse arch freebsd).include?(node['platform_family'])
 end
 
 if node['apache']['version'] == '2.4'
   %w(unixd).each do |unix_mod|
-    default['apache']['default_modules'] << unix_mod if %w(rhel fedora suse arch freebsd).include?(node['platform_family'])
+    default['apache']['default_modules'] << unix_mod if %w(rhel amazon fedora suse arch freebsd).include?(node['platform_family'])
   end
 
   unless node['platform'] == 'amazon'
-    default['apache']['default_modules'] << 'systemd' if %w(rhel fedora).include?(node['platform_family'])
+    default['apache']['default_modules'] << 'systemd' if %w(rhel fedora amazon).include?(node['platform_family'])
   end
 end

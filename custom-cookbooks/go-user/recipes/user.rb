@@ -1,6 +1,7 @@
 user 'go' do
-  home '/go'
+  home node['go-user']['home_dir']
   shell '/bin/bash'
+  manage_home true
   notifies :reload, 'ohai[reload_passwd]', :immediately
 end
 

@@ -33,6 +33,10 @@ module Ark
       end
     end
 
+    def owner
+      resource.owner || default_owner
+    end
+
     def windows?
       node_in_run_context['platform_family'] == 'windows'
     end
@@ -62,13 +66,13 @@ module Ark
 
     def generate_extension_from_url(url)
       # purge any trailing redirect
-      url =~ %r{^https?:\/\/.*(.bin|bz2|gz|jar|tbz|tgz|txz|war|xz|zip)(\/.*\/)}
+      url =~ %r{^https?:\/\/.*(.bin|bz2|gz|jar|tbz|tgz|txz|war|xz|zip|7z)(\/.*\/)}
       url.gsub!(Regexp.last_match(2), '') unless Regexp.last_match(2).nil?
-      # remove tailing query string
+      # remove trailing query string
       release_basename = ::File.basename(url.gsub(/\?.*\z/, '')).gsub(/-bin\b/, '')
       # (\?.*)? accounts for a trailing querystring
       Chef::Log.debug("DEBUG: release_basename is #{release_basename}")
-      release_basename =~ /^(.+?)\.(jar|tar\.bz2|tar\.gz|tar\.xz|tbz|tgz|txz|war|zip|tar)(\?.*)?/
+      release_basename =~ /^(.+?)\.(jar|tar\.bz2|tar\.gz|tar\.xz|tbz|tgz|txz|war|zip|tar|7z)(\?.*)?/
       Chef::Log.debug("DEBUG: file_extension is #{Regexp.last_match(2)}")
       Regexp.last_match(2)
     end
@@ -87,6 +91,21 @@ module Ark
 
     def default_version
       '1'
+    end
+
+    def default_owner
+      if windows?
+        wmi_property_from_query(:name, "select * from Win32_UserAccount where sid like 'S-1-5-21-%-500' and LocalAccount=True")
+      else
+        'root'
+      end
+    end
+
+    def wmi_property_from_query(wmi_property, wmi_query)
+      @wmi = ::WIN32OLE.connect('winmgmts://')
+      result = @wmi.ExecQuery(wmi_query)
+      return nil unless result.each.count > 0
+      result.each.next.send(wmi_property)
     end
 
     def file_cache_path

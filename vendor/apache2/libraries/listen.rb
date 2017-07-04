@@ -1,9 +1,9 @@
 # encoding: utf-8
 #
-# Cookbook Name:: apache2
+# Cookbook:: apache2
 # Libraries:: listen
 #
-# Copyright 2015, Ontario Systems, LLC
+# Copyright:: 2015, Ontario Systems, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,8 +34,9 @@ module Apache2
       return [] unless node['apache']['listen_ports'] || node['apache']['listen_addresses']
       Chef::Log.warn "node['apache']['listen_ports'] and node['apache']['listen_addresses'] are deprecated in favor of node['apache']['listen']. Please adjust your cookbooks"
 
-      node['apache']['listen_addresses'].uniq.each_with_object([]) do |address, listen|
-        node['apache']['listen_ports'].uniq.each do |port|
+      # Defaults to * for addresses or 80 / 443 for ports if not specified
+      (node['apache']['listen_addresses'] || %w(*)).uniq.each_with_object([]) do |address, listen|
+        (node['apache']['listen_ports'] || %w(80 443)).uniq.each do |port|
           listen << "#{address}:#{port}"
         end
       end

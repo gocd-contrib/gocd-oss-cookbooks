@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: apache2
+# Cookbook:: apache2
 # Recipe:: mod_fastcgi
 #
-# Copyright 2008-2013, Chef Software, Inc.
+# Copyright:: 2008-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ else
   if platform_family?('debian')
     package 'build-essential'
     package node['apache']['devel_package']
-  elsif platform_family?('rhel')
+  elsif platform_family?('rhel', 'amazon')
     %W(gcc make libtool #{node['apache']['devel_package']} apr-devel apr).each do |package|
       package package do
         action :upgrade
@@ -45,7 +45,7 @@ else
             end
   include_recipe 'apache2::default'
   bash 'compile fastcgi source' do
-    notifies :run, 'execute[generate-module-list]', :immediately if platform_family?('rhel')
+    notifies :run, 'execute[generate-module-list]', :immediately if platform_family?('rhel', 'amazon')
     not_if "test -f #{node['apache']['dir']}/mods-available/fastcgi.conf"
     cwd ::File.dirname(src_filepath)
     code <<-EOH

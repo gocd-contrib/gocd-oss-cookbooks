@@ -2,9 +2,62 @@
 
 This file is used to list changes made in each version of the ark cookbook.
 
-## [1.2](https://github.com/chef-cookbooks/ark/tree/1.2) (2016-07-03)
+## 3.1.0 (2017-05-06)
 
-[Full Changelog](https://github.com/chef-cookbooks/ark/compare/v1.1.0...1.2)
+- Ensure the dependencies get installed on Chef 13 Amazon Linux systems
+- Require Chef 12.7+ and remove action_class.class_eval usage
+
+## 3.0.0 (2017-04-05)
+
+- Rewrite of resource to custom resources.
+- Remove EOL platforms from testing.
+- Update zlib URL
+- 
+## 2.2.1 (2016-12-16)
+- Use Ohai root_group attribute to avoid trying to set the group to root on BSD/macOS.
+- Add missing accessor for owner property
+
+## 2.2.0 (2016-12-14)
+
+- Add detection of .7z file extensions
+- Fix 7zip extraction using strip_components >= 1 to properly extract to the path instead of the user's home_dir
+- Always quote the path to the 7zip and xcopy binaries as they may have spaces
+- Clarified in the readme that the install_with_make action includes the configure action
+- Fix files with very long paths failing to extract on Windows
+- Fix default owner of 'root' failing on Windows
+- Fix 7-zip extraction with long paths when strip_components is >= 1
+- Add the group attribute parameter to README
+- Fix package installation failure on macOS systems
+- Use x to extract with 7-zip, not e. Use e only for dump, which strips directories.
+
+## 2.1.0 (2016-11-15)
+
+- Move tar/7zip path logic out of attributes and into helpers to prevent failures when 7zip is not installed before the chef run starts
+- Improve platform testing in Test Kitchen
+- Recognize Windows as a supported platform in the readme
+- Introduce a new attribute for overriding the 7-zip location: node['ark']['sevenzip_binary']
+
+## 2.0.2 (2016-11-03)
+
+- Fix suse support and centos < 6
+
+## 2.1.0 (2016-11-01)
+
+- Use multipackage installs to speed up installation
+- Avoid installation package dependencies on Windows entirely
+- Remove the testing bin stubs
+
+## 2.0.0 (2016-09-15)
+
+- Add CentOS 7.2, Fedora 23, and Suse specs
+- Add centos 5, debian, and opensuse travis testing
+- Add a contributing doc
+- Fix cookstyle warnings
+- Require Chef 12.1+
+
+## [v1.2.0](https://github.com/chef-cookbooks/ark/tree/v1.2.0) (2016-07-03)
+
+[Full Changelog](https://github.com/chef-cookbooks/ark/compare/v1.1.0...v1.2.0)
 
 - Create seven_zip unpack command when strip_components is 0 [#155](https://github.com/chef-cookbooks/ark/pull/155) ([terkill](https://github.com/terkill))
 - Get 7zip path from the windows registry. [#153](https://github.com/chef-cookbooks/ark/pull/153) ([buri17](https://github.com/buri17))

@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: apache2
+# Cookbook:: apache2
 # Recipe:: mod_fcgid
 #
-# Copyright 2008-2013, Chef Software, Inc.
+# Copyright:: 2008-2013, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,22 +19,34 @@
 
 if platform_family?('debian')
   package 'libapache2-mod-fcgid'
-elsif platform_family?('rhel', 'fedora')
+elsif platform_family?('rhel', 'fedora', 'amazon')
   package 'mod_fcgid' do
     notifies :run, 'execute[generate-module-list]', :immediately
   end
 
   file "#{node['apache']['dir']}/conf.d/fcgid.conf" do
-    action :delete
-    backup false
+    content '# conf is under mods-available/fcgid.conf - apache2 cookbook\n'
+    only_if { ::Dir.exist?("#{node['apache']['dir']}/conf.d") }
   end
 
-  directory '/var/run/httpd/mod_fcgid' do
-    owner node['apache']['user']
-    group node['apache']['group']
-    recursive true
-    only_if { node['platform_version'].to_i >= 6 }
+  # CentOS 7 (and recent Fedoras) have Apache 2.4, where FCGI socket path
+  # and shared memory path is managed adequately without further involvment
+  # neccessary (subdirectory is created under /var/run/httpd).
+  #
+  # However, when the path is specified manually, that subdirectory is NOT
+  # created automatically if it doesn't already exist and Apache fails to
+  # start. Since in recent RHEL systems /var/run is on tmpfs, end result is
+  # that chef-created subdirectory disappears on shutdown, and Apache fails
+  # to start after server reboot. Best to leave out these two settings
+  # unset then.
+  if (node['platform_family'] == 'rhel') && (node['platform_version'].to_i == 6)
+    directory '/var/run/httpd/mod_fcgid' do
+      owner node['apache']['user']
+      group node['apache']['group']
+      recursive true
+    end
   end
+
 elsif platform_family?('suse')
   apache_lib_path = node['apache']['lib_dir']
 

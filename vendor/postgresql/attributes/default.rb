@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: postgresql
 # Attributes:: postgresql
@@ -111,7 +112,7 @@ when 'fedora'
   default['postgresql']['version'] = '9.5'
   default['postgresql']['setup_script'] = 'postgresql-setup'
   default['postgresql']['dir'] = '/var/lib/pgsql/data'
-  default['postgresql']['client']['packages'] = %w(postgresql-devel)
+  default['postgresql']['client']['packages'] = %w(postgresql-devel postgresql-contrib)
   default['postgresql']['server']['packages'] = %w(postgresql-server)
   default['postgresql']['contrib']['packages'] = %w(postgresql-contrib)
   default['postgresql']['server']['service_name'] = 'postgresql'
@@ -136,7 +137,7 @@ when 'redhat', 'centos', 'scientific', 'oracle'
 
   default['postgresql']['version'] = '8.4'
 
-  default['postgresql']['client']['packages'] = ['postgresql84-devel']
+  default['postgresql']['client']['packages'] = 'postgresql84-devel'
   default['postgresql']['server']['packages'] = ['postgresql84-server']
   default['postgresql']['contrib']['packages'] = ['postgresql84-contrib']
 
@@ -146,14 +147,14 @@ when 'redhat', 'centos', 'scientific', 'oracle'
   default['postgresql']['gid'] = '26'
 
   if node['platform_version'].to_f >= 6.0 && node['postgresql']['version'].to_f == 8.4
-    default['postgresql']['client']['packages'] = ['postgresql-devel']
+    default['postgresql']['client']['packages'] = 'postgresql-devel'
     default['postgresql']['server']['packages'] = ['postgresql-server']
     default['postgresql']['contrib']['packages'] = ['postgresql-contrib']
   end
 
   if node['platform_version'].to_f >= 7.0
     default['postgresql']['version'] = '9.2'
-    default['postgresql']['client']['packages'] = ['postgresql-devel']
+    default['postgresql']['client']['packages'] = 'postgresql-devel'
     default['postgresql']['server']['packages'] = ['postgresql-server']
     default['postgresql']['contrib']['packages'] = ['postgresql-contrib']
   end
@@ -161,7 +162,6 @@ when 'redhat', 'centos', 'scientific', 'oracle'
 when 'opensuse', 'opensuseleap'
 
   default['postgresql']['dir'] = '/var/lib/pgsql/data'
-
   default['postgresql']['uid'] = '26'
   default['postgresql']['gid'] = '26'
 
@@ -176,7 +176,7 @@ when 'opensuse', 'opensuseleap'
     default['postgresql']['client']['packages'] = ['postgresql93', 'postgresql93-devel']
     default['postgresql']['server']['packages'] = ['postgresql93-server']
     default['postgresql']['contrib']['packages'] = ['postgresql93-contrib']
-  when 42.1
+  else # opensuseleap
     default['postgresql']['version'] = '9.4'
     default['postgresql']['client']['packages'] = ['postgresql94', 'postgresql94-devel']
     default['postgresql']['server']['packages'] = ['postgresql94-server']

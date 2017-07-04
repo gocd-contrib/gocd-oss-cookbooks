@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: postgresql
 # Recipe:: client
@@ -15,8 +16,6 @@
 # limitations under the License.
 #
 
-include_recipe 'postgresql::ca_certificates'
-
 case node['platform_family']
 when 'debian'
   if node['postgresql']['version'].to_f > 9.3
@@ -26,12 +25,10 @@ when 'debian'
   if node['postgresql']['enable_pgdg_apt']
     include_recipe 'postgresql::apt_pgdg_postgresql'
   end
-when 'rhel'
+when 'rhel', 'fedora'
   if node['postgresql']['enable_pgdg_yum']
     include_recipe 'postgresql::yum_pgdg_postgresql'
   end
 end
 
-node['postgresql']['client']['packages'].each do |pkg|
-  package pkg
-end
+package node['postgresql']['client']['packages']

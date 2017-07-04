@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: postgresql
 # Recipe:: server
@@ -14,8 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-include_recipe 'postgresql::ca_certificates'
 
 ::Chef::Recipe.send(:include, OpenSSLCookbook::RandomPassword)
 

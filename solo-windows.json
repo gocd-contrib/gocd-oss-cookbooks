@@ -1,0 +1,75 @@
+{
+  "run_list": [
+    "recipe[chocolatey]",
+    "recipe[windows-customizations]",
+
+
+
+
+    "recipe[nodejs-windows]",
+
+    "recipe[java]",
+    "recipe[ruby]",
+
+    "recipe[git]",
+    "recipe[mercurial]",
+    "recipe[subversion]",
+    "recipe[perforce]",
+
+
+
+
+
+    "recipe[go-user]",
+
+    "recipe[gauge]",
+    "recipe[firefox]"
+  ],
+  "java": {
+    "jdk_version": "8",
+    "java_home": "C:\\Program Files\\Java\\jdk1.8.0_131",
+    "windows": {
+      "package_name": "Java SE Development Kit 8 Update 131 (64-bit)",
+      "url": "https://maven-mirrors.gocd.org/repository/s3-mirrors/local/jdk-8u131-windows-x64.exe",
+      "checksum": "8226ff89769ec3bd212305dbc83a678ad42560e65a430819917bb7965a2b89bb"
+    }
+  },
+  "perforce": {
+    "base_url": "https://s3.amazonaws.com/mirrors-archive/local/perforce/",
+    "p4_version": "15.1",
+    "p4d_version": "16.2"
+  },
+  "git": {
+    "version": "2.8.3",
+    "url": "https://github.com/git-for-windows/git/releases/download/v2.8.3.windows.1/Git-2.8.3-64-bit.exe",
+    "checksum": "5b26be59b9e289351338befe7f2f185011bc057c63515afb9d29d3744cc68e6b"
+  },
+  "hg": {
+    "version": "1.8.4",
+    "windows_url": "https://www.mercurial-scm.org/release/windows/mercurial-1.8.4-x64.msi"
+  },
+  "firefox": {
+    "version": "41.0.2"
+  },
+  "postgresql": {
+    "enable_pgdg_yum": true,
+    "version": "9.6",
+    "client": {
+      "packages": []
+    }
+  },
+  "nodejs": {
+    "version": "6.11.0"
+  },
+  "hosts_file": {
+    "custom_entries": {
+      "172.16.38.56": [
+        "mirrors.gocd.org",
+        "maven-mirrors.gocd.org"
+      ],
+      "172.16.38.45": [
+        "build.gocd.org"
+      ]
+    }
+  }
+}

@@ -2,6 +2,35 @@
 
 This file is used to list changes made in each version of the dmg cookbook.
 
+## 4.0.0 (2017-04-27)
+
+- Converted the existing LWRP to a custom resource which increases the required chef-client release to 12.5+
+- Added Test Kitchen config with private atlas boxes for 10.10 and 10.11
+- Added a test recipe to installed Tunnelblick
+- Added an Inspec test to confirm that Tunnelblick actually installs
+- Remove unused attributes and the entire attributes file
+- Add a warning if you include the default recipe on your runlist
+- Update specs to run on 10.12 and against the test recipe since dmg::default is empty and the existing spec tested nothing
+
+## 3.1.1 (2017-04-11)
+
+- Cookstyle updates
+- Test with Local Delivery and not Rake
+- Update apache2 license string
+- Remove foodcritic exclusions
+
+## 3.1.0 (2017-01-18)
+
+- Fixed pkg,mpkg installation when it was using mounted app name while it was actually mounted under different name for some applications
+- Cookstyle fixes
+
+## 3.0.0 (2016-09-06)
+
+- Add chef_version metadata
+- Run the specs against a mock of OS X
+- Testing updates
+- Require Chef 12+
+
 ## v2.4.0 (2016-04-26)
 
 - Added support for local .dmg files with the file property. See the readme for details

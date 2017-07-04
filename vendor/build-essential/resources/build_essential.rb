@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: build-essential
+# Cookbook:: build-essential
 # resource:: build_essential
 #
-# Copyright 2008-2016, Chef Software, Inc.
+# Copyright:: 2008-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ action :install do
   case node['platform_family']
   when 'debian'
     package %w( autoconf binutils-doc bison build-essential flex gettext ncurses-dev )
-  when 'fedora', 'rhel'
+  when 'amazon', 'fedora', 'rhel'
     package %w( autoconf bison flex gcc gcc-c++ gettext kernel-devel make m4 ncurses-devel patch )
 
     # Ensure GCC 4 is available on older pre-6 EL
@@ -71,6 +71,7 @@ action :install do
       package 'gnu-make'
       package 'gnu-patch'
       package 'gnu-tar'
+      package 'make'
       package 'pkg-config'
       package 'ucb'
     end
@@ -83,6 +84,7 @@ action :install do
     package 'pkg-config'
   when 'suse'
     package %w( autoconf bison flex gcc gcc-c++ kernel-default-devel make m4 )
+    package %w( gcc48 gcc48-c++ ) if node['platform_version'].to_i < 12
   when 'windows'
     include_recipe 'build-essential::_windows'
   else
@@ -97,9 +99,8 @@ end
 
 # this resource forces itself to run at compile_time
 def after_created
-  if compile_time
-    Array(action).each do |action|
-      run_action(action)
-    end
+  return unless compile_time
+  Array(action).each do |action|
+    run_action(action)
   end
 end

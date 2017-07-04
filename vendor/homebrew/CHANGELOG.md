@@ -2,6 +2,45 @@
 
 This file is used to list changes made in each version of the homebrew cookbook.
 
+## 4.2.0 (2017-05-30)
+
+- Remove class_eval and require Chef 12.7+
+
+## 4.1.0 (2017-04-25)
+
+- Extend the tap resource to use the --full option. See the readme for details and examples
+
+## 4.0.0 (2017-04-19)
+
+- Convert the tap and cask resources from LWRPs to custom resources which simplifies the code and fixes an incompatibility with Chef 13
+- Uses the homebrew_owner as the user to check if a cask has been casked
+- Fixed the location of the tap dir to properly prevent trying to install a tap twice
+- Refactor the mixin to be a simpler helper that is easier to test
+- Resolved failures in the Chefspecs on Travis
+- Test with Local Delivery and not Rake
+- Use standardize Apache 2 license string
+- Only check if homebrew exists once in the default recipe
+
+## 3.0.0 (2016-12-19)
+
+- The homebrew package provider has been removed from this cookbook. It ships with Chef 12.0+. This cookbook now requires a minimum of Chef 12.1 or later.
+- This cookbook no longer depends on build-essential as it wasn't using it directly
+- Properly define the chefspec matchers
+- Add chef_version metadata and remove OS X server which isn't an actual platform from ohai
+- Don't grab homebrew_go script if homebrew is already installed.
+- Add ability to disable sending analytics data via a new attribute
+- Move testing to a test cookbook to make it easier to expand in the future. Also convert integration tests to InSpec from ServerSpec
+
+## 2.1.2 (2016-09-07)
+
+- Allow passing custom options to brew packages
+
+## 2.1.1 (2016-09-06)
+
+- Run chefspecs as OS X
+- Update cask recipe to not create /opt/homebrew-cask and /opt/homebrew-cask/Caskroom
+- Update tests
+
 ## v2.1.0 (2016-03-29)
 
 - Make homebrew install script url configurable

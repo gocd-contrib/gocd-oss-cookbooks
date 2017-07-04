@@ -2,12 +2,14 @@ require "chef/version"
 
 if Gem::Requirement.new(">= 12.0").satisfied_by?(Gem::Version.new(Chef::VERSION))
 
-  require 'compat_resource/version'
-  require 'compat_resource/gemspec'
   require 'chef_compat/resource'
   require 'chef_compat/property'
   require 'chef_compat/mixin/properties'
 
+  resources_dir = File.expand_path("chef_compat/copied_from_chef/chef/resource", File.dirname(__FILE__))
+  providers_dir = File.expand_path("chef_compat/copied_from_chef/chef/provider", File.dirname(__FILE__))
+  Dir["#{resources_dir}/*.rb"].each {|file| require file }
+  Dir["#{providers_dir}/*.rb"].each {|file| require file }
 else
 
   class Chef

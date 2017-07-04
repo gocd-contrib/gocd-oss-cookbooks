@@ -23,3 +23,8 @@ cookbook 'build-essential'
 
 cookbook 'postgresql'
 cookbook 'cloudcli'
+
+# needed only on windows
+cookbook 'firefox'
+cookbook 'hostsfile'
+cookbook 'chocolatey'

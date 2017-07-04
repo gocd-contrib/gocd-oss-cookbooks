@@ -5,7 +5,7 @@ step is the desire to improve the project.
 
 ## Quick-contribute
 
-* Create an issue on the github [issue tracker](https://github.com/svanzoest-cookbooks/apache2/issues)
+* Create an issue on the github [issue tracker](https://github.com/sous-chefs/apache2/issues)
 * Link to your patch as a rebased git branch or pull request from the ticket
 
 We regularly review contributions and will get back to you if we have
@@ -67,15 +67,15 @@ signalling to them to research your ticket and use case and accounting
 for it.
 
 If you need help writing tests, please ask on the Chef Developer's
-mailing list, or the #chef-hacking IRC channel.
+mailing list, or https://community-slack.chef.io/
 
 ## Cookbook Contribution Do's and Don't's
 
 Please do include tests for your contribution. If you need help, ask
 on the
 [chef-dev mailing list](http://lists.chef.io/sympa/info/chef-dev)
-or the
-[#chef-hacking IRC channel](https://botbot.me/freenode/chef-hacking/).
+or the https://community-slack.chef.io/
+
 Not all platforms that a cookbook supports may be supported by Test
 Kitchen. Please provide evidence of testing your contribution if it
 isn't trivial so we don't have to duplicate effort in testing. Chef

@@ -2,6 +2,19 @@ subversion Cookbook CHANGELOG
 =============================
 This file is used to list changes made in each version of the subversion cookbook.
 
+## 2.1.1 (2016-12-31)
+
+- Loosen the Windows cookbook dependency
+
+## 2.1.0 (2016-09-16)
+
+- Require Chef 12.1+
+
+## 2.0.0 (2016-09-03)
+
+- Testing updates
+- Require Chef 12 or later
+
 ## 1.4.0 (2016-08-11)
 - Issue #9 subversion::server converges execute[create htpasswd file] on every run
 - Force chef run to include svn directory in PATH on Windows

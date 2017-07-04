@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: postgresql
 # Recipe:: server
@@ -47,9 +48,7 @@ directory node['postgresql']['config']['data_directory'] do
   mode '0700'
 end
 
-node['postgresql']['server']['packages'].each do |pg_pack|
-  package pg_pack
-end
+package node['postgresql']['server']['packages']
 
 # If using PGDG, add symlinks so that downstream commands all work
 if node['postgresql']['enable_pgdg_yum'] == true || node['postgresql']['use_pgdg_packages'] == true
@@ -85,7 +84,14 @@ end
 if node['postgresql']['server']['init_package'] == 'systemd'
 
   if node['platform_family'] == 'rhel'
-    template '/etc/systemd/system/postgresql.service' do
+
+    template_path = if node['postgresql']['use_pgdg_packages']
+                      "/etc/systemd/system/postgresql-#{node['postgresql']['version']}.service"
+                    else
+                      '/etc/systemd/system/postgresql.service'
+                    end
+
+    template template_path do
       source 'postgresql.service.erb'
       owner 'root'
       group 'root'

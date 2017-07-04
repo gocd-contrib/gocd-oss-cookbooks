@@ -1,6 +1,2 @@
-# some older linux distributions have expired certificate bundles
-# for pgdg repositories. Upgrading this package before trying to
-# install postgresql is necessary.
-package 'ca-certificates' do
-  action :upgrade
-end
+# frozen_string_literal: true
+Chef::Log.warn('The postgresql::ca-certificates recipe has been deprecated and will be removed in the next major release of the cookbook')

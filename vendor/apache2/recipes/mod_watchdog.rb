@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: apache2
+# Cookbook:: apache2
 # Recipe:: mod_watchdog
 #
-# Copyright 2016, Alexander van Zoest
+# Copyright:: 2016, Alexander van Zoest
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,5 +19,5 @@
 
 # http://httpd.apache.org/docs/2.4/mod/mod_watchdog.html
 # To allow a module to use mod_watchdog functionality be loaded before the calling module.
-# see https://github.com/svanzoest-cookbooks/apache2/issues/224
+# see https://github.com/sous-chefs/apache2/issues/224
 apache_module 'watchdog'

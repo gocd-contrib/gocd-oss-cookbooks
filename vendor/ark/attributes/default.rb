@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: ark
+# Cookbook:: ark
 # Attributes:: default
 #
 #
@@ -20,28 +20,23 @@ default['ark']['apache_mirror'] = 'http://apache.mirrors.tds.net'
 default['ark']['prefix_root'] = '/usr/local'
 default['ark']['prefix_bin'] = '/usr/local/bin'
 default['ark']['prefix_home'] = '/usr/local'
-default['ark']['tar'] = case node['platform_family']
-                        when 'windows'
-                          "\"#{::Win32::Registry::HKEY_LOCAL_MACHINE.open(
-                            'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\7zFM.exe', ::Win32::Registry::KEY_READ).read_s('Path')}\\7z.exe\""
-                        when 'mac_os_x', 'freebsd'
-                          '/usr/bin/tar'
-                        when 'smartos'
-                          '/bin/gtar'
-                        else
-                          '/bin/tar'
-                        end
 
-pkgs = %w(libtool autoconf) unless platform_family?('mac_os_x', 'windows')
-pkgs += %w(make) unless platform_family?('mac_os_x', 'windows', 'freebsd')
-pkgs += %w(unzip rsync gcc) unless platform_family?('mac_os_x', 'windows')
-pkgs += %w(autogen) unless platform_family?('rhel', 'fedora', 'mac_os_x', 'suse', 'windows')
+# the default path will be determined based on platform, but can be overridden here
+default['ark']['tar'] = nil
+
+# the default path will be determined from the registry, but you may override here
+default['ark']['sevenzip_binary'] = nil
+
+pkgs = %w(libtool autoconf) unless platform_family?('mac_os_x')
+pkgs += %w(make) unless platform_family?('mac_os_x', 'freebsd')
+pkgs += %w(unzip rsync gcc) unless platform_family?('mac_os_x')
+pkgs += %w(autogen) unless platform_family?('rhel', 'fedora', 'mac_os_x', 'suse', 'amazon')
 pkgs += %w(gtar) if platform?('freebsd') || platform?('smartos')
 pkgs += %w(gmake) if platform?('freebsd')
-if platform_family?('rhel')
-  if node['platform_version'] >= '7'
+if platform_family?('rhel', 'suse', 'amazon')
+  if node['platform_version'].to_i >= 7
     pkgs += %w(xz bzip2 tar)
-  elsif node['platform_version'] < '7'
+  elsif node['platform_version'].to_i < 7
     pkgs += %w(xz-lzma-compat bzip2 tar)
   end
 elsif platform_family?('fedora')

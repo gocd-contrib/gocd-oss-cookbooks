@@ -6,6 +6,21 @@ java cookbook
 This cookbook installs a Java JDK/JRE. It defaults to installing
 OpenJDK, but it can also install Oracle and IBM JDKs.
 
+
+Production Deployment with Oracle Java
+-----
+Oracle has been known to change the behavior of its download site frequently. It is recommended you store the archives on an artifact server or s3 bucket. You can then override the attributes in a cookbook, role, or environment:
+
+```ruby
+default['java']['jdk_version'] = '8'
+default['java']['install_flavor'] = 'oracle'
+default['java']['jdk']['7']['x86_64']['url'] = 'http://artifactory.example.com/artifacts/jdk-7u65-linux-x64.tar.gz'
+default['java']['jdk']['7']['x86_64']['checksum'] = 'The SHA-256 checksum of the JDK archive'
+default['java']['oracle']['accept_oracle_download_terms'] = true
+```
+
+NOTE: Oracle JDK 6 & 7 are unable to be automatically downloaded at this time.
+
 Usage
 -----
 
@@ -53,7 +68,7 @@ run_list(
 Requirements
 -----
 
-Chef 11+
+Chef 12+
 
 ### Platform
 
@@ -100,6 +115,11 @@ the .tar.gz.
 * `node['java']['windows']['checksum']` - The checksum for the package to
   download on Windows machines (default is nil, which does not perform
   checksum validation)
+* `node['java']['windows']['remove_obsolete']` - Indicates whether to remove
+  previous versions of the JRE (default is `false`)
+* `node['java']['windows']['aws_access_key_id']` - AWS Acess Key ID to use with AWS API calls
+* `node['java']['windows']['aws_secret_access_key']` - AWS Secret Access Key to use with AWS API calls
+* `node['java']['windows']['aws_session_token']` - AWS Session Token to use with AWS API calls
 * `node['java']['ibm']['url']` - The URL which to download the IBM
   JDK/SDK. See the `ibm` recipe section below.
 * `node['java']['ibm']['accept_ibm_download_terms']` - Indicates that
@@ -220,9 +240,9 @@ replacing `40` with the most current version in your local repo.
 
 ### windows
 
-Because as of 26 March 2012 you can no longer directly download the 
+Because as of 26 March 2012 you can no longer directly download the
 JDK msi from Oracle's website without using a special cookie. This recipe
-requires you to set `node['java']['oracle']['accept_oracle_download_terms']` 
+requires you to set `node['java']['oracle']['accept_oracle_download_terms']`
 to true or host it internally on your own http repo or s3 bucket.
 
 **IMPORTANT NOTE**
@@ -254,9 +274,9 @@ is called when a JDK version changes. This gives cookbook authors a way
 to subscribe to JDK changes and take actions (say restart a java service):
 
 ```ruby
-service 'somejavaservice'
+service 'somejavaservice' do
   action :restart
-  subscribes :write, 'log[jdk-version-changed]', :delayed
+  subscribes :restart, 'log[jdk-version-changed]', :delayed
 end
 ```
 
@@ -303,12 +323,13 @@ By default, the extracted directory is extracted to
   boolean true or false
 - `use_alt_suffix`: whether '_alt' suffix is used for not default javas
   boolean true or false
+- `proxy`: optional address and port of proxy server, for example, `proxy.example.com:1234`
 
 #### Examples
 ```ruby
 # install jdk6 from Oracle
 java_ark "jdk" do
-    url 'http://download.oracle.com/otn-pub/java/jdk/6u29-b11/jdk-6u29-linux-x64.bin'
+    url 'http://download.oracle.com/otn/java/jdk/6u29-b11/jdk-6u29-linux-x64.bin'
     checksum  'a8603fa62045ce2164b26f7c04859cd548ffe0e33bfc979d9fa73df42e3b3365'
     app_home '/usr/local/java/default'
     bin_cmds ["java", "javac"]
@@ -343,17 +364,48 @@ java_alternatives "set java alternatives" do
 end
 ```
 
-Production Deployment with Oracle Java
------
-Oracle has been known to change the behavior of its download site frequently. It is recommended you store the archives on an artifact server or s3 bucket. You can then override the attributes in a cookbook, role, or environment:
+### java_certificate
 
-```ruby
-default['java']['jdk_version'] = '7'
-default['java']['install_flavor'] = 'oracle'
-default['java']['jdk']['7']['x86_64']['url'] = 'http://artifactory.example.com/artifacts/jdk-7u65-linux-x64.tar.gz'
-default['java']['jdk']['7']['x86_64']['checksum'] = 'The SHA-256 checksum of the JDK archive'
-default['java']['oracle']['accept_oracle_download_terms'] = true
-```
+
+This cookbook contains the `java_certificate` LWRP which simplifies
+adding certificates to a java keystore. It can also populate the keystore
+with a certificate retrieved from a given SSL end-point. It defaults
+to the default keystore `<java_home>/jre/lib/security/cacerts` with the
+default password if a specific keystore is not provided.
+
+### Actions
+
+- `:install`: installs a certificate.
+- `:remove`: removes a certificate.
+
+### Attribute Parameters
+
+- `cert_alias`: The alias of the certificate in the keystore. This defaults
+  to the name of the resource.
+
+Optional parameters:
+
+- `java_home`: the java home directory. Defaults to `node['java']['java_home']`.
+
+- `keystore_path`: the keystore path. Defaults to `node['java']['java_home']/jre/lib/security/cacerts`.
+
+- `keystore_passwd`: the keystore password. Defaults to 'changeit' as specified by the Java Documentation.
+
+Only one of the following
+- `cert_data`: the certificate data to install
+- `cert_file`: path to a certificate file to install
+- `ssl_endpoint`: an SSL end-point from which to download the certificate
+
+### Examples
+
+    java_certificate "Install LDAP server certificate to Java CA keystore for Jenkins" do
+        cert_alias node['jenkins']['ldap']['url'][/\/\/(.*)/, 1]
+        ssl_endpoint node['jenkins']['ldap']['url']
+        action :install
+        notifies :restart, "runit_service[jenkins]", :delayed
+    end
+
+
 
 Recommendations for inclusion in community cookbooks
 -----
@@ -408,7 +460,7 @@ License and Author
 -----
 * Author: Eric Helgeson (<erichelgeson@gmail.com>)
 
-Copyright: 2014-2015, Agile Orbit, LLC
+Copyright: 2014-2017, Agile Orbit, LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

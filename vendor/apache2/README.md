@@ -1,10 +1,9 @@
 apache2 Cookbook
 ================
 [![Cookbook Version](https://img.shields.io/cookbook/v/apache2.svg?style=flat)](https://supermarket.chef.io/cookbooks/apache2)
-[![Build Status](https://travis-ci.org/svanzoest-cookbooks/apache2.svg?branch=master)](https://travis-ci.org/svanzoest-cookbooks/apache2)
-[![Dependency Status](http://img.shields.io/gemnasium/svanzoest-cookbooks/apache2.svg?style=flat)](https://gemnasium.com/svanzoest-cookbooks/apache2)
+[![Build Status](https://travis-ci.org/sous-chefs/apache2.svg?branch=master)](https://travis-ci.org/sous-chefs/apache2)
+[![Dependency Status](http://img.shields.io/gemnasium/sous-chefs/apache2.svg?style=flat)](https://gemnasium.com/sous-chefs/apache2)
 [![License](https://img.shields.io/badge/license-Apache_2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/svanzoest-cookbooks/apache2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 This cookbook provides a complete Debian/Ubuntu style Apache HTTPD
 configuration. Non-Debian based distributions such as Red Hat/CentOS,
@@ -73,15 +72,16 @@ performs `pacman -Sy` to keep pacman's package cache updated.
 The following platforms and versions are tested and supported using
 [test-kitchen](http://kitchen.ci/)
 
-* Ubuntu 12.04, 14.04
-* Debian 7.6
-* CentOS 6.5, 7.0
+* Ubuntu 14.04
+* Ubuntu 16.04
+* Debian 8.6
+* CentOS 7.3
+* Fedora 25
 
 The following platform families are supported in the code, and are
 assumed to work based on the successful testing on Ubuntu and CentOS.
 
 * Red Hat (rhel)
-* Fedora
 
 The following platforms are also supported in the code, have been
 tested manually but are not regularly tested under test-kitchen.
@@ -103,13 +103,13 @@ Usage
 =====
 
 Using this cookbook is relatively straightforward. It is recommended to create
-a project or organization specific [wrapper cookbook](https://www.chef.io/blog/2013/12/03/doing-wrapper-cookbooks-right/) 
+a project or organization specific [wrapper cookbook](https://www.chef.io/blog/2013/12/03/doing-wrapper-cookbooks-right/)
 and add the desired recipes to the run list of a node, or create a role. Depending on your
 environment, you may have multiple roles that use different recipes
 from this cookbook. Adjust any attributes as desired. For example, to
 create a basic role for web servers that provide both HTTP and HTTPS:
 
-``````
+```ruby
     % cat roles/webserver.rb
     name "webserver"
     description "Systems that serve HTTP and HTTPS"
@@ -122,7 +122,7 @@ create a basic role for web servers that provide both HTTP and HTTPS:
         "listen" => ["*:80", "*:443"]
       }
     )
-``````
+```
 
 For examples of using the definitions in your own recipes, see their
 respective sections below.
@@ -176,6 +176,7 @@ values are noted.
 * `node['apache']['keepaliverequests']` - Value for MaxKeepAliveRequests. Default is 100.
 * `node['apache']['keepalivetimeout']` - Value for the KeepAliveTimeout directive. Default is 5.
 * `node['apache']['sysconfig_additional_params']` - Additionals variables set in sysconfig file. Default is empty.
+* `node['apache']['log_level']` - Value for LogLevel directive. Default is 'warn'.
 * `node['apache']['default_modules']` - Array of module names. Can take "mod_FOO" or "FOO" as names, where FOO is the apache module, e.g. "`mod_status`" or "`status`".
 * `node['apache']['mpm']` - With apache.version 2.4, specifies what Multi-Processing Module to enable. Defaults to platform default, otherwise it is "prefork"
 
@@ -189,8 +190,8 @@ Prefork attributes are used for tuning the Apache HTTPD [prefork MPM](http://htt
 * `node['apache']['prefork']['startservers']` - initial number of server processes to start. Default is 16.
 * `node['apache']['prefork']['minspareservers']` - minimum number of spare server processes. Default 16.
 * `node['apache']['prefork']['maxspareservers']` - maximum number of spare server processes. Default 32.
-* `node['apache']['prefork']['serverlimit']` - upper limit on configurable server processes. Default 400.
-* `node['apache']['prefork']['maxrequestworkers']` - Maximum number of connections that will be processed simultaneously
+* `node['apache']['prefork']['serverlimit']` - upper limit on configurable server processes. Default 256.
+* `node['apache']['prefork']['maxrequestworkers']` - Maximum number of connections that will be processed simultaneously. Default 256.
 * `node['apache']['prefork']['maxconnectionsperchild']` - Maximum number of request a child process will handle. Default 10000.
 
 Worker attributes
@@ -354,7 +355,7 @@ update the ports.conf.
 * `node['apache']['mod_ssl']['cipher_suite']` - sets the SSLCiphersuite value to the specified string. The default is
   considered "sane" but you may need to change it for your local security policy, e.g. if you have PCI-DSS requirements. Additional
   commentary on the
-  [original pull request](https://github.com/svanzoest-cookbooks/apache2/pull/15#commitcomment-1605406).
+  [original pull request](https://github.com/sous-chefs/apache2/pull/15#commitcomment-1605406).
 * `node['apache']['mod_ssl']['honor_cipher_order']` - Option to prefer the server's cipher preference order. Default 'On'.
 * `node['apache']['mod_ssl']['insecure_renegotiation']` - Option to enable support for insecure renegotiation. Default 'Off'.
 * `node['apache']['mod_ssl']['strict_sni_vhost_check']` - Whether to allow non-SNI clients to access a name-based virtual host. Default 'Off'.
@@ -383,8 +384,8 @@ Definitions
 ===========
 
 The cookbook provides a few definitions. At some point in the future
-these definitions will be refactored into custom resources see 
-[issue 414](https://github.com/svanzoest-cookbooks/apache2/issues/414).
+these definitions will be refactored into custom resources see
+[issue 414](https://github.com/sous-chefs/apache2/issues/414).
 
 apache\_conf
 ------------
@@ -405,28 +406,28 @@ This definition should generally be called over `apache_config`.
 
 Place and enable the example conf:
 
-``````
+```ruby
     apache_conf 'example' do
       enable true
     end
-``````
+```
 
 Place and disable (or never enable to begin with) the example conf:
 
-``````
+```ruby
     apache_conf 'example' do
       enable false
     end
-``````
+```
 
 Place the example conf, which has a different path than the default (conf-*):
 
-``````
+```ruby
     apache_conf 'example' do
       conf_path '/random/example/path'
       enable false
     end
-``````
+```
 
 
 apache\_config (internal)
@@ -453,19 +454,19 @@ Enable or disable an Apache config file in
 
 Enable the example config.
 
-``````
+```ruby
     apache_config 'example' do
       enable true
     end
-``````
+```
 
 Disable a module:
 
-``````
+```ruby
     apache_config 'disabled_example' do
       enable false
     end
-``````
+```
 
 See the recipes directory for many more examples of `apache_config`.
 
@@ -492,27 +493,27 @@ the definition is used. See __Examples__.
 
 Enable the ssl module, which also has a configuration template in `templates/default/mods/ssl.conf.erb`.
 
-``````
+```ruby
     apache_module "ssl" do
       conf true
     end
-``````
+```
 
 Enable the php5 module, which has a different filename than the module default:
 
-``````
+```ruby
     apache_module "php5" do
       filename "libphp5.so"
     end
-``````
+```
 
 Disable a module:
 
-``````
+```ruby
     apache_module "disabled_module" do
       enable false
     end
-``````
+```
 
 See the recipes directory for many more examples of `apache_module`.
 
@@ -538,9 +539,9 @@ __apache\_module__.
 
 Create `#{node['apache']['dir']}/mods-available/alias.conf`.
 
-``````
+```ruby
     apache_mod "alias"
-``````
+```
 
 apache\_site
 ------------
@@ -599,12 +600,12 @@ The recommended way to use the `web_app` definition is in a application specific
 The following example would look for a template named 'web_app.conf.erb' in your cookbook containing
 the apache httpd directives defining the `VirtualHost` that would serve up "my_app".
 
-``````
+```ruby
     web_app "my_app" do
        template 'web_app.conf.erb'
        server_name node['my_app']['hostname']
     end
-``````
+```
 
 All parameters are passed into the template. You can use whatever you
 like. The apache2 cookbook comes with a `web_app.conf.erb` template as
@@ -620,14 +621,14 @@ an example. The following parameters are used in the template:
 
 To use the default web_app, for example:
 
-``````
+```ruby
     web_app "my_site" do
       server_name node['hostname']
       server_aliases [node['fqdn'], "my-site.example.com"]
       docroot "/srv/www/my_site"
       cookbook 'apache2'
     end
-``````
+```
 
 The parameters specified will be used as:
 
@@ -643,7 +644,7 @@ For more information about Definitions and parameters, see the
 Tests
 =====
 
-This cookbook in the [source repository](https://github.com/svanzoest-cookbooks/apache2/)
+This cookbook in the [source repository](https://github.com/sous-chefs/apache2/)
 contains chefspec, serverspec tests.
 
 Please see the CONTRIBUTING file for information on how to add tests

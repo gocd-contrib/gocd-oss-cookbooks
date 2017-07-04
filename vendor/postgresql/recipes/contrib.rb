@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: postgresql
 # Recipe:: contrib
@@ -19,9 +20,7 @@ db_name = node['postgresql']['database_name']
 
 # Install the PostgreSQL contrib package(s) from the distribution,
 # as specified by the node attributes.
-node['postgresql']['contrib']['packages'].each do |pg_pack|
-  package pg_pack
-end
+package node['postgresql']['contrib']['packages']
 
 include_recipe 'postgresql::server'
 
@@ -29,14 +28,6 @@ include_recipe 'postgresql::server'
 # node attribute node['postgresql']['database_name'].
 if node['postgresql']['contrib'].attribute?('extensions')
   node['postgresql']['contrib']['extensions'].each do |pg_ext|
-    bash "install-#{pg_ext}-extension" do
-      user 'postgres'
-      code <<-EOH
-        echo 'CREATE EXTENSION IF NOT EXISTS "#{pg_ext}";' | psql -d "#{db_name}"
-      EOH
-      action :run
-      ::Chef::Resource.send(:include, Opscode::PostgresqlHelpers)
-      not_if { extension_installed?(pg_ext) }
-    end
+    postgresql_extension "#{db_name}/#{pg_ext}"
   end
 end

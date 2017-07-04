@@ -1,4 +1,5 @@
 # yum-epel Cookbook
+
 [![Build Status](https://travis-ci.org/chef-cookbooks/yum-epel.svg?branch=master)](http://travis-ci.org/chef-cookbooks/yum-epel) [![Cookbook Version](https://img.shields.io/cookbook/v/yum-epel.svg)](https://supermarket.chef.io/cookbooks/yum-epel)
 
 Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group that creates, maintains, and manages a high quality set of additional packages for Enterprise Linux, including, but not limited to, Red Hat Enterprise Linux (RHEL), CentOS and Scientific Linux (SL), Oracle Linux (OL).
@@ -6,27 +7,39 @@ Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group
 The yum-epel cookbook takes over management of the default repositoryids shipped with epel-release. It allows attribute manipulation of `epel`, `epel-debuginfo`, `epel-source`, `epel-testing`, `epel-testing-debuginfo`, and `epel-testing-source`.
 
 ## Requirements
+
 ### Platforms
+
 - RHEL/CentOS and derivatives
 
 ### Chef
-- Chef 11+
+
+- Chef 12.1+
 
 ### Cookbooks
-- yum version 3.6.3 or higher
+
+- compat_resource
 
 ## Attributes
+
 The following attributes are set by default
 
 ```ruby
-default['yum-epel']['repositories'] = %w{epel epel-debuginfo epel-source epel-testing epel-testing-debuginfo epel-testing-source}
+default['yum-epel']['repos'] = %w(
+  epel
+  epel-debuginfo
+  epel-source
+  epel-testing
+  epel-testing-debuginfo
+  epel-testing-source
+)
 ```
 
 ```ruby
 default['yum']['epel']['repositoryid'] = 'epel'
 default['yum']['epel']['description'] = 'Extra Packages for Enterprise Linux 6 - $basearch'
 default['yum']['epel']['mirrorlist'] = 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-5&arch=$basearch'
-default['yum']['epel']['gpgkey'] = 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+default['yum']['epel']['gpgkey'] = 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
 default['yum']['epel']['failovermethod'] = 'priority'
 default['yum']['epel']['gpgcheck'] = true
 default['yum']['epel']['enabled'] = true
@@ -37,7 +50,7 @@ default['yum']['epel']['managed'] = true
 default['yum']['epel-debuginfo']['repositoryid'] = 'epel-debuginfo'
 default['yum']['epel-debuginfo']['description'] = 'Extra Packages for Enterprise Linux 6 - $basearch - Debug'
 default['yum']['epel-debuginfo']['mirrorlist'] = 'https://mirrors.fedoraproject.org/metalink?repo=epel-debug-6&arch=$basearch'
-default['yum']['epel-debuginfo']['gpgkey'] = 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+default['yum']['epel-debuginfo']['gpgkey'] = 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
 default['yum']['epel-debuginfo']['failovermethod'] = 'priority'
 default['yum']['epel-debuginfo']['gpgcheck'] = true
 default['yum']['epel-debuginfo']['enabled'] = false
@@ -48,7 +61,7 @@ default['yum']['epel-debuginfo']['managed'] = false
 default['yum']['epel-source']['repositoryid'] = 'epel-source'
 default['yum']['epel-source']['description'] = 'Extra Packages for Enterprise Linux 6 - $basearch - Source'
 default['yum']['epel-source']['mirrorlist'] = 'http://mirrors.fedoraproject.org/mirrorlist?repo=epel-source-6&arch=$basearch'
-default['yum']['epel-source']['gpgkey'] = 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+default['yum']['epel-source']['gpgkey'] = 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
 default['yum']['epel-source']['failovermethod'] = 'priority'
 default['yum']['epel-source']['gpgcheck'] = true
 default['yum']['epel-source']['enabled'] = false
@@ -59,7 +72,7 @@ default['yum']['epel-source']['managed'] = false
 default['yum']['epel-testing']['repositoryid'] = 'epel-testing'
 default['yum']['epel-testing']['description'] = 'Extra Packages for Enterprise Linux 6 - Testing - $basearch'
 default['yum']['epel-testing']['mirrorlist'] = 'https://mirrors.fedoraproject.org/metalink?repo=testing-epel6&arch=$basearch'
-default['yum']['epel-testing']['gpgkey'] = 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6r'
+default['yum']['epel-testing']['gpgkey'] = 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6r'
 default['yum']['epel-testing']['failovermethod'] = 'priority'
 default['yum']['epel-testing']['gpgcheck'] = true
 default['yum']['epel-testing']['enabled'] = false
@@ -70,7 +83,7 @@ default['yum']['epel-testing']['managed'] = false
 default['yum']['epel-testing-debuginfo']['repositoryid'] = 'epel-testing-debuginfo'
 default['yum']['epel-testing-debuginfo']['description'] = 'Extra Packages for Enterprise Linux 6 - Testing - $basearch Debug'
 default['yum']['epel-testing-debuginfo']['mirrorlist'] = 'https://mirrors.fedoraproject.org/metalink?repo=testing-debug-epel6&arch=$basearch'
-default['yum']['epel-testing-debuginfo']['gpgkey'] = 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+default['yum']['epel-testing-debuginfo']['gpgkey'] = 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
 default['yum']['epel-testing-debuginfo']['failovermethod'] = 'priority'
 default['yum']['epel-testing-debuginfo']['gpgcheck'] = true
 default['yum']['epel-testing-debuginfo']['enabled'] = false
@@ -81,7 +94,7 @@ default['yum']['epel-testing-debuginfo']['managed'] = false
 default['yum']['epel-testing-source']['repositoryid'] = 'epel-testing-source'
 default['yum']['epel-testing-source']['description'] = 'Extra Packages for Enterprise Linux 6 - Testing - $basearch Source'
 default['yum']['epel-testing-source']['mirrorlist'] = 'https://mirrors.fedoraproject.org/metalink?repo=testing-source-epel6&arch=$basearch'
-default['yum']['epel-testing-source']['gpgkey'] = 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
+default['yum']['epel-testing-source']['gpgkey'] = 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6'
 default['yum']['epel-testing-source']['failovermethod'] = 'priority'
 default['yum']['epel-testing-source']['gpgcheck'] = true
 default['yum']['epel-testing-source']['enabled'] = false
@@ -99,7 +112,7 @@ default['yum']['epel-testing-source']['managed'] = false
     description 'Extra Packages for Enterprise Linux 5 - $basearch'
     enabled true
     gpgcheck true
-    gpgkey 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL'
+    gpgkey 'http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL'
   end
 ```
 
@@ -139,6 +152,7 @@ include_recipe 'yum-epel'
 ```
 
 ## License & Authors
+
 **Author:** Cookbook Engineering Team ([cookbooks@chef.io](mailto:cookbooks@chef.io))
 
 **Copyright:** 2011-2016, Chef Software, Inc.

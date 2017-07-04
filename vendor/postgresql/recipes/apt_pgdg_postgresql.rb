@@ -1,5 +1,4 @@
-include_recipe 'apt::default'
-
+# frozen_string_literal: true
 apt_repository 'apt.postgresql.org' do
   uri 'http://apt.postgresql.org/pub/repos/apt'
   distribution "#{node['postgresql']['pgdg']['release_apt_codename']}-pgdg"

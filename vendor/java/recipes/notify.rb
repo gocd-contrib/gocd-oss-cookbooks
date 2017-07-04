@@ -1,9 +1,9 @@
 #
 # Author:: Eric Helgeson (<eric@agileorbit.com>)
-# Cookbook Name:: java
+# Cookbook:: java
 # Recipe:: notify
 #
-# Copyright 2008-2015, Chef Software, Inc.
+# Copyright:: 2008-2015, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-# This resource is avalible for other recipes to subscribe to so they can be notified
+# This resource is avalible for other recipes to subscribe to so they can be
 # notified of a JDK change. For example you want to restart a service to take
 # advantage of the new JDK
 # eg:

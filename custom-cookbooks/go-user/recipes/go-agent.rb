@@ -1,12 +1,16 @@
-remote_file '/go/go-agent' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-  source 'https://github.com/ketan/gocd-golang-bootstrapper/releases/download/1.0/go-bootstrapper-1.0.linux.amd64'
+remote_file node['go-user']['go-agent']['bootstrapper_path'] do
+  unless node['platform_family'] == 'windows'
+    owner 'root'
+    group 'root'
+    mode '0755'
+  end
+  source node['go-user']['go-agent']['bootstrapper_url']
 end
 
-cookbook_file '/bootstrap.sh' do
-  owner 'root'
-  group 'root'
-  mode '0755'
+cookbook_file node['go-user']['go-agent']['bootstrapper_script'] do
+  unless node['platform_family'] == 'windows'
+    owner 'root'
+    group 'root'
+    mode '0755'
+  end
 end

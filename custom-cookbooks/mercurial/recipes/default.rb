@@ -1,7 +1,7 @@
-include_recipe 'yum-repoforge'
-
 case node['platform_family']
 when 'rhel'
+  include_recipe 'yum-repoforge'
+
   package 'mercurial' do
     action [:install, :upgrade]
     options '--enablerepo=rpmforge-extras'

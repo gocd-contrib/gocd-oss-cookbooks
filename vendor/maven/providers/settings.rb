@@ -1,9 +1,9 @@
 #
-# Cookbook Name:: maven
+# Cookbook:: maven
 # Provider:: settings
 #
 # Author:: Pushkar Raste <praste@bloomberg.net, pushkar.raste@gmail.com>
-# Copyright 2014-2015, Bloomberg Inc.
+# Copyright:: 2014-2016, Bloomberg Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +19,14 @@
 
 # This is inspired by settings provider in https://github.com/RiotGames/nexus-cookbook
 
+use_inline_resources
+
+def whyrun_supported?
+  true
+end
+
 def load_current_resource
-  @current_resource = Chef::Resource::MavenSettings.new(new_resource.path)
+  @current_resource = new_resource.class.new(new_resource.name)
   @current_resource.value new_resource.value
 
   @current_resource
@@ -28,8 +34,9 @@ end
 
 action :update do
   unless path_value_equals?(@current_resource.value)
-    update_maven_settings
-    new_resource.updated_by_last_action(true)
+    converge_by('update maven settings') do
+      update_maven_settings
+    end
   end
 end
 
@@ -61,5 +68,7 @@ def update_maven_settings
   # Empty tags end up with attribute xsi:nil="true", let's clean that up
   xmlized_updated_settings.gsub!(/xsi:nil="true"/, '')
 
-  ::File.open("#{node['maven']['m2_home']}/conf/settings.xml", 'w+').write(xmlized_updated_settings)
+  file = ::File.open("#{node['maven']['m2_home']}/conf/settings.xml", 'w+')
+  file.write(xmlized_updated_settings)
+  file.close()
 end

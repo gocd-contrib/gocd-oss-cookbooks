@@ -1,11 +1,11 @@
 #
-# Cookbook Name:: maven
+# Cookbook:: maven
 # Library:: default
 #
-# Author:: Seth Chisamore (<schisamo@opscode.com>)
+# Author:: Seth Chisamore (<schisamo@chef.io>)
 # Author:: Bryan W. Berry (<bryan.berry@gmail.com>)
 #
-# Copyright:: 2010-2015, Opscode, Inc.
+# Copyright:: 2010-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,5 +27,9 @@ if defined?(ChefSpec)
 
   def put_maven_artifact(resource)
     ChefSpec::Matchers::ResourceMatcher.new(:maven, :put, resource)
+  end
+
+  def update_maven_settings(resource)
+    ChefSpec::Matchers::ResourceMatcher.new(:maven, :update, resource)
   end
 end

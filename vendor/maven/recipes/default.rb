@@ -1,11 +1,11 @@
 #
-# Cookbook Name:: maven
+# Cookbook:: maven
 # Recipe:: default
 #
 # Author:: Seth Chisamore (<schisamo@chef.io>)
 # Author:: Bryan W. Berry (<bryan.berry@gmail.com>)
 #
-# Copyright:: 2010-2015, Chef Software, Inc.
+# Copyright:: 2010-2016, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ ark 'maven' do
   checksum node['maven']['checksum']
   home_dir node['maven']['m2_home']
   win_install_dir node['maven']['m2_home']
-  append_env_path true
+  append_env_path node['maven']['setup_bin']
 end
 
 # setup environmental variables
