@@ -26,7 +26,7 @@ else
   './gradlew'
 end
 
-gradle_command = "#{gradle_executable} --version --no-daemon"
+gradle_command = "#{gradle_executable} prepare compileTestJava --max-workers 4 --no-daemon --no-build-cache"
 unless node['platform_family'] == 'windows'
   gradle_command = ['bash', '-lc', gradle_command]
 end
