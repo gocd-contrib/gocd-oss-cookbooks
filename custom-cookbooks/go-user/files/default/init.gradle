@@ -24,3 +24,16 @@ addListener new BuildAdapter() {
     }
   }
 }
+
+// if a build cache url is specified, use it
+if (GradleVersion.current() >= GradleVersion.version("3.5") && System.getenv().containsKey('GOCD_BUILD_CACHE_URL')) {
+  gradle.settingsEvaluated { settings ->
+    settings.buildCache {
+
+      remote(org.gradle.caching.http.HttpBuildCache) {
+        url = System.getenv().get('GOCD_BUILD_CACHE_URL')
+        push = true
+      }
+    }
+  }
+}
