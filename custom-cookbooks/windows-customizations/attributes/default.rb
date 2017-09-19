@@ -1,0 +1,1 @@
+node.default['hosts_file']['custom_entries'] = {}
