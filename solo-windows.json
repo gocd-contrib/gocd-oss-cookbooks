@@ -57,16 +57,5 @@
   },
   "nodejs": {
     "version": "6.11.0"
-  },
-  "hosts_file": {
-    "custom_entries": {
-      "172.16.38.56": [
-        "mirrors.gocd.org",
-        "maven-mirrors.gocd.org"
-      ],
-      "172.16.38.45": [
-        "build.gocd.org"
-      ]
-    }
   }
 }
