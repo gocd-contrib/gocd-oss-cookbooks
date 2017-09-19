@@ -24,11 +24,11 @@
   ],
   "java": {
     "jdk_version": "8",
-    "java_home": "C:\\Program Files\\Java\\jdk1.8.0_131",
+    "java_home": "C:\\Program Files\\Java\\jdk1.8.0_144",
     "windows": {
-      "package_name": "Java SE Development Kit 8 Update 131 (64-bit)",
-      "url": "https://maven-mirrors.gocd.org/repository/s3-mirrors/local/jdk-8u131-windows-x64.exe",
-      "checksum": "8226ff89769ec3bd212305dbc83a678ad42560e65a430819917bb7965a2b89bb"
+      "package_name": "Java SE Development Kit 8 Update 144 (64-bit)",
+      "url": "https://s3.amazonaws.com/mirrors-archive/local/jdk-8u144-windows-x64.exe",
+      "checksum": "be9f6e920f817757ce1913c9c3f0a5d63046c720f37a95e4a14450a179f48a18"
     }
   },
   "perforce": {
