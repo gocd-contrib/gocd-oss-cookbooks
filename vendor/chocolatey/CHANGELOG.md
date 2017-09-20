@@ -1,8 +1,12 @@
 # Changelog for Chocolatey cookbook
 
+### v1.2.1 (2017-08-20)
+
+* Explicitly use the double-dash long option names for `--source` and `--installargs`
+
 ### v1.2.0 (2017-05-04)
 
-* Thange the default `['chocolatey']['upgrade']` attribute value to `false`
+* Change the default `['chocolatey']['upgrade']` attribute value to `false`. Preventing chocolatey from reinstalling every chef run
 
 ### v1.1.1 (2017-04-22)
 

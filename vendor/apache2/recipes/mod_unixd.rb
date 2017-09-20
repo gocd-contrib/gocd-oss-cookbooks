@@ -18,8 +18,8 @@
 #
 
 # on platform_family debian this module is staticly linked into apache2
-if node['apache']['version'] == '2.4' && !platform_family?('debian')
-  apache_module 'unixd'
+if platform_family?('debian')
+  Chef::Log.info("Skipping mod_unixd recipe as unixd module is statically linked into apache2 on #{node['platform']}")
 else
-  log 'Ignoring apache2::mod_unixd. Not available until apache 2.4'
+  apache_module 'unixd'
 end

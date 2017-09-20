@@ -8,4 +8,3 @@ version          '0.1.6'
 
 depends 'windows'
 depends 'git'
-depends 'hostsfile'

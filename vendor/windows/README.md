@@ -15,9 +15,13 @@ Provides a set of Windows-specific resources to aid in the creation of cookbooks
 
 ### Chef
 
-- Chef 12.6+
+- Chef 12.7+
 
 ## Resources
+
+### Deprecated Resources Note
+
+As of chef-client 13.0+ and 13.4+ windows_task and windows_path are now included in the Chef client. windows_task underwent a full rewrite that greatly improved the functionality and idempotency of the resource. We highly recommend using these new resources by upgrading to Chef 13.4 or later. If you are running these more recent Chef releases the windows_task and windows_path resources within chef-client will take precedence over those in this cookbook. In September 2018 we will release a new major version of this cookbook that removes windows_task and windows_path.
 
 ### windows_auto_run
 
@@ -163,9 +167,9 @@ get-windowsfeature
 #### Properties
 
 - `feature_name` - name of the feature/role(s) to install. The same feature may have different names depending on the provider used (ie DHCPServer vs DHCP; DNS-Server-Full-Role vs DNS).
-- `all` - Boolean. Optional. Default: false. DISM and Powershell providers only. Forces all dependencies to be installed.
+- `all` - Boolean. Optional. Default: false. DISM and PowerShell providers only. For DISM this is the equivalent of specifying the /All switch to dism.exe, forcing all parent dependencies to be installed. With the PowerShell install method, the `-InstallAllSubFeatures` switch is applied. Note that these two methods may not produce identical results.
 - `source` - String. Optional. DISM provider only. Uses local repository for feature install.
-- `install_method` - Symbol. Optional. **REPLACEMENT FOR THE PREVIOUS PROVIDER OPTION** If not supplied, Chef will determine which method to use (in the order of `:windows_feature_dism`, `:windows_feature_servercmd`, `:windows_feature_powershell`)
+- `install_method` - Symbol. Optional. If not supplied, Chef will determine which method to use (in the order of `:windows_feature_dism`, `:windows_feature_servercmd`, `:windows_feature_powershell`)
 
 #### Examples
 
@@ -275,7 +279,6 @@ end
 
 Configures the file that provides virtual memory for applications requiring more memory than available RAM or that are paged out to free up memory in use.
 
-
 #### Actions
 
 - `:set` - configures the default pagefile, creating if it doesn't exist.
@@ -283,7 +286,7 @@ Configures the file that provides virtual memory for applications requiring more
 
 #### Properties
 
-- `name` - the path to the pagefile,  String, name_property: true
+- `name` - the path to the pagefile, String, name_property: true
 - `system_managed` - configures whether the system manages the pagefile size. [true, false]
 - `automatic_managed` - all of the settings are managed by the system. If this is set to true, other settings will be ignored. [true, false], default: false
 - `initial_size` - initial size of the pagefile in bytes. Integer
@@ -441,16 +444,16 @@ Creates and modifies Windows shortcuts.
 
 #### Examples
 
-Add a shortcut all users desktop:
+Add a shortcut to all users desktop:
 
 ```ruby
 require 'win32ole'
 all_users_desktop = WIN32OLE.new("WScript.Shell").SpecialFolders("AllUsersDesktop")
 
 windows_shortcut "#{all_users_desktop}/Notepad.lnk" do
-  target "C:\\WINDOWS\\notepad.exe"
+  target "C:\\Windows\\notepad.exe"
   description "Launch Notepad"
-  iconlocation "C:\\windows\\notepad.exe, 0"
+  iconlocation "C:\\Windows\\notepad.exe,0"
 end
 ```
 

@@ -1,6 +1,6 @@
 case node['platform_family']
 when 'debian'
-  include_recipe 'apt'
+  package 'apt-transport-https'
 
   apt_repository 'node.js' do
     uri node['nodejs']['repo']
@@ -9,20 +9,10 @@ when 'debian'
     keyserver node['nodejs']['keyserver']
     key node['nodejs']['key']
   end
-when 'rhel'
-  cookbook_file "/etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL" do
-    owner 'root'
-    group 'root'
-    mode '0644'
-  end
+when 'rhel', 'amazon'
   yum_repository 'node.js' do
-    description "Node.js Packages for Enterprise Linux $releasever - $basearch"
-    baseurl     "https://rpm.nodesource.com/pub_6.x/el/$releasever/$basearch"
-    enabled     true
-    gpgcheck    true
-    gpgkey      'file:///etc/pki/rpm-gpg/NODESOURCE-GPG-SIGNING-KEY-EL'
-    action      :create
+    description 'nodesource.com nodejs repository'
+    baseurl node['nodejs']['repo']
+    gpgkey node['nodejs']['key']
   end
-
-  # include_recipe 'yum-epel'
 end

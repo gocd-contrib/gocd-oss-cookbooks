@@ -2,6 +2,16 @@
 
 This file is used to list changes made in each version of the apt cookbook.
 
+## 6.1.4 (2017-08-31)
+
+- Restores ignore_failure true on compile time update.
+- name_property vs name_attribute in the resource
+
+## 6.1.3 (2017-07-19)
+
+- Fixed typo in readme
+- Fixed config namespace in the 10dpkg-options file 
+
 ## 6.1.2 (2017-06-20)
 
 - restore backwards compatability by respecting node['apt']['periodic_update_min_delay']

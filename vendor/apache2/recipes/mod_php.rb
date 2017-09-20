@@ -1,8 +1,8 @@
 #
 # Cookbook:: apache2
-# Recipe:: mod_php5
+# Recipe:: mod_php
 #
-# Copyright:: 2008-2013, Chef Software, Inc.
+# Copyright:: 2008-2017, Chef Software, Inc.
 # Copyright:: 2014, OneHealth Solutions, Inc.
 # Copyright:: 2014, Viverae, Inc.
 #
@@ -38,33 +38,15 @@ when 'arch'
   package 'php-apache' do
     notifies :run, 'execute[generate-module-list]', :immediately
   end
-when 'rhel', 'amazon'
-  package 'which'
-  package 'php package' do
-    if node['platform_version'].to_f < 6.0 && node['platform'] != 'amazon'
-      package_name 'php53'
-    else
-      package_name 'php'
-    end
-    notifies :run, 'execute[generate-module-list]', :immediately
-    not_if 'which php'
-  end
-when 'fedora'
-  package 'which'
-  package 'php' do
-    notifies :run, 'execute[generate-module-list]', :immediately
-    not_if 'which php'
-  end
-when 'suse'
+when 'rhel', 'amazon', 'fedora', 'suse'
   package 'which'
   package 'php' do
     notifies :run, 'execute[generate-module-list]', :immediately
     not_if 'which php'
   end
 when 'freebsd'
-  %w(php56 libxml2).each do |pkg|
-    package pkg
-  end
+  package %w(php56 libxml2)
+
   %w(mod_php56).each do |pkg|
     package pkg do
       options '-I'

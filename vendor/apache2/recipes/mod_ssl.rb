@@ -2,7 +2,7 @@
 # Cookbook:: apache2
 # Recipe:: mod_ssl
 #
-# Copyright:: 2008-2013, Chef Software, Inc.
+# Copyright:: 2008-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,6 +45,4 @@ apache_module 'ssl' do
   conf true
 end
 
-if node['apache']['version'] == '2.4'
-  include_recipe 'apache2::mod_socache_shmcb'
-end
+include_recipe 'apache2::mod_socache_shmcb'

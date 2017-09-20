@@ -5,7 +5,6 @@ DEPENDENCIES
   firefox
   gauge
   git
-  hostsfile
   icewm
   java
   jq
@@ -20,8 +19,8 @@ DEPENDENCIES
   zip
 
 GRAPH
-  apache2 (3.3.0)
-  apt (6.1.2)
+  apache2 (5.0.1)
+  apt (6.1.4)
   ark (3.1.0)
     build-essential (>= 0.0.0)
     seven_zip (>= 0.0.0)
@@ -29,7 +28,7 @@ GRAPH
   build-essential (8.0.3)
     mingw (>= 1.1)
     seven_zip (>= 0.0.0)
-  chocolatey (1.2.0)
+  chocolatey (1.2.1)
     windows (>= 1.38)
   cloudcli (1.2.0)
     poise-python (~> 1.6)
@@ -39,12 +38,10 @@ GRAPH
     dmg (>= 2.2)
   gauge (1.8.0)
     windows (>= 0.0.0)
-  git (6.1.0)
+  git (8.0.0)
     build-essential (>= 0.0.0)
-    dmg (>= 0.0.0)
-    yum-epel (>= 0.0.0)
+    homebrew (>= 0.0.0)
   homebrew (4.2.0)
-  hostsfile (2.4.5)
   icewm (0.1.0)
     yum-epel (>= 0.0.0)
   java (1.50.0)
@@ -58,15 +55,13 @@ GRAPH
     java (>= 1.38)
   mingw (2.0.1)
     seven_zip (>= 0.0.0)
-  nodejs (3.0.0)
-    apt (>= 2.9.1)
-    ark (>= 0.0.0)
+  nodejs (4.0.0)
+    ark (>= 2.0.2)
     build-essential (>= 0.0.0)
-    homebrew (>= 0.0.0)
-    yum-epel (>= 0.0.0)
+    compat_resource (>= 12.16)
   nsis (0.4.0)
     yum (>= 0.0.0)
-  ohai (5.1.0)
+  ohai (5.2.0)
   openssl (7.1.0)
   poise (2.8.1)
   poise-archive (1.5.0)
@@ -85,10 +80,10 @@ GRAPH
     windows (>= 1.2.2)
   software-collections (0.1.0)
     yum (>= 0.0.0)
-  subversion (2.1.1)
+  subversion (2.1.2)
     apache2 (>= 2.0.0)
     windows (>= 1.44)
-  windows (3.1.1)
+  windows (3.1.3)
     ohai (>= 4.0.0)
   yum (5.0.1)
   yum-epel (2.1.2)

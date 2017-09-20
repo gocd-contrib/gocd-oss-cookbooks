@@ -6,7 +6,7 @@ COPY . /chef-cookbooks
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 RUN Write-Host 'Downloading chef'; \
-    Invoke-WebRequest "https://packages.chef.io/files/stable/chef/13.2.20/windows/2016/chef-client-13.2.20-1-x64.msi" -Outfile chef-client.msi -UseBasicParsing; \
+    Invoke-WebRequest "https://packages.chef.io/files/stable/chef/13.4.24/windows/2016/chef-client-13.4.24-1-x64.msi" -Outfile chef-client.msi -UseBasicParsing; \
     Write-Host 'Installing chef'; \
     Start-Process cmd.exe -ArgumentList '/c c:\windows\system32\msiexec.exe /i chef-client.msi /quiet /norestart ADDLOCAL="ChefClientFeature"' -NoNewWindow -Wait; \
     Remove-Item chef-client.msi; \

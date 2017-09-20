@@ -2,7 +2,7 @@
 # Cookbook:: subversion
 # Recipe:: default
 #
-# Copyright:: 2008-2016, Chef Software, Inc.
+# Copyright:: 2008-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ else
 
   extra_packages = value_for_platform_family(
     'debian' => %w(subversion-tools libsvn-perl),
-    %w(rhel fedora suse) => %w(subversion-devel subversion-perl)
+    %w(rhel fedora suse amazon) => %w(subversion-devel subversion-perl)
   )
 
   extra_packages.each do |name|

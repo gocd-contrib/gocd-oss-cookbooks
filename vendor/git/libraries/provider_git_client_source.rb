@@ -5,27 +5,15 @@ class Chef
         include Chef::DSL::IncludeRecipe
 
         action :install do
-          return "#{node['platform']} is not supported by the #{cookbook_name}::#{recipe_name} recipe" unless platform_family?('rhel', 'suse', 'fedora', 'debian')
+          raise "#{node['platform']} is not supported by the git_client source resource" unless platform_family?('rhel', 'suse', 'fedora', 'debian', 'amazon')
 
           include_recipe 'build-essential'
-          include_recipe 'yum-epel' if node['platform_family'] == 'rhel' && node['platform_version'].to_i == 5
 
           # move this to attributes.
           case node['platform_family']
-          when 'fedora'
-            pkgs = %w(tar openssl-devel libcurl-devel expat-devel perl-ExtUtils-MakeMaker)
-          when 'rhel'
-            case node['platform_version'].to_i
-            when 5
-              pkgs = %w(tar expat-devel gettext-devel curl-devel openssl-devel zlib-devel)
-              pkgs += %w( pcre-devel ) if new_resource.source_use_pcre
-            when 6, 7
-              pkgs = %w(tar expat-devel gettext-devel libcurl-devel openssl-devel perl-ExtUtils-MakeMaker zlib-devel)
-              pkgs += %w( pcre-devel ) if new_resource.source_use_pcre
-            else
-              pkgs = %w(expat-devel gettext-devel curl-devel openssl-devel perl-ExtUtils-MakeMaker zlib-devel) if node['platform'] == 'amazon'
-              pkgs += %w( pcre-devel ) if new_resource.source_use_pcre
-            end
+          when 'rhel', 'fedora', 'amazon'
+            pkgs = %w(tar expat-devel gettext-devel libcurl-devel openssl-devel perl-ExtUtils-MakeMaker zlib-devel)
+            pkgs += %w( pcre-devel ) if new_resource.source_use_pcre
           when 'debian'
             pkgs = %w(libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev)
             pkgs += %w( libpcre3-dev ) if new_resource.source_use_pcre

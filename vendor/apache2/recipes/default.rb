@@ -2,7 +2,7 @@
 # Cookbook:: apache2
 # Recipe:: default
 #
-# Copyright:: 2008-2013, Chef Software, Inc.
+# Copyright:: 2008-2017, Chef Software, Inc.
 # Copyright:: 2014-2015, Alexander van Zoest
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,7 +84,6 @@ unless platform_family?('debian')
 end
 
 if platform_family?('freebsd')
-
   directory "#{node['apache']['dir']}/Includes" do
     action :delete
     recursive true
@@ -97,7 +96,6 @@ if platform_family?('freebsd')
 end
 
 if platform_family?('suse')
-
   directory "#{node['apache']['dir']}/vhosts.d" do
     action :delete
     recursive true
@@ -133,7 +131,7 @@ directory node['apache']['lock_dir'] do
 end
 
 # Set the preferred execution binary - prefork or worker
-template "/etc/sysconfig/#{node['apache']['package']}" do
+template "/etc/sysconfig/#{node['apache']['service_name']}" do
   source 'etc-sysconfig-httpd.erb'
   owner 'root'
   group node['apache']['root_group']
@@ -178,12 +176,10 @@ apache_conf 'ports' do
   conf_path node['apache']['dir']
 end
 
-if node['apache']['version'] == '2.4'
-  if node['apache']['mpm_support'].include?(node['apache']['mpm'])
-    include_recipe "apache2::mpm_#{node['apache']['mpm']}"
-  else
-    Chef::Log.warn("apache2: #{node['apache']['mpm']} module is not supported and must be handled separately!")
-  end
+if node['apache']['mpm_support'].include?(node['apache']['mpm'])
+  include_recipe "apache2::mpm_#{node['apache']['mpm']}"
+else
+  Chef::Log.warn("apache2: #{node['apache']['mpm']} module is not supported and must be handled separately!")
 end
 
 node['apache']['default_modules'].each do |mod|
@@ -202,17 +198,6 @@ apache_service_name = node['apache']['service_name']
 
 service 'apache2' do
   service_name apache_service_name
-  case node['platform_family']
-  when 'rhel'
-    if node['platform_version'].to_f < 7.0 && node['apache']['version'] != '2.4'
-      restart_command "/sbin/service #{apache_service_name} restart && sleep 1"
-      reload_command "/sbin/service #{apache_service_name} graceful && sleep 1"
-    end
-  when 'debian'
-    provider Chef::Provider::Service::Debian
-  when 'arch'
-    service_name apache_service_name
-  end
   supports [:start, :restart, :reload, :status]
   action [:enable, :start]
   only_if "#{node['apache']['binary']} -t", environment: { 'APACHE_LOG_DIR' => node['apache']['log_dir'] }, timeout: 10

@@ -10,20 +10,19 @@ Installs node.js/io.js and manages npm
 
 - Debian/Ubuntu
 - RHEL/CentOS/Scientific/Amazon/Oracle
+- openSUSE
 
 Note: Source installs require GCC 4.8+, which is not included on older distro releases
 
 ### Chef
 
-- Chef 11+
+- Chef 12.1+
 
 ### Cookbooks
 
-- yum-epel
 - build-essential
 - ark
-- apt
-- homebrew
+- compat_resource
 
 ## Usage
 
@@ -32,17 +31,6 @@ Include the nodejs recipe to install node on your system based on the default in
 ```chef
 include_recipe "nodejs"
 ```
-
-### Engine
-
-You can select different engine by setting `node['nodejs']['engine']`
-
-```
-node['nodejs']['engine'] => 'node' # default
-node['nodejs']['engine'] => 'iojs'
-```
-
-You can also use recipes `nodejs::nodejs` or `nodejs::iojs`.
 
 ### Install methods
 
@@ -57,7 +45,7 @@ include_recipe "nodejs"
 include_recipe "nodejs::nodejs_from_package"
 ```
 
-Note that only apt (Ubuntu, Debian) appears to have up to date packages available. Centos, RHEL, etc are non-functional (try `nodejs_from_binary` for those).
+By default this will setup deb/rpm repositories from nodesource.com, which include up to date NodeJS packages. If you prefer to use distro provided package you can disable this behavior by setting `node['nodejs']['install_repo']` to `false`.
 
 #### Binary
 
@@ -66,12 +54,19 @@ Install node from official prebuilt binaries:
 ```chef
 node['nodejs']['install_method'] = 'binary'
 include_recipe "nodejs"
+
 # Or
 include_recipe "nodejs::nodejs_from_binary"
+
 # Or set a specific version of nodejs to be installed
 node.default['nodejs']['install_method'] = 'binary'
 node.default['nodejs']['version'] = '5.9.0'
 node.default['nodejs']['binary']['checksum'] = '99c4136cf61761fac5ac57f80544140a3793b63e00a65d4a0e528c9db328bf40'
+
+# Or fetch the binary from your own location
+node.default['nodejs']['install_method'] = 'binary'
+node.default['nodejs']['binary']['url'] = 'https://s3.amazonaws.com/my-bucket/node-v7.8.0-linux-x64.tar.gz'
+node.default['nodejs']['binary']['checksum'] = '0bd86f2a39221b532172c7d1acb57f0b0cba88c7b82ea74ba9d1208b9f6f9697'
 ```
 
 #### Source
@@ -186,7 +181,7 @@ Or add packages via attributes (which accept the same attributes as the LWRP abo
 
 **Author:** Marius Ducea (marius@promethost.com) **Author:** Nathan L Smith (nlloyds@gmail.com) **Author:** Guilhem Lettron (guilhem@lettron.fr) **Author:** Barthelemy Vessemont (bvessemont@gmail.com)
 
-**Copyright:** 2008-2016, Chef Software, Inc.
+**Copyright:** 2008-2017, Chef Software, Inc.
 
 ```
 Licensed under the Apache License, Version 2.0 (the "License");
