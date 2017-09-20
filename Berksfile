@@ -9,6 +9,7 @@ cookbook 'java'
 cookbook 'maven'
 cookbook 'nsis'
 cookbook 'nodejs'
+cookbook 'yarn'
 
 # for SCM tests
 cookbook 'git'
