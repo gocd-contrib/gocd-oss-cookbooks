@@ -4,6 +4,7 @@ if node['platform_family'] != 'windows'
 end
 
 include_recipe 'go-user::go-agent'
+include_recipe 'go-user::git'
 include_recipe 'go-user::gradle'
 include_recipe 'go-user::maven'
 include_recipe 'go-user::rubygems'
