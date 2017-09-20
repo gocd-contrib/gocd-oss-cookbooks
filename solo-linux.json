@@ -40,7 +40,7 @@
     "jdk_version": "8"
   },
   "tini": {
-    "version": "v0.14.0"
+    "version": "v0.16.1"
   },
   "yum": {
     "rpmforge-extras": {
