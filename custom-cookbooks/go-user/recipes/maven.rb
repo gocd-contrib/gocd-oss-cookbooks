@@ -6,8 +6,8 @@ directory ::File.join(node['go-user']['home_dir'], '.m2') do
   end
 end
 
-cookbook_file ::File.join(node['go-user']['home_dir'], '.m2', 'settings') do
-  source 'bundle-config'
+cookbook_file ::File.join(node['go-user']['home_dir'], '.m2', 'settings.xml') do
+  source 'settings.xml'
   unless node['platform_family'] == 'windows'
     owner 'go'
     group 'go'
