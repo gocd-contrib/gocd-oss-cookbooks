@@ -1,3 +1,4 @@
 include_recipe 'yum-epel'
 
-packages %w(python-devel python-pip)
+# this is needed for awscli
+package %w(python-devel python-pip)
