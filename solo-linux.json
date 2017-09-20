@@ -65,5 +65,15 @@
     "enable_pgdg_yum": true,
     "version": "9.6",
     "client": { "packages": [] }
+  },
+  "poise-python": {
+    "options": {
+      "wheel_version": false
+    }
+  },
+  "cloudcli": {
+    "aws": {
+      "virtualenv": "/opt/local/awscli"
+    }
   }
 }
