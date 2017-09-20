@@ -3,7 +3,7 @@ MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
 COPY . /chef-cookbooks
 
-RUN rpm -ivh https://packages.chef.io/files/stable/chef/13.4.24/el/7/chef-13.4.24-1.el7.x86_64.rpm && \
+RUN rpm -ivh https://packages.chef.io/files/stable/chef/13.4.24/el/6/chef-13.4.24-1.el6.x86_64.rpm && \
     chef-solo -c /chef-cookbooks/solo.rb && \
     yum remove chef -y && \
     yum clean all --enablerepo='*' && \
