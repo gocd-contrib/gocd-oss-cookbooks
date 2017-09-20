@@ -16,7 +16,6 @@ RUN Write-Host 'Downloading chef'; \
     Write-Host 'Finished executing chef. Cleaning up...' ; \
     Start-Process "cmd.exe" -ArgumentList '/c rmdir /s /q c:\chef c:\chef-cookbooks' -NoNewWindow -Wait
 
-COPY hostsfile.windows C:\Windows\System32\drivers\etc\hosts
+COPY hostsfile.windows 'C:\Windows\System32\drivers\etc\hosts'
 
-USER go
 CMD ["/bootstrap.cmd"]
