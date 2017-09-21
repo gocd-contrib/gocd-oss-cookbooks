@@ -1,4 +1,4 @@
-default['go-user']['go-agent']['bootstrapper-version'] = '1.0'
+default['go-user']['go-agent']['bootstrapper-version'] = '1.1'
 
 if node['platform_family'] == 'windows'
   default['go-user']['go-agent']['bootstrapper_path'] = ::File.join(node['go-user']['home_dir'], 'go-agent.exe')
