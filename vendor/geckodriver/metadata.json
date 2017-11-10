@@ -1,0 +1,59 @@
+{
+  "name": "geckodriver",
+  "description": "Selenium WebDriver for Mozilla Firefox",
+  "long_description": "# Selenium GeckoDriver Cookbook\n\n[![Cookbook Version](http://img.shields.io/cookbook/v/geckodriver.svg?style=flat-square)][cookbook]\n[![linux](http://img.shields.io/travis/dhoer/chef-geckodriver/master.svg?label=linux&style=flat-square)][linux]\n[![osx](http://img.shields.io/travis/dhoer/chef-geckodriver/macosx.svg?label=macosx&style=flat-square)][osx]\n[![win](https://img.shields.io/appveyor/ci/dhoer/chef-geckodriver/master.svg?label=windows&style=flat-square)][win]\n\n[cookbook]: https://supermarket.chef.io/cookbooks/geckodriver\n[linux]: https://travis-ci.org/dhoer/chef-geckodriver\n[osx]: https://travis-ci.org/dhoer/chef-geckodriver/branches\n[win]: https://ci.appveyor.com/project/dhoer/chef-geckodriver\n\nInstalls geckodriver (https://github.com/mozilla/geckodriver). \n\n## Requirements\n\n- Chef 12.6+\n- Mozilla Firefox (this cookbook does not install Mozilla Firefox)\n\n### Platforms\n\n- CentOS, RedHat, Fedora\n- Mac OS X\n- Ubuntu, Debian\n- Windows\n\n## Usage\n\nInclude recipe in a run list or cookbook to install geckodriver.\n\n### Attributes\n\n- `node['geckodriver']['version']` - Version to download. \n- `node['geckodriver']['url']` -  URL download prefix. \n- `node['geckodriver']['windows']['home']` - Home directory for windows. \n- `node['geckodriver']['unix']['home']` - Home directory for both linux and macosx. \n\n#### Install selenium node with firefox capability\n\n```ruby\ninclude_recipe 'mozilla_firefox'\ninclude_recipe 'geckodriver'\n\nnode.override['selenium']['node']['capabilities'] = [\n  {\n    browserName: 'firefox',\n    maxInstances: 1,\n    version: firefox_version,\n    seleniumProtocol: 'WebDriver'\n  }\n]\n\ninclude_recipe 'selenium::node'\n```\n\n## Getting Help\n\n- Ask specific questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/marionette+driver).\n- Report bugs and discuss potential features in [Github issues](https://github.com/dhoer/chef-geckodriver/issues).\n\n## Contributing\n\nPlease refer to [CONTRIBUTING](https://github.com/dhoer/chef-geckodriver/graphs/contributors).\n\n## License\n\nMIT - see the accompanying [LICENSE](https://github.com/dhoer/chef-geckodriver/blob/master/LICENSE.md) file for \ndetails.\n",
+  "maintainer": "Dennis Hoer",
+  "maintainer_email": "dennis.hoer@gmail.com",
+  "license": "MIT",
+  "platforms": {
+    "centos": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "fedora": ">= 0.0.0",
+    "mac_os_x": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "windows": ">= 0.0.0"
+  },
+  "dependencies": {
+
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.1.3",
+  "source_url": "https://github.com/dhoer/chef-geckodriver",
+  "issues_url": "https://github.com/dhoer/chef-geckodriver/issues",
+  "privacy": false,
+  "chef_versions": [
+    [
+      ">= 12.6"
+    ]
+  ],
+  "ohai_versions": [
+
+  ],
+  "gems": [
+
+  ]
+}

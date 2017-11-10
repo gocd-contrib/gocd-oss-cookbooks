@@ -5,7 +5,7 @@ pkgs = ['firefox']
 if platform_family?('rhel', 'suse', 'amazon')
   if node['platform_version'].to_i >= 7
     pkgs += %w(gtk3)
-  if node['platform_version'].to_i < 7
+  elsif node['platform_version'].to_i < 7
     pkgs += %w(gnome-themes xdotool nspluginwrapper)
   end
 end

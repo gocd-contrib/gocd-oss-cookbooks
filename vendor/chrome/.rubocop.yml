@@ -1,0 +1,16 @@
+AllCops:
+  Exclude:
+    - '.kitchen/**/*'
+    - 'vendor/**/*'
+
+LineLength:
+  Max: 120
+
+BlockLength:
+  Max: 60
+
+Style/TrailingCommaInLiteral:
+  Enabled: false
+
+Layout/EndOfLine:
+  Enabled: false

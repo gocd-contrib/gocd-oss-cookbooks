@@ -1,0 +1,44 @@
+{
+  "name": "chrome",
+  "description": "Installs/Configures Chrome browser",
+  "long_description": "# Chrome Cookbook\n\n[![Cookbook Version](http://img.shields.io/cookbook/v/chrome.svg?style=flat-square)][cookbook]\n[![linux](http://img.shields.io/travis/dhoer/chef-chrome/master.svg?label=linux&style=flat-square)][linux]\n[![osx](http://img.shields.io/travis/dhoer/chef-chrome/macosx.svg?label=macosx&style=flat-square)][osx]\n[![win](https://img.shields.io/appveyor/ci/dhoer/chef-chrome/master.svg?label=windows&style=flat-square)][win]\n\n[cookbook]: https://supermarket.chef.io/cookbooks/chrome\n[linux]: https://travis-ci.org/dhoer/chef-chrome\n[osx]: https://travis-ci.org/dhoer/chef-chrome/branches\n[win]: https://ci.appveyor.com/project/dhoer/chef-chrome\n\nThis cookbook installs Google Chrome browser (https://www.google.com/chrome/) at compile time, provides \n`chrome_version` library method  to retrieve Chrome version installed, and provides `master_preferences` resource\nto set user preferences.\n\n## Requirements\n\nChef 12.14+\n\n### Platforms\n\n- CentOS 7, Red Hat 7, Fedora\n- Debian, Ubuntu\n- Mac OS X\n- Windows\n\n### Cookbooks\n\n- dmg - used by Mac OS X platform \n\n## Usage\n\nInclude the default recipe on a node's runlist to ensure that Chrome is installed.\n\nA library method `chrome_version` is provided to retrieve the Chrome version installed:\n\n```ruby\nv = chrome_version\n```\n\n**Tip:** use `allow_any_instance_of` to stub chrome_version method when testing with rspec:\n\n```ruby\nallow_any_instance_of(Chef::Recipe).to receive(:chrome_version).and_return('50.0.0.0')\n```\n\n### Attributes\n\n- `node['chrome']['track']` - For Linux only. Install stable, beta or unstable version. Default is `stable`.\n- `node['chrome']['32bit_only']` - For windows only. Install 32-bit browser on 64-bit machines. Default is `false`.\n\nSee [attributes/default.rb](https://github.com/dhoer/chef-chrome/blob/master/attributes/default.rb) for complete list \nof attributes.\n\n## master_preferences \n\nManage a template resource that configures master_preferences.\n[More info...](http://www.chromium.org/administrators/configuring-other-preferences)\n\n### Resource Attributes\n\n- `name` - The name of the preference. \n- `cookbook` - Optional. Cookbook where the source template is. If this is not defined, Chef will use the named \ntemplate in the cookbook where the definition is used.\n- `template` - Default `master_preferences.json.erb`, source template file.\n- `parameters` - Additional parameters, see Examples.\n\n### Examples\n    \nThe following example would look for a template named `master_preferences.json.erb` in your cookbook:\n\n```ruby\nchrome 'custom_preferences' do\n  parameters(\n    homepage: 'https://mycompany.com/'\n    import_bookmarks_from_file: 'c:\\path\\to\\bookmarks.html'\n  )\n  action :master_preferences\nend\n```\n\nThe Chrome cookbook comes with a `master_preferences.json.erb` template as an example. The following parameter is used \nin the template:\n\n- `homepage` - Sets the homepage URL.\n\nTo use the default template preferences, set cookbook to `chrome`, for example:\n\n```ruby\nchrome 'set_user_preferences' do\n  cookbook 'chrome'\n  parameters(\n    homepage: 'https://www.getchef.com'\n  )\n  action :master_preferences\nend\n```\n    \nThe parameter specified will be used as:\n\n- `@parameters[:homepage]`\n\nIn the template, when you write your own, the `@` is significant.\n\n## ChefSpec Matchers\n\nThis cookbook includes custom [ChefSpec](https://github.com/sethvargo/chefspec) matchers you can use to test your \nown cookbooks.\n\nExample Matcher Usage\n\n```ruby\nexpect(chef_run).to master_preferences_chrome('name').with(\n  parameters: {\n    homepage: 'https://www.getchef.com'\n  }\n)\n```\n      \nCookbook Matchers\n\n- master_preferences_chrome(name)\n\n## Getting Help\n\n- Ask specific questions on [Stack Overflow](http://stackoverflow.com/search?q=google-chrome+chef).\n- Report bugs and discuss potential features in [Github issues](https://github.com/dhoer/chef-chrome/issues).\n\n## Contributing\n\nPlease refer to [CONTRIBUTING](https://github.com/dhoer/chef-chrome/blob/master/CONTRIBUTING.md).\n\n## License\n\nMIT - see the accompanying [LICENSE](https://github.com/dhoer/chef-chrome/blob/master/LICENSE.md) file for details.\n",
+  "maintainer": "Dennis Hoer",
+  "maintainer_email": "dennis.hoer@gmail.com",
+  "license": "MIT",
+  "platforms": {
+    "centos": ">= 7.0",
+    "redhat": ">= 7.0",
+    "fedora": ">= 0.0.0",
+    "mac_os_x": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "windows": ">= 0.0.0"
+  },
+  "dependencies": {
+    "dmg": ">= 3.0"
+  },
+  "providing": {
+
+  },
+  "attributes": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "4.0.2",
+  "source_url": "https://github.com/dhoer/chef-chrome",
+  "issues_url": "https://github.com/dhoer/chef-chrome/issues",
+  "privacy": false,
+  "chef_versions": [
+    [
+      ">= 12.14"
+    ]
+  ],
+  "ohai_versions": [
+
+  ],
+  "gems": [
+
+  ]
+}
