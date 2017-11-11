@@ -36,7 +36,8 @@
 
     "recipe[postgresql-custom]",
     "recipe[chrome]",
-    "recipe[geckodriver]"
+    "recipe[geckodriver]",
+    "recipe[chromedriver]"
   ],
   "geckodriver": {
     "version": "v0.19.1"

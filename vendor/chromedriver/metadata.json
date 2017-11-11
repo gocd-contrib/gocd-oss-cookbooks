@@ -1,0 +1,54 @@
+{
+  "name": "chromedriver",
+  "description": "Selenium WebDriver for Chrome",
+  "long_description": "# Selenium ChromeDriver Cookbook\n\n[![Cookbook Version](http://img.shields.io/cookbook/v/chromedriver.svg?style=flat-square)][cookbook]\n[![linux](http://img.shields.io/travis/dhoer/chef-chromedriver/master.svg?label=linux&style=flat-square)][linux]\n[![osx](http://img.shields.io/travis/dhoer/chef-chromedriver/macosx.svg?label=macosx&style=flat-square)][osx]\n[![win](https://img.shields.io/appveyor/ci/dhoer/chef-chromedriver/master.svg?label=windows&style=flat-square)][win]\n\n[cookbook]: https://supermarket.chef.io/cookbooks/chromedriver\n[linux]: https://travis-ci.org/dhoer/chef-chromedriver\n[osx]: https://travis-ci.org/dhoer/chef-chromedriver/branches\n[win]: https://ci.appveyor.com/project/dhoer/chef-chromedriver\n\nInstalls ChromeDriver (https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver). \n\n## Requirements\n\n- Chef 12.6+\n- Chrome (this cookbook does not install Chrome)\n\n### Platforms\n\n- CentOS, RedHat, Fedora\n- Debian, Ubuntu\n- Mac OS X\n- Windows\n\n### Cookbooks\n\n- windows \n\n## Usage\n\nInclude recipe in a run list or cookbook to install ChromeDriver.\n\n### Attributes\n\n- `node['chromedriver']['version']` - Version to download. Default `LATEST_RELEASE`.\n- `node['chromedriver']['url']` -  URL download prefix. Default `https://chromedriver.storage.googleapis.com`.\n- `node['chromedriver']['windows']['home']` - Home directory for windows. Default `%SYSTEMDRIVE%\\chromedriver`.\n- `node['chromedriver']['unix']['home']` - Home directory for both linux and macosx. Default `/opt/chromedriver`.\n\n#### Install selenium node with chrome capability\n\n```ruby\ninclude_recipe 'chrome'\ninclude_recipe 'chromedriver'\n\nnode.set['selenium']['node']['capabilities'] = [\n  {\n    browserName: 'chrome',\n    maxInstances: 1,\n    version: chrome_version,\n    seleniumProtocol: 'WebDriver'\n  }\n]\n\ninclude_recipe 'selenium::node'\n```\n\n#### Download ChromeDriver from alternative location\n\n```\noverride_attributes(\n  \"chromedriver\": {\n    \"url\": \"https://s3.amazonaws.com/mybucket/chromedriver\"\n    \"version\": \"2.21\"\n  }\n)\n```\n\nThis will download the ChromeDriver that best matches version and platform criteria e.g., Linux x64 platform will \nmatch https://s3.amazonaws.com/mybucket/chromedriver/2.21/chromedriver_linux64.zip. Note that ChromeDriver path must \nbe the same as that found under http://chromedriver.storage.googleapis.com/index.html.\n\n## Getting Help\n\n- Ask specific questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/chromedriver).\n- Report bugs and discuss potential features in [Github issues](https://github.com/dhoer/chef-chromedriver/issues).\n\n## Contributing\n\nPlease refer to [CONTRIBUTING](https://github.com/dhoer/chef-chromedriver/blob/master/CONTRIBUTING.md).\n\n## License\n\nMIT - see the accompanying [LICENSE](https://github.com/dhoer/chef-chromedriver/blob/master/LICENSE.md) file for \ndetails.\n",
+  "maintainer": "Dennis Hoer",
+  "maintainer_email": "dennis.hoer@gmail.com",
+  "license": "MIT",
+  "platforms": {
+    "centos": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "fedora": ">= 0.0.0",
+    "mac_os_x": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "windows": ">= 0.0.0"
+  },
+  "dependencies": {
+
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "2.0.0",
+  "source_url": "https://github.com/dhoer/chef-chromedriver",
+  "issues_url": "https://github.com/dhoer/chef-chromedriver/issues",
+  "privacy": false,
+  "chef_versions": [
+
+  ],
+  "ohai_versions": [
+
+  ]
+}

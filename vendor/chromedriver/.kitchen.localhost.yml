@@ -1,0 +1,20 @@
+---
+driver:
+  name: localhost
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12
+
+platforms:
+  - name: macosx-10
+
+suites:
+- name: default
+  run_list:
+    - chromedriver_test
+  attributes:
+    selenium:
+      node:
+        username: travis
+        password: travis
