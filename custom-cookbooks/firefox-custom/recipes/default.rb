@@ -21,7 +21,12 @@ pkgs += %w(xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-
 package pkgs
 
 node['firefox-custom']['versions'].each do |ff_version|
-  firefox_url = "https://ftp.mozilla.org/pub/firefox/releases/#{ff_version}/linux-x86_64/en-US/firefox-#{ff_version}.tar.bz2"
+  firefox_url = if ff_version == 'latest'
+    # see https://ftp.mozilla.org/pub/firefox/releases/latest/README.txt
+    "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
+  else
+    "https://ftp.mozilla.org/pub/firefox/releases/#{ff_version}/linux-x86_64/en-US/firefox-#{ff_version}.tar.bz2"
+  end
 
   zipfile                = ::File.join(Chef::Config[:file_cache_path], "firefox-#{ff_version}-bin.tar.bz2")
   firefox_executable     = ::File.join(node['firefox-custom']['install_dir'], "firefox-#{ff_version}/firefox")
