@@ -1,15 +1,18 @@
 # this package is here, just to pull down any FF dependencies
 
+include_recipe 'yum-epel'
+
 pkgs = ['firefox']
 
 if platform_family?('rhel', 'suse', 'amazon')
   if node['platform_version'].to_i >= 7
     pkgs += %w(gtk3)
   elsif node['platform_version'].to_i < 7
-    pkgs += %w(gnome-themes xdotool nspluginwrapper)
+    pkgs += %w(gnome-themes nspluginwrapper)
   end
 end
 
+pkgs += %w(xdotool)
 
 pkgs += %w(hicolor-icon-theme)
 
