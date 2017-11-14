@@ -2,6 +2,8 @@
 // This file is managed by chef. Any changes will be lost.
 //
 
+import org.gradle.util.GradleVersion
+
 addListener new BuildAdapter() {
   def void projectsLoaded(Gradle gradle) {
 
