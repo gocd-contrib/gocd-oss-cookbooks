@@ -1,17 +1,11 @@
 include_recipe 'postgresql::yum_pgdg_postgresql'
 
-case node['postgresql']['version']
-when "9.2"
-  package %w(postgresql92 postgresql92-devel postgresql92-server postgresql92-contrib)
-when "9.3"
-  package %w(postgresql93 postgresql93-devel postgresql93-server postgresql93-contrib)
-when "9.4"
-  package %w(postgresql94 postgresql94-devel postgresql94-server postgresql94-contrib)
-when "9.5"
-  package %w(postgresql95 postgresql95-devel postgresql95-server postgresql95-contrib)
-when "9.6"
-  package %w(postgresql96 postgresql96-devel postgresql96-server postgresql96-contrib)
-end
+pg_version = node['postgresql']['version']
+
+# Convert 9.6 to 96 to install the right packages
+pg_package_version = pg_version.gsub(/\./, '')
+
+package %W{ postgresql#{pg_package_version} postgresql#{pg_package_version}-devel postgresql#{pg_package_version}-server postgresql#{pg_package_version}-contrib }
 
 directory '/var/run/postgresql' do
   owner  'go'
