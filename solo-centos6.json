@@ -63,7 +63,7 @@
   },
   "postgresql": {
     "enable_pgdg_yum": true,
-    "version": "9.6",
+    "version": "__PG_VERSION__",
     "client": { "packages": [] }
   },
   "poise-python": {
