@@ -1,6 +1,6 @@
 include_recipe 'postgresql::yum_pgdg_postgresql'
 
-pg_version = node['postgresql']['version']
+pg_version = node['postgresql']['pg_version']
 
 # Convert 9.6 to 96 to install the right packages
 pg_package_version = pg_version.gsub(/\./, '')
