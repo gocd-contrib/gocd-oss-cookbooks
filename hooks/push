@@ -4,5 +4,4 @@ pg_versions=('9.2', '9.3', '9.4', '9.5', '9.6')
 for pg_version in "${pg_versions[@]}"
 do
   docker push gocddev/go-dev-build-pg:centos-6-pg"$pg_version"-"$SOURCE_BRANCH"
-  docker push gocddev/go-dev-build-pg:centos-7-pg"$pg_version"-"$SOURCE_BRANCH"
 done
