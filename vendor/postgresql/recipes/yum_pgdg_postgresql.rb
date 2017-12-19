@@ -22,7 +22,7 @@
 rpm_platform = node['platform']
 rpm_platform_version = node['platform_version'].to_f.to_i.to_s
 arch = node['kernel']['machine']
-pg_version = node['postgresql']['version']
+pg_version = node['postgresql']['pg_version']
 pgdg_setup = node['postgresql']['pgdg']['repo_rpm_url'][pg_version][rpm_platform][rpm_platform_version][arch]
 pgdg_package = pgdg_setup['package']
 pgdg_repository = pgdg_setup['url']
