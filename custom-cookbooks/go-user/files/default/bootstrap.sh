@@ -8,9 +8,11 @@ export DISPLAY=:3
 
 OS_VERSION="$(lsb_release -a | grep Release | cut -f2 | cut -f1 -d.)"
 
+MACHINE_ID_FILE="/etc/machine-id"
 if [ OS_VERSION == "6" ]; then
-  try sudo /etc/init.d/messagebus start
+  MACHINE_ID_FILE="/var/lib/dbus/machine-id"
 fi
 
-try vncserver :3 -geometry '1280x960' -depth 16
+try sudo dbus-uuidgen > $MACHINE_ID_FILE
+try Xvfb :3 -screen 0 1280x960x16 &
 try exec /go/go-agent

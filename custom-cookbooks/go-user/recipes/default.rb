@@ -1,6 +1,5 @@
 if node['platform_family'] != 'windows'
   include_recipe 'go-user::user'
-  include_recipe 'go-user::vnc'
 end
 
 include_recipe 'go-user::go-agent'

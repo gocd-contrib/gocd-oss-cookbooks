@@ -18,8 +18,6 @@
 
     "recipe[compression]",
     "recipe[gocd-build-essentials]",
-    "recipe[vnc]",
-    "recipe[icewm]",
     "recipe[go-user]",
     "recipe[zip]",
     "recipe[gocd-gauge-wrapper]",
