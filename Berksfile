@@ -16,7 +16,7 @@ cookbook 'git'
 cookbook 'subversion'
 
 cookbook 'jq'
-cookbook 'icewm'
+cookbook 'xvfb'
 
 cookbook 'gauge'
 cookbook 'zip'

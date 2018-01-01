@@ -18,9 +18,8 @@
 
     "recipe[compression]",
     "recipe[gocd-build-essentials]",
-    "recipe[vnc]",
-    "recipe[icewm]",
     "recipe[go-user]",
+    "recipe[xvfb]",
     "recipe[zip]",
     "recipe[gocd-gauge-wrapper]",
 
