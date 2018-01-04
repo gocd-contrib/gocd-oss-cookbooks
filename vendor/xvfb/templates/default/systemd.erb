@@ -1,0 +1,9 @@
+[Unit]
+Description=Xvfb X Server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/Xvfb <%= @display %> -screen <%= @screennum %> <%= @dimensions %> <%= @args %>
+
+[Install]
+WantedBy=multi-user.target

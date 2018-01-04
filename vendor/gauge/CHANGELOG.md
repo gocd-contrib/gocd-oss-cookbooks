@@ -3,6 +3,10 @@ Gauge CHANGELOG
 
 This file is used to list changes made in each version of the gauge cookbook.
 
+v1.9.0 (2018-01-03)
+-----------------
+* Upgrade to gauge 0.9.6
+
 v1.8.0 (2016-12-24)
 -----------------
 * Upgrade to gauge 0.7.0
