@@ -4,4 +4,4 @@ windows_package "Gauge #{node['gauge']['version']}" do
   checksum  node['gauge']['checksum']
 end
 
-template 'C:\Program Files\Gauge\share\gauge\gauge.properties'
+template "#{ENV['APPDATA']}\\Gauge\\config\\gauge.properties"

@@ -36,7 +36,7 @@ Setting up Gauge properties
 
 gauge.properties
 ----------
-[Source](https://github.com/getgauge/gauge/blob/master/skel/gauge.properties)
+[Source](https://docs.getgauge.io/configuration.html?highlight=properties)
 ```
 # Timeout in milliseconds for making a connection to the language runner.
 node['gauge']['properties']['runner_connection_timeout']

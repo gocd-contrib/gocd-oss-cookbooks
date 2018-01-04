@@ -1,5 +1,5 @@
 XVFB=/usr/bin/Xvfb
-XVFBARGS="<%= @display %> -screen <%= @screen_number %> <%= @screen_resolution %> <%= @option %>"
+XVFBARGS="<%= @display %> -screen <%= @screennum %> <%= @dimensions %> <%= @args %>"
 PIDFILE=/var/tmp/xvfb_<%= @display %>.pid
 case "$1" in
   start)
