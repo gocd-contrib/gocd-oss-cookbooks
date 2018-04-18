@@ -34,9 +34,7 @@
     "recipe[cloudcli-wrapper]",
 
     "recipe[postgresql-custom]",
-    "recipe[chrome]",
-    "recipe[geckodriver]",
-    "recipe[chromedriver]"
+    "recipe[geckodriver]"
   ],
   "geckodriver": {
     "version": "v0.19.1"
