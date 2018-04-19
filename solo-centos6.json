@@ -67,7 +67,8 @@
   },
   "poise-python": {
     "options": {
-      "wheel_version": false
+      "wheel_version": false,
+      "pip_version": "9.0.3"
     }
   },
   "cloudcli": {
