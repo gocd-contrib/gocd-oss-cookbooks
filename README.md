@@ -1,27 +1,23 @@
 #### Images built:
 
-- `gocddev/gocd-dev-build:centos-6-pg9.2-<github_tag>`
-- `gocddev/gocd-dev-build:centos-6-pg9.3-<github_tag>`
-- `gocddev/gocd-dev-build:centos-6-pg9.4-<github_tag>`
-- `gocddev/gocd-dev-build:centos-6-pg9.5-<github_tag>`
-- `gocddev/gocd-dev-build:centos-6-pg9.6-<github_tag>`
 - `gocddev/gocd-dev-build:centos-6-<github_tag>`
-
-- `gocddev/gocd-dev-build:centos-7-pg9.2-<github_tag>`
-- `gocddev/gocd-dev-build:centos-7-pg9.3-<github_tag>`
-- `gocddev/gocd-dev-build:centos-7-pg9.4-<github_tag>`
-- `gocddev/gocd-dev-build:centos-7-pg9.5-<github_tag>`
-- `gocddev/gocd-dev-build:centos-7-pg9.6-<github_tag>`
 - `gocddev/gocd-dev-build:centos-7-<github_tag>`
 
+To build images a new image, create a new tag and push to this repository.
 
-#### Build all images locally
+#### Build an image locally
 
-- Run SOURCE_BRANCH=value `hooks/build.sh`
+`docker build . -t gocddev/gocd-dev-build:centos6-v2.0.29 -f Dockerfile.centos6`
+`docker build . -t gocddev/gocd-dev-build:centos7-v2.0.29 -f Dockerfile.centos7`
 
-SOURCE_BRANCH is an env var provided by docker cloud for automated builds.
+#### Upgrading a vendor cookbook
 
-#### Build a specific image locally
+If the cookbook is specified under Berksfile, then, 
 
-- Replace `__PG_VERSION__` in solo-centos6.json or solo-centos7.json with the postgres version of your choice.
-- Run `docker build -f <Dockerfile.centos6 | Dockerfile.centos7> . -t <image_name>`
+`berks update <cookbook_name_as_specified_in_metadata>; berks vendor vendor`
+
+_Note: Check in the Berksfile.lock._
+
+If a vendor cookbook that's been checked in is not present in Berksfile, then add it to the Berksfile and run the above command.
+
+Alternatively, you could download a newer version of the cookbook from the chef supermarket and check that in. However, if the vendor cookbook has dependencies, then, those need to be updated and checked in as well.
