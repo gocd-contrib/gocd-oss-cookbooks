@@ -75,5 +75,8 @@
     "aws": {
       "virtualenv": "/opt/local/awscli"
     }
+  },
+  "gauge": {
+    "version": "0.9.9"
   }
 }
