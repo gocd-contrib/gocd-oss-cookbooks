@@ -1,20 +1,20 @@
-default['gauge']['version'] = '0.9.6'
+default['gauge']['version'] = '0.9.9'
 
 if platform_family?('windows')
   if node['kernel']['machine'] =~ /x86_64/
     default['gauge']['url']      = "https://github.com/getgauge/gauge/releases/download/v#{node['gauge']['version']}/gauge-#{node['gauge']['version']}-windows.x86_64.exe"
-    default['gauge']['checksum'] = '33161d71ca19540334e744d5ad570c97a3d6ad3e92a90458d3823ec3f88db3a4'
+    default['gauge']['checksum'] = '0ca9c62a2ee66a5a9f7c316b228d7e8370521590335a3c9085e8a371e77f111e'
   else
     default['gauge']['url']      = "https://github.com/getgauge/gauge/releases/download/v#{node['gauge']['version']}/gauge-#{node['gauge']['version']}-windows.x86.exe"
-    default['gauge']['checksum'] = 'df94a8b64c95f53d991d3a45b3ff5699591a4522fa625cd87b24795e69170725'
+    default['gauge']['checksum'] = '236444c3627fe03a4b18cea6cef463a004ad0262d217e9ac73a710fda810d4ec'
   end
 else
   if node['kernel']['machine'] =~ /x86_64/
     default['gauge']['url']      = "https://github.com/getgauge/gauge/releases/download/v#{node['gauge']['version']}/gauge-#{node['gauge']['version']}-linux.x86_64.zip"
-    default['gauge']['checksum'] = '81315277152b6540967cacc17be599405df2bad46452f603a7b2c83e4b12a99e'
+    default['gauge']['checksum'] = '1270414eec5c0f2598c13670fd3fcf054fa74d5605695648403adcaf7e101170'
   else
     default['gauge']['url']      = "https://github.com/getgauge/gauge/releases/download/v#{node['gauge']['version']}/gauge-#{node['gauge']['version']}-linux.x86.zip"
-    default['gauge']['checksum'] = 'ecb49dcc7ee8b3b3eb150e5b1906e7e16675a1631bee240bc66036b1b5ca6271'
+    default['gauge']['checksum'] = 'a3e9cf15160482506b5033d300c6abc8c636c4b151f8c1693e2b6e408963daab'
   end
 end
 
