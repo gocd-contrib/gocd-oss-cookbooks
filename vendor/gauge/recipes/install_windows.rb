@@ -1,7 +1,7 @@
-windows_package "Gauge #{node['gauge']['version']}" do
-  version   node['gauge']['version']
-  source    node['gauge']['url']
-  checksum  node['gauge']['checksum']
+chocolatey_package 'package_name' do
+  if node['gauge']['version'] == 'latest'
+    action :upgrade
+  elsif node['gauge']['version']
+    version node['gauge']['version']
+  end
 end
-
-template "#{ENV['APPDATA']}\\Gauge\\config\\gauge.properties"

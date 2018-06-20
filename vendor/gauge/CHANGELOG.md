@@ -3,6 +3,12 @@ Gauge CHANGELOG
 
 This file is used to list changes made in each version of the gauge cookbook.
 
+v2.0.0 (2018-06-19)
+-----------------
+* Use yum, apt_get and chocolatey packages to install
+* Use latest version always
+* Remove plugins LWRP and gauge.properties template as they are not managed by chef any more
+
 v1.9.0 (2018-01-03)
 -----------------
 * Upgrade to gauge 0.9.6
