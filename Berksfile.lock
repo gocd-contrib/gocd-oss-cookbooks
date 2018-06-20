@@ -37,7 +37,7 @@ GRAPH
   dmg (4.0.0)
   firefox (4.0.0)
     dmg (>= 2.2)
-  gauge (1.9.0)
+  gauge (2.0.0)
     windows (>= 0.0.0)
   git (8.0.0)
     build-essential (>= 0.0.0)
