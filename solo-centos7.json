@@ -1,39 +1,7 @@
 {
   "run_list": [
 
-    "recipe[tini]",
-
-    "recipe[yum-epel]",
-    "recipe[software-collections]",
-
-    "recipe[nodejs]",
-    "recipe[yarn]",
-    "recipe[java]",
-    "recipe[ruby]",
-
-    "recipe[git]",
-    "recipe[mercurial]",
-    "recipe[subversion]",
-    "recipe[perforce]",
-
-    "recipe[compression]",
-    "recipe[gocd-build-essentials]",
-    "recipe[xvfb]",
     "recipe[go-user]",
-    "recipe[zip]",
-    "recipe[gocd-gauge-wrapper]",
-
-    "recipe[jq]",
-    "recipe[phantomjs]",
-    "recipe[firefox-custom]",
-
-    "recipe[maven]",
-    "recipe[ant]",
-    "recipe[fpm]",
-    "recipe[nsis]",
-    "recipe[cloudcli-wrapper]",
-
-    "recipe[postgresql-custom]",
     "recipe[geckodriver]"
   ],
   "geckodriver": {
