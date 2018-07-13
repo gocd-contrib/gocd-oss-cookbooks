@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-URL="$(curl --silent --fail --location https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.assets[] | select(.name | contains("linux64.tar.gz")) | .browser_download_url')"
-curl --silent --fail --location "${URL}" --output /usr/local/src/geckodriver-latest.tar.gz
-
-tar -zxf /usr/local/src/geckodriver-latest.tar.gz -C /usr/local/bin
