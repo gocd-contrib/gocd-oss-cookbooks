@@ -15,12 +15,12 @@ POSTGRESQL_VERSION=9.6
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3)
 
 function setup_epel() {
-  try yum install --assumeyes --quiet epel-release
+  try yum install --assumeyes epel-release
 }
 
 function install_basic_utils() {
   # add some basic utils
-  try yum install --assumeyes --quiet \
+  try yum install --assumeyes \
       ncurses \
       file \
       wget \
@@ -30,21 +30,22 @@ function install_basic_utils() {
       tar \
       gzip \
       bzip2 \
-      which
+      which \
+      sudo
 
   try curl --silent --fail --location https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 --output /usr/local/bin/jq
   try chmod 755 /usr/local/bin/jq
 }
 
 function install_node() {
-  try yum install --assumeyes --quiet https://rpm.nodesource.com/pub_6.x/el/${CENTOS_MAJOR_VERSION}/x86_64/nodesource-release-el${CENTOS_MAJOR_VERSION}-1.noarch.rpm
-  try yum install --assumeyes --quiet nodejs
+  try yum install --assumeyes https://rpm.nodesource.com/pub_6.x/el/${CENTOS_MAJOR_VERSION}/x86_64/nodesource-release-el${CENTOS_MAJOR_VERSION}-1.noarch.rpm
+  try yum install --assumeyes nodejs
   try node --version
 }
 
 function install_yarn() {
   try curl --silent --fail --location https://dl.yarnpkg.com/rpm/yarn.repo --output /etc/yum.repos.d/yarn.repo
-  try yum install --assumeyes --quiet yarn
+  try yum install --assumeyes yarn
   try yarn --version
 }
 
@@ -57,19 +58,19 @@ gpgcheck=0
 enabled=1
 EOF
 
-  try yum install --assumeyes --quiet gauge
+  try yum install --assumeyes gauge
   try gauge --version
 }
 
 function install_openjdk() {
-  try yum install --assumeyes --quiet java-1.8.0-openjdk java-1.8.0-openjdk-devel
+  try yum install --assumeyes java-1.8.0-openjdk java-1.8.0-openjdk-devel
   try java -version
 }
 
 function install_native_build_packages() {
-  try yum install --assumeyes --quiet centos-release-scl # for gcc-6
+  try yum install --assumeyes centos-release-scl # for gcc-6
 
-  try yum install --assumeyes --quiet \
+  try yum install --assumeyes \
       libxml2-devel libxslt-devel \
       zlib-devel bzip2-devel \
       glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
@@ -85,8 +86,8 @@ EOF
 }
 
 function install_ruby() {
-  try yum install --assumeyes --quiet centos-release-scl # for ruby-2.3
-  try yum install --assumeyes --quiet \
+  try yum install --assumeyes centos-release-scl # for ruby-2.3
+  try yum install --assumeyes \
       rh-ruby23 rh-ruby23-ruby-devel rh-ruby23-rubygem-bundler rh-ruby23-ruby-irb rh-ruby23-rubygem-rake rh-ruby23-rubygem-psych libffi-devel
 
 cat <<-EOF > /etc/profile.d/scl-rh-ruby23.sh
@@ -98,12 +99,12 @@ EOF
 }
 
 function install_python() {
-  try yum install --assumeyes --quiet python-devel python-pip python-virtualenv
+  try yum install --assumeyes python-devel python-pip python-virtualenv
   try python --version
 }
 
 function install_scm_tools() {
-  try yum install --assumeyes --quiet git subversion mercurial
+  try yum install --assumeyes git subversion mercurial
 
   try mkdir -p /usr/local/bin 
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
@@ -118,7 +119,7 @@ function install_scm_tools() {
 }
 
 function install_installer_tools() {
-  try yum install --assumeyes --quiet \
+  try yum install --assumeyes \
       dpkg-devel dpkg-dev \
       createrepo yum-utils rpm-build fakeroot yum-utils \
       gnupg2 \
@@ -149,32 +150,32 @@ function install_awscli() {
 
 function install_postgresql() {
   package_suffix="$(echo ${POSTGRESQL_VERSION} | sed -e 's/\.//g')"
-  try yum install --assumeyes --quiet https://download.postgresql.org/pub/repos/yum/${POSTGRESQL_VERSION}/redhat/rhel-${CENTOS_MAJOR_VERSION}-x86_64/pgdg-centos96-${POSTGRESQL_VERSION}-3.noarch.rpm
-  try yum install --assumeyes --quiet \
+  try yum install --assumeyes https://download.postgresql.org/pub/repos/yum/${POSTGRESQL_VERSION}/redhat/rhel-${CENTOS_MAJOR_VERSION}-x86_64/pgdg-centos96-${POSTGRESQL_VERSION}-3.noarch.rpm
+  try yum install --assumeyes \
     postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
 }
 
 function install_xvfb() {
-  try yum install --assumeyes --quiet xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
+  try yum install --assumeyes xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
 }
 
 # for FF
 function install_firefox_dependencies() {
   if [ "$CENTOS_MAJOR_VERSION" == "6" ]; then
-    try yum install --assumeyes --quiet gnome-themes nspluginwrapper
+    try yum install --assumeyes gnome-themes nspluginwrapper
   else
-    try yum install --assumeyes --quiet gtk3
+    try yum install --assumeyes gtk3
   fi
 
-  try yum install --assumeyes --quiet libcroco
-  try yum install --assumeyes --quiet \
+  try yum install --assumeyes libcroco
+  try yum install --assumeyes \
       xdotool \
       hicolor-icon-theme \
       dbus dbus-x11 xauth liberation-sans-fonts liberation-serif-fonts liberation-mono-fonts mesa-dri-drivers \
       xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts
 
   # install just the FF dependencies, without FF
-  try yum install --assumeyes --quiet $(yum deplist firefox | awk '/provider:/ {print $2}' | sort -u)
+  try yum install --assumeyes $(yum deplist firefox | awk '/provider:/ {print $2}' | sort -u)
 }
 
 function install_firefox_latest() {
@@ -196,7 +197,7 @@ function install_firefox_latest() {
 
 function install_tini() {
   URL="$(curl --silent --fail --location https://api.github.com/repos/krallin/tini/releases/latest | jq -r '.assets[] | select(.name | match("-amd64.rpm$")) | .browser_download_url' | grep -v muslc)"
-  yum install --assumeyes --quiet "${URL}"
+  yum install --assumeyes "${URL}"
   try tini --version
 }
 
