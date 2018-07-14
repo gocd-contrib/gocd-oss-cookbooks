@@ -1,23 +1,29 @@
-#### Images built:
+# Images built:
 
 - `gocddev/gocd-dev-build:centos-6-<github_tag>`
 - `gocddev/gocd-dev-build:centos-7-<github_tag>`
 
 To build images a new image, create a new tag and push to this repository.
 
-#### Build an image locally
+# Build an image locally
 
 `docker build . -t gocddev/gocd-dev-build:centos6-v2.0.29 -f Dockerfile.centos6`
 `docker build . -t gocddev/gocd-dev-build:centos7-v2.0.29 -f Dockerfile.centos7`
 
-#### Upgrading a vendor cookbook
+# License
 
-If the cookbook is specified under Berksfile, then, 
+```plain
+Copyright 2018 ThoughtWorks, Inc.
 
-`berks update <cookbook_name_as_specified_in_metadata>; berks vendor vendor`
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-_Note: Check in the Berksfile.lock._
+   http://www.apache.org/licenses/LICENSE-2.0
 
-If a vendor cookbook that's been checked in is not present in Berksfile, then add it to the Berksfile and run the above command.
-
-Alternatively, you could download a newer version of the cookbook from the chef supermarket and check that in. However, if the vendor cookbook has dependencies, then, those need to be updated and checked in as well.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

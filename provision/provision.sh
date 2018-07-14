@@ -10,15 +10,12 @@ ANT_VERSION=1.10.4
 P4_VERSION=15.1
 P4D_VERSION=16.2
 TINI_VERSION=0.18.0
-FIREFOX_VERSION=24.5.0esr
 POSTGRESQL_VERSION=9.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3)
 
-function setup_repos() {
-  try yum install --assumeyes --quiet \
-      epel-release \
-      centos-release-scl
+function setup_epel() {
+  try yum install --assumeyes --quiet epel-release
 }
 
 function install_basic_utils() {
@@ -33,17 +30,26 @@ function install_basic_utils() {
       tar \
       gzip \
       bzip2 \
-      jq
+      which
+
+  try curl --silent --fail --location https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 --output /usr/local/bin/jq
+  try chmod 755 /usr/local/bin/jq
 }
 
-function install_gocd_development_packages() {
+function install_node() {
   try yum install --assumeyes --quiet https://rpm.nodesource.com/pub_6.x/el/${CENTOS_MAJOR_VERSION}/x86_64/nodesource-release-el${CENTOS_MAJOR_VERSION}-1.noarch.rpm
   try yum install --assumeyes --quiet nodejs
+  try node --version
+}
 
+function install_yarn() {
   try curl --silent --fail --location https://dl.yarnpkg.com/rpm/yarn.repo --output /etc/yum.repos.d/yarn.repo
   try yum install --assumeyes --quiet yarn
-  
-  cat <<-EOF > /etc/yum.repos.d/gauge-stable.repo
+  try yarn --version
+}
+
+function install_gauge() {
+    cat <<-EOF > /etc/yum.repos.d/gauge-stable.repo
 [gauge-stable]
 name=gauge-stable
 baseurl=http://dl.bintray.com/gauge/gauge-rpm/gauge-stable
@@ -52,8 +58,12 @@ enabled=1
 EOF
 
   try yum install --assumeyes --quiet gauge
+  try gauge --version
+}
 
+function install_openjdk() {
   try yum install --assumeyes --quiet java-1.8.0-openjdk java-1.8.0-openjdk-devel
+  try java -version
 }
 
 function install_native_build_packages() {
@@ -84,25 +94,27 @@ source /opt/rh/rh-ruby23/enable
 export PATH=\$PATH:/opt/rh/rh-ruby23/root/usr/local/bin
 export X_SCLS="\$(scl enable rh-ruby23 'echo \$X_SCLS')"
 EOF
+  try bash -lc "ruby --version"
 }
 
 function install_python() {
-  try yum install --assumeyes --quiet \
-      python-devel \
-      python-pip \
-      python-virtualenv
+  try yum install --assumeyes --quiet python-devel python-pip python-virtualenv
+  try python --version
 }
 
 function install_scm_tools() {
-  try yum install --assumeyes --quiet \
-      git \
-      subversion \
-      mercurial
+  try yum install --assumeyes --quiet git subversion mercurial
 
   try mkdir -p /usr/local/bin 
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d --output /usr/local/bin/p4d
   try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
+
+  try git --version
+  try svn --version
+  try hg --version
+  try p4 -V
+  try p4d -V
 }
 
 function install_installer_tools() {
@@ -118,17 +130,17 @@ function install_installer_tools() {
 function install_maven() {
   try mkdir -p /opt/local/
   try curl --silent --fail --location http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip --output /usr/local/src/apache-maven-${MAVEN_VERSION}-bin.zip
-  try unzip -q /usr/local/src/apache-maven-${MAVEN_VERSION}-bin.zip
-  try mv apache-maven-${MAVEN_VERSION} /opt/local/
+  try unzip -q /usr/local/src/apache-maven-${MAVEN_VERSION}-bin.zip -d /opt/local
   try ln -sf /opt/local/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/local/bin/mvn
+  try mvn -version
 }
 
 function install_ant() {
   try mkdir -p /opt/local/
   try curl --silent --fail --location http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.zip --output /usr/local/src/apache-ant-${ANT_VERSION}-bin.zip
-  try unzip -q /usr/local/src/apache-ant-${ANT_VERSION}-bin.zip
-  try mv apache-ant-${ANT_VERSION} /opt/local/
-  try ln -sf /opt/local/apache-ant-${ANT_VERSION}/bin/mvn /usr/local/bin/ant
+  try unzip -q /usr/local/src/apache-ant-${ANT_VERSION}-bin.zip -d /opt/local
+  try ln -sf /opt/local/apache-ant-${ANT_VERSION}/bin/ant /usr/local/bin/ant
+  try ant -version
 }
 
 function install_awscli() {
@@ -143,31 +155,26 @@ function install_postgresql() {
 }
 
 function install_xvfb() {
-  try yum install --assumeyes --quiet \
-      xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
+  try yum install --assumeyes --quiet xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
 }
 
 # for FF
-function install_firefox() {
+function install_firefox_dependencies() {
   if [ "$CENTOS_MAJOR_VERSION" == "6" ]; then
     try yum install --assumeyes --quiet gnome-themes nspluginwrapper
   else
     try yum install --assumeyes --quiet gtk3
   fi
 
+  try yum install --assumeyes --quiet libcroco
   try yum install --assumeyes --quiet \
-      firefox \
       xdotool \
       hicolor-icon-theme \
       dbus dbus-x11 xauth liberation-sans-fonts liberation-serif-fonts liberation-mono-fonts mesa-dri-drivers \
       xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts
-}
 
-function install_firefox() {
-  try mkdir -p /opt/local/firefox
-  try mkdir -p /opt/local/firefox-${FIREFOX_VERSION}
-  try curl --silent --fail --location https://ftp.mozilla.org/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 --output /usr/local/src/firefox-${FIREFOX_VERSION}.tar.bz2
-  try tar -jxf /usr/local/src/firefox-${FIREFOX_VERSION}.tar.bz2 -C /opt/local/firefox-${FIREFOX_VERSION} --strip-components=1
+  # install just the FF dependencies, without FF
+  try yum install --assumeyes --quiet $(yum deplist firefox | awk '/provider:/ {print $2}' | sort -u)
 }
 
 function install_firefox_latest() {
@@ -176,11 +183,21 @@ function install_firefox_latest() {
   try mkdir -p /opt/local/firefox-latest
   try curl --silent --fail --location 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US' --output /usr/local/src/firefox-latest.tar.bz2
   try tar -jxf /usr/local/src/firefox-latest.tar.bz2 -C /opt/local/firefox-latest --strip-components=1
+  if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
+    try bash -c "dbus-uuidgen > /etc/machine-id"
+  else
+    try bash -c "dbus-uuidgen > /var/lib/dbus/machine-id"
+  fi
+
   try ln -sf /opt/local/firefox-latest/firefox /usr/local/bin/firefox
+  try /opt/local/firefox-latest/firefox -version
+  try firefox -version
 }
 
 function install_tini() {
-  yum install --assumeyes --quiet https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}-amd64.rpm
+  URL="$(curl --silent --fail --location https://api.github.com/repos/krallin/tini/releases/latest | jq -r '.assets[] | select(.name | match("-amd64.rpm$")) | .browser_download_url' | grep -v muslc)"
+  yum install --assumeyes --quiet "${URL}"
+  try tini --version
 }
 
 function install_geckodriver() {
@@ -195,6 +212,7 @@ function list_installed_packages() {
 
 function clean() {
   try yum clean all
+  try rm -rf /usr/local/src/*
 }
 
 function upgrade_os_packages() {
@@ -246,11 +264,20 @@ function setup_entrypoint() {
   try chmod 755 /bootstrap.sh
 }
 
-setup_repos
+function build_gocd() {
+  try su - go -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
+              cd /tmp/gocd && \
+              ./gradlew prepare --no-build-cache"
+  try rm -rf /tmp/gocd /home/go/.gradle/caches/build-cache-*
+}
 
-# install a bunch of stuff we need
+setup_epel
+
 install_basic_utils
-install_gocd_development_packages
+install_node
+install_yarn
+# install_gauge
+install_openjdk
 install_native_build_packages
 install_ruby
 install_python
@@ -259,19 +286,28 @@ install_installer_tools
 install_maven
 install_ant
 install_awscli
-install_xvfb
-install_tini
-install_geckodriver
+install_postgresql
+
+if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
+  install_geckodriver
+  install_firefox_dependencies
+  install_firefox_latest
+  install_xvfb
+fi
 
 # setup gocd user to use internal mirrors for builds
 add_gocd_user
 setup_git_config
+build_gocd
+
 setup_gradle_config
 setup_maven_config
 setup_rubygems_config
 setup_npm_config
+
 add_golang_gocd_bootstrapper
 setup_entrypoint
+install_tini
 
 upgrade_os_packages
 list_installed_packages
