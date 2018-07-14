@@ -267,7 +267,7 @@ function setup_entrypoint() {
 function build_gocd() {
   try su - go -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              ./gradlew prepare --no-build-cache"
+              ./gradlew compileAll yarnInstall --no-build-cache"
   try rm -rf /tmp/gocd /home/go/.gradle/caches/build-cache-*
 }
 
