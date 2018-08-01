@@ -222,6 +222,8 @@ function upgrade_os_packages() {
 
 function add_gocd_user() {
   try useradd --home-dir /go --shell /bin/bash go
+  try cp /usr/local/src/provision/gocd-sudoers /etc/sudoers.d/go
+  try chmod 0440 /etc/sudoers.d/go
 }
 
 function setup_git_config() {
