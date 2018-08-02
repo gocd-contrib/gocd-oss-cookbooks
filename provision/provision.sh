@@ -104,7 +104,23 @@ function install_python() {
 }
 
 function install_scm_tools() {
-  try yum install --assumeyes git subversion mercurial
+
+  if [ "$CENTOS_MAJOR_VERSION" == "6" ]; then
+    cat <<-EOF > /etc/yum.repos.d/rpmforge-extras.repo
+[rpmforge-extras]
+name=RHEL $releasever - RPMforge.net - extras
+enabled=0
+fastestmirror_enabled=0
+gpgcheck=1
+gpgkey=http://repository.it4i.cz/mirrors/repoforge/RPM-GPG-KEY.dag.txt
+mirrorlist=http://mirrorlist.repoforge.org/el6/mirrors-rpmforge-extras
+EOF
+    try yum install --assumeyes mercurial --enablerepo=rpmforge-extras
+else
+    try yum install --assumeyes mercurial
+  fi
+
+  try yum install --assumeyes git subversion
 
   try mkdir -p /usr/local/bin 
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
