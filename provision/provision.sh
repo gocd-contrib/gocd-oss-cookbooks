@@ -153,6 +153,9 @@ function install_postgresql() {
   try yum install --assumeyes https://download.postgresql.org/pub/repos/yum/${POSTGRESQL_VERSION}/redhat/rhel-${CENTOS_MAJOR_VERSION}-x86_64/pgdg-centos96-${POSTGRESQL_VERSION}-3.noarch.rpm
   try yum install --assumeyes \
     postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
+cat <<-EOF > /etc/profile.d/postgresql96.sh
+export PATH=\$PATH:/usr/pgsql-${POSTGRESQL_VERSION}/bin
+EOF
 }
 
 function install_xvfb() {
