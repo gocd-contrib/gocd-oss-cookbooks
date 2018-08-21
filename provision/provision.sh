@@ -277,7 +277,7 @@ setup_epel
 install_basic_utils
 install_node
 install_yarn
-# install_gauge
+install_gauge
 install_openjdk
 install_native_build_packages
 install_ruby
