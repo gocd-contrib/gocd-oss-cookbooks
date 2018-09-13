@@ -25,13 +25,13 @@ GoCD.script {
             job('centos-6') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
-                shell {
+                bash {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
-                shell {
+                bash {
                   commandString = 'docker build -f Dockerfile.centos6 -t gocddev/gocd-dev-build:centos-6-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
                 }
-                shell {
+                bash {
                   commandString = 'docker push gocddev/gocd-dev-build:centos-6-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
                 }
               }
@@ -39,15 +39,15 @@ GoCD.script {
             job('centos-7') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
-                shell {
+                bash {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
 
-                shell {
+                bash {
                   commandString = 'docker build -f Dockerfile.centos7 -t gocddev/gocd-dev-build:centos-7-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
                 }
 
-                shell {
+                bash {
                   commandString = 'docker push gocddev/gocd-dev-build:centos-7-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
                 }
               }
