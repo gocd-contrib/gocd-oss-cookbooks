@@ -30,7 +30,7 @@ GoCD.script {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
                 bash {
-                  commandString = 'set -x; docker build -f Dockerfile.centos6 -t gocddev/gocd-dev-build:centos-6-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
+                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.centos6 -t gocddev/gocd-dev-build:centos-6-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
                 }
                 bash {
                   commandString = 'docker push gocddev/gocd-dev-build:centos-6-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
@@ -45,7 +45,7 @@ GoCD.script {
                 }
 
                 bash {
-                  commandString = 'set -x; docker build -f Dockerfile.centos7 -t gocddev/gocd-dev-build:centos-7-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
+                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.centos7 -t gocddev/gocd-dev-build:centos-7-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
                 }
 
                 bash {
