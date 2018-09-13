@@ -4,6 +4,7 @@ import cd.go.contrib.plugins.configrepo.groovy.dsl.*
 GoCD.script {
   pipelines {
     pipeline('build-dev-images') {
+      group = 'internal'
       materials {
         git {
           url = 'https://github.com/gocd-contrib/gocd-oss-cookbooks'
