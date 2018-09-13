@@ -57,4 +57,11 @@ GoCD.script {
       }
     }
   }
+
+  environments {
+    environment('internal') {
+      pipelines = ['build-dev-images']
+    }
+  }
+
 }
