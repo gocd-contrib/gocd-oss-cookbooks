@@ -38,7 +38,7 @@ function install_basic_utils() {
 }
 
 function install_node() {
-  try yum install --assumeyes https://rpm.nodesource.com/pub_6.x/el/${CENTOS_MAJOR_VERSION}/x86_64/nodesource-release-el${CENTOS_MAJOR_VERSION}-1.noarch.rpm
+  try yum install --assumeyes https://rpm.nodesource.com/pub_8.x/el/${CENTOS_MAJOR_VERSION}/x86_64/nodesource-release-el${CENTOS_MAJOR_VERSION}-1.noarch.rpm
   try yum install --assumeyes nodejs
   try node --version
 }
