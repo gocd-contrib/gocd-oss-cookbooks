@@ -245,6 +245,10 @@ function add_gocd_user() {
   try chmod 0440 /etc/sudoers.d/go
 }
 
+function install_jabba() {
+  try su - go -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
+}
+
 function setup_git_config() {
   try cp /usr/local/src/provision/gitconfig /go/.gitconfig
   try chown go:go /go/.gitconfig
@@ -294,7 +298,6 @@ function build_gocd() {
 }
 
 setup_epel
-
 install_basic_utils
 install_node
 install_yarn
@@ -319,6 +322,7 @@ fi
 
 # setup gocd user to use internal mirrors for builds
 add_gocd_user
+install_jabba
 setup_git_config
 build_gocd
 
