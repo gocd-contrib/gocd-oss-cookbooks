@@ -9,4 +9,4 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 
 USER go
 
-CMD ["/bin/bash", "-lc", "/bootstrap.sh"]
+CMD ["/bin/bash", "-lc", "with-java /bootstrap.sh"]

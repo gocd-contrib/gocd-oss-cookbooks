@@ -62,9 +62,17 @@ EOF
   try gauge --version
 }
 
-function install_openjdk() {
+function install_jdk8() {
   try yum install --assumeyes java-1.8.0-openjdk java-1.8.0-openjdk-devel
   try java -version
+}
+
+function install_jdk10() {
+  try su - go -c "jabba install openjdk@1.10.0-2"
+}
+
+function install_jdk11() {
+  try su - go -c "jabba install openjdk@1.11.0-28"
 }
 
 function install_native_build_packages() {
@@ -122,7 +130,7 @@ else
 
   try yum install --assumeyes git subversion
 
-  try mkdir -p /usr/local/bin 
+  try mkdir -p /usr/local/bin
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d --output /usr/local/bin/p4d
   try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
@@ -286,7 +294,9 @@ function add_golang_gocd_bootstrapper() {
 }
 
 function setup_entrypoint() {
+  try cp /usr/local/src/provision/with-java /usr/local/bin/with-java
   try cp /usr/local/src/provision/bootstrap.sh /bootstrap.sh
+  try chmod 755 /usr/local/bin/with-java
   try chmod 755 /bootstrap.sh
 }
 
@@ -299,10 +309,15 @@ function build_gocd() {
 
 setup_epel
 install_basic_utils
+# setup gocd user to use internal mirrors for builds
+add_gocd_user
 install_node
 install_yarn
 install_gauge
-install_openjdk
+install_jabba
+install_jdk8
+install_jdk10
+install_jdk11
 install_native_build_packages
 install_ruby
 install_python
@@ -320,9 +335,6 @@ if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
   install_xvfb
 fi
 
-# setup gocd user to use internal mirrors for builds
-add_gocd_user
-install_jabba
 setup_git_config
 build_gocd
 
