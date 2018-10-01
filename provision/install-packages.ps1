@@ -1,4 +1,4 @@
-$GOLANG_BOOTSTRAPPER_VERSION='2.2'
+$GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4_VERSION='15.1'
 $P4D_VERSION='16.2'
 $NODEJS_VERSION='6.14.4'
@@ -26,17 +26,26 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 
 # install packages
 choco install -y nodejs.install --version="${NODEJS_VERSION}"
-choco install -y ruby --version=${RUBY_VERSION}
-choco install -y nant --version=${NANT_VERSION}
-choco install -y ant --version=${ANT_VERSION}
+choco install -y ruby --version="${RUBY_VERSION}"
+choco install -y nant --version="${NANT_VERSION}"
+choco install -y ant -i --version="${ANT_VERSION}"
 choco install -y hg yarn svn git
 
+RefreshEnv
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
 
 # install jabba
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
+
+# install openjdk 1.8, 10 and 11. Make openjdk 11 default
+Write-Host "Installing jabba and openjdk(1.8, 10, 11), setting openjdk 11 as default"
+jabba install 1.8.181
+jabba install openjdk@1.10.0
+jabba install openjdk@1.11.0
+
+jabba use "openjdk@1.11.0"
 
 # install p4
 New-Item "${env:ProgramFiles(x86)}\\Perforce\\bin\\" -ItemType Directory | Out-Null
@@ -47,7 +56,7 @@ Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4D_
 Invoke-WebRequest https://github.com/ketan/gocd-golang-bootstrapper/releases/download/${GOLANG_BOOTSTRAPPER_VERSION}/go-bootstrapper-${GOLANG_BOOTSTRAPPER_VERSION}.windows.amd64.exe -Outfile C:\\go-agent.exe
 
 $newSystemPath = [System.Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)
-$newSystemPath = "${newSystemPath};${env:ProgramFiles(x86)}\\Perforce\\bin"
+$newSystemPath = "${newSystemPath};${env:ProgramFiles(x86)}\\Perforce\\bin;${env:USERPROFILE}\\.jabba\\bin"
 $env:Path = $newSystemPath + ";" + [System.Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
 [Environment]::SetEnvironmentVariable("Path", $newSystemPath, [EnvironmentVariableTarget]::Machine)
 
