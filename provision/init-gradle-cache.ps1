@@ -1,5 +1,9 @@
 # Running gradle task to install gradle
+
 $ErrorActionPreference = "Stop"
+
+Write-Host "Builing gocd to install gradle and build gradle cache"
+
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
 ./gradlew.bat prepare --no-build-cache --quiet

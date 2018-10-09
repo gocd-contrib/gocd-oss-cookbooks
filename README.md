@@ -2,6 +2,7 @@
 
 - `gocddev/gocd-dev-build:centos-6-<github_tag>`
 - `gocddev/gocd-dev-build:centos-7-<github_tag>`
+- `gocddev/gocd-dev-build:windows-<github_tag>`
 
 To build images a new image, create a new tag and push to this repository.
 
@@ -9,6 +10,7 @@ To build images a new image, create a new tag and push to this repository.
 
 `docker build . -t gocddev/gocd-dev-build:centos6-v2.0.29 -f Dockerfile.centos6`
 `docker build . -t gocddev/gocd-dev-build:centos7-v2.0.29 -f Dockerfile.centos7`
+`docker build . -t gocddev/gocd-dev-build:windows-v2.0.29 -f Dockerfile.windowsservercore`
 
 # License
 
