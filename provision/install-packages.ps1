@@ -36,6 +36,9 @@ refreshenv
 
 npm install --global --production windows-build-tools
 
+# install jabba
+Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
+
 # install openjdk 1.8, 10 and 11. Make openjdk 11 default
 Write-Host "Installing jabba and openjdk(1.8, 10, 11, 12), setting openjdk 11 as default"
 jabba install 1.8
@@ -55,8 +58,6 @@ RefreshEnv
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
 
-# install jabba
-Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
 
 # install p4
 New-Item "${env:ProgramFiles(x86)}\\Perforce\\bin\\" -ItemType Directory | Out-Null
