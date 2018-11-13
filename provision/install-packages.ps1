@@ -46,7 +46,7 @@ jabba install openjdk@1.10.0-2
 jabba install openjdk@1.11.0-1
 jabba install openjdk@1.12.0
 
-jabba use "openjdk@1.11.0"
+jabba use "openjdk@1.11.0-1"
 
 # install p4
 New-Item "${env:ProgramFiles(x86)}\\Perforce\\bin\\" -ItemType Directory | Out-Null
