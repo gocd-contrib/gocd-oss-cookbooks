@@ -25,7 +25,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # install packages
-choco install -y nodejs.install --version="${NODEJS_VERSION}"
+choco install -y nodejs-lts --version="${NODEJS_VERSION}"
 choco install -y ruby --version="${RUBY_VERSION}"
 choco install -y nant --version="${NANT_VERSION}"
 choco install -y ant -i --version="${ANT_VERSION}"
