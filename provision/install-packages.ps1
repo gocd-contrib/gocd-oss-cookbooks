@@ -41,9 +41,10 @@ Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/
 
 # install openjdk 1.8, 10 and 11. Make openjdk 11 default
 Write-Host "Installing jabba and openjdk(1.8, 10, 11), setting openjdk 11 as default"
-jabba install 1.8.181
-jabba install openjdk@1.10.0
-jabba install openjdk@1.11.0
+jabba install 1.8.192
+jabba install openjdk@1.10.0-2
+jabba install openjdk@1.11.0-1
+jabba install openjdk@1.12.0
 
 jabba use "openjdk@1.11.0"
 
