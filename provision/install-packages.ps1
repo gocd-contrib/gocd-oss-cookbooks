@@ -24,10 +24,15 @@ $progressPreference = 'silentlyContinue'
 Set-ExecutionPolicy Bypass -Scope Process -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
+$env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
+Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+
+refreshenv
+
 # install packages
 choco install -y nodejs-lts --version="${NODEJS_VERSION}"
 
-RefreshEnv
+refreshenv
 
 npm install --global --production windows-build-tools
 
