@@ -31,6 +31,15 @@ RefreshEnv
 
 npm install --global --production windows-build-tools
 
+# install openjdk 1.8, 10 and 11. Make openjdk 11 default
+Write-Host "Installing jabba and openjdk(1.8, 10, 11, 12), setting openjdk 11 as default"
+jabba install 1.8
+jabba install openjdk@1.10
+jabba install openjdk@1.11
+jabba install openjdk@1.12
+
+jabba use "openjdk@1.11.0"
+
 choco install -y ruby --version="${RUBY_VERSION}"
 choco install -y nant --version="${NANT_VERSION}"
 choco install -y ant -i --version="${ANT_VERSION}"
@@ -43,15 +52,6 @@ Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey 
 
 # install jabba
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
-
-# install openjdk 1.8, 10 and 11. Make openjdk 11 default
-Write-Host "Installing jabba and openjdk(1.8, 10, 11), setting openjdk 11 as default"
-jabba install 1.8.192
-jabba install openjdk@1.10.0-2
-jabba install openjdk@1.11.0-1
-jabba install openjdk@1.12.0
-
-jabba use "openjdk@1.11.0-1"
 
 # install p4
 New-Item "${env:ProgramFiles(x86)}\\Perforce\\bin\\" -ItemType Directory | Out-Null
