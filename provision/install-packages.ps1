@@ -26,6 +26,11 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 
 # install packages
 choco install -y nodejs-lts --version="${NODEJS_VERSION}"
+
+RefreshEnv
+
+npm install --global --production windows-build-tools
+
 choco install -y ruby --version="${RUBY_VERSION}"
 choco install -y nant --version="${NANT_VERSION}"
 choco install -y ant -i --version="${ANT_VERSION}"
