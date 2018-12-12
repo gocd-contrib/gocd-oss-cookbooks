@@ -63,10 +63,10 @@ GoCD.script {
                  commandLine = ['powershell', 'git fetch --all']
                }
                exec {
-                 commandLine = ['powershell', 'docker build -f Dockerfile.windowsservercore -t gocddev/gocd-dev-build:windows-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .']
+                 commandLine = ['powershell', 'docker build -f Dockerfile.windowsservercore -t gocddev/gocd-dev-build:windows-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .']
                }
                exec {
-                 commandLine = ['powershell', 'docker push gocddev/gocd-dev-build:windows-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"']
+                 commandLine = ['powershell', 'docker push gocddev/gocd-dev-build:windows-$(git tag --points-at HEAD --sort=version:refname | tail -n1)']
                }
              }
             }
