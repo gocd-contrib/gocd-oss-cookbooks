@@ -53,6 +53,26 @@ GoCD.script {
                 }
               }
             }
+             job('windows') {
+              elasticProfileId = 'azure-windows-server-container'
+              tasks {
+                exec {
+                  commandLine = ['powershell', 'docker login --username "%DOCKERHUB_USERNAME%" --password "%DOCKERHUB_PASSWORD%"']
+                }
+
+                exec {
+                  commandLine = ['powershell', 'git fetch --all']
+                }
+
+                exec {
+                  commandLine = ['powershell', 'docker build -f Dockerfile.windowsservercore -t gocddev/gocd-dev-build:windows-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .']
+                }
+
+                exec {
+                  commandLine = ['powershell', 'docker push gocddev/gocd-dev-build:windows-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"']
+                }
+              }
+            }
           }
         }
       }
