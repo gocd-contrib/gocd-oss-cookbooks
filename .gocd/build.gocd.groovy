@@ -55,6 +55,7 @@ GoCD.script {
             }
             job('windows') {
              elasticProfileId = 'azure-windows-server-container'
+             timeout = 90
              tasks {
                exec {
                  commandLine = ['powershell', 'docker login --username "%DOCKERHUB_USERNAME%" --password "%DOCKERHUB_PASSWORD%"']
