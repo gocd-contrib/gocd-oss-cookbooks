@@ -48,6 +48,12 @@ jabba install openjdk@1.12
 
 jabba use "openjdk@1.11.0"
 
+# modify global PATH & JAVA_HOME
+$envRegKey = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey('SYSTEM\CurrentControlSet\Control\Session Manager\Environment', $true)
+$envPath=$envRegKey.GetValue('Path', $null, "DoNotExpandEnvironmentNames").replace('%JAVA_HOME%\bin;', '')
+[Environment]::SetEnvironmentVariable('JAVA_HOME', "$(jabba which $(jabba current))", 'Machine')
+[Environment]::SetEnvironmentVariable('PATH', "%JAVA_HOME%\bin;$envPath", 'Machine')
+
 choco install -y ruby --version="${RUBY_VERSION}"
 choco install -y nant --version="${NANT_VERSION}"
 choco install -y ant -i --version="${ANT_VERSION}"
