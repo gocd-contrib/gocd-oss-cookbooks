@@ -8,9 +8,9 @@ To build images a new image, create a new tag and push to this repository.
 
 # Build an image locally
 
-`docker build . -t gocddev/gocd-dev-build:centos6-v2.0.29 -f Dockerfile.centos6`
-`docker build . -t gocddev/gocd-dev-build:centos7-v2.0.29 -f Dockerfile.centos7`
-`docker build . -t gocddev/gocd-dev-build:windows-v2.0.29 -f Dockerfile.windowsservercore`
+- ```docker build . -t gocddev/gocd-dev-build:centos6-v2.0.29 -f Dockerfile.centos6```
+- ```docker build . -t gocddev/gocd-dev-build:centos7-v2.0.29 -f Dockerfile.centos7```
+- ```docker build . -t gocddev/gocd-dev-build:windows-v2.0.29 -f Dockerfile.windowsservercore```
 
 # License
 
