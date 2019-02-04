@@ -3,6 +3,7 @@
 - `gocddev/gocd-dev-build:centos-6-<github_tag>`
 - `gocddev/gocd-dev-build:centos-7-<github_tag>`
 - `gocddev/gocd-dev-build:windows-<github_tag>`
+- `gocddev/gocd-dev-build-dind:<gocd-version>`
 
 To build images a new image, create a new tag and push to this repository.
 
@@ -11,11 +12,12 @@ To build images a new image, create a new tag and push to this repository.
 - ```docker build . -t gocddev/gocd-dev-build:centos6-v2.0.29 -f Dockerfile.centos6```
 - ```docker build . -t gocddev/gocd-dev-build:centos7-v2.0.29 -f Dockerfile.centos7```
 - ```docker build . -t gocddev/gocd-dev-build:windows-v2.0.29 -f Dockerfile.windowsservercore```
+- ```docker build . -t gocddev/gocd-dev-build-dind:19.1.0 -f Dockerfile.dind```
 
 # License
 
 ```plain
-Copyright 2018 ThoughtWorks, Inc.
+Copyright 2019 ThoughtWorks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
