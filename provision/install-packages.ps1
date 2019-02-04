@@ -51,7 +51,7 @@ jabba use "openjdk@1.11.0"
 choco install -y ruby --version="${RUBY_VERSION}"
 choco install -y nant --version="${NANT_VERSION}"
 choco install -y ant -i --version="${ANT_VERSION}"
-choco install -y hg yarn svn git gpg4win-vanilla
+choco install -y hg yarn svn git gpg4win-vanilla windows-sdk-8.1
 
 RefreshEnv
 
