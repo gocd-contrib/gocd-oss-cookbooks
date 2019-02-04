@@ -68,11 +68,11 @@ function install_jdk8() {
 }
 
 function install_jdk10() {
-  try su - go -c "jabba install openjdk@1.10.0"
+  try su - go -c "jabba install openjdk@1.10"
 }
 
 function install_jdk11() {
-  try su - go -c "jabba install openjdk@1.11.0"
+  try su - go -c "jabba install openjdk@1.11"
 }
 
 function install_native_build_packages() {
