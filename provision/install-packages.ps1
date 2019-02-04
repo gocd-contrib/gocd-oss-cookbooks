@@ -30,7 +30,7 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 refreshenv
 
 # install packages
-choco install -y nodejs-lts --version="${NODEJS_VERSION}"
+choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
 
 refreshenv
 
@@ -48,10 +48,10 @@ jabba install openjdk@1.12
 
 jabba use "openjdk@1.11.0"
 
-choco install -y ruby --version="${RUBY_VERSION}"
-choco install -y nant --version="${NANT_VERSION}"
-choco install -y ant -i --version="${ANT_VERSION}"
-choco install -y hg yarn svn git gpg4win-vanilla windows-sdk-8.1
+choco install --no-progress -y ruby --version="${RUBY_VERSION}"
+choco install --no-progress -y nant --version="${NANT_VERSION}"
+choco install --no-progress -y ant -i --version="${ANT_VERSION}"
+choco install --no-progress -y hg yarn svn git gpg4win-vanilla windows-sdk-8.1
 
 RefreshEnv
 
