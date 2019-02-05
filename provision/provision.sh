@@ -145,7 +145,7 @@ else
 function install_installer_tools() {
   try yum install --assumeyes \
       dpkg-devel dpkg-dev \
-      createrepo yum-utils rpm-build fakeroot yum-utils \
+      createrepo repoview yum-utils rpm-build fakeroot yum-utils \
       gnupg2 \
       http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.el6.x86_64.rpm
 
