@@ -110,6 +110,11 @@ function install_tini() {
   try rm /usr/local/src/tini.deb
 }
 
+function install_awscli() {
+  try apt-get install -y awscli
+}
+
+
 function clean() {
   try rm -rf /usr/local/src/*
 }
@@ -125,6 +130,7 @@ install_openjdk_headless
 install_native_build_packages
 install_ruby
 install_python
+install_awscli
 install_scm_tools
 
 setup_git_config
