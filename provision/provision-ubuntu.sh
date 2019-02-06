@@ -25,7 +25,7 @@ function install_ruby() {
 }
 
 function install_python() {
-  try apt-get install -y python
+  try apt-get install -y python python-pip
 }
 
 function install_node() {
@@ -111,7 +111,7 @@ function install_tini() {
 }
 
 function install_awscli() {
-  try apt-get install -y awscli
+  try pip install awscli
 }
 
 
