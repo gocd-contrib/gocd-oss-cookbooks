@@ -172,10 +172,6 @@ function install_awscli() {
   try pip install awscli
 }
 
-function install_rclone() {
-  try yum install --awscli https://downloads.rclone.org/rclone-current-linux-amd64.rpm
-}
-
 function install_postgresql() {
   package_suffix="$(echo ${POSTGRESQL_VERSION} | sed -e 's/\.//g')"
   try yum install --assumeyes https://download.postgresql.org/pub/repos/yum/${POSTGRESQL_VERSION}/redhat/rhel-${CENTOS_MAJOR_VERSION}-x86_64/pgdg-centos96-${POSTGRESQL_VERSION}-3.noarch.rpm
@@ -330,7 +326,6 @@ install_installer_tools
 install_maven
 install_ant
 install_awscli
-install_rclone
 install_postgresql
 
 if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then

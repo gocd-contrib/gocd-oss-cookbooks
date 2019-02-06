@@ -1,9 +1,9 @@
-FROM centos:7
+FROM ubuntu:16.04
 MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
 COPY provision /usr/local/src/provision/
 
-RUN /usr/local/src/provision/provision-centos.sh
+RUN /usr/local/src/provision/provision-ubuntu.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 

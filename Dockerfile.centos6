@@ -3,7 +3,7 @@ MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
 COPY provision /usr/local/src/provision/
 
-RUN /usr/local/src/provision/provision.sh
+RUN /usr/local/src/provision/provision-centos.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 

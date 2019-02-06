@@ -21,7 +21,7 @@ GoCD.script {
             DOCKERHUB_USERNAME: 'AES:C6gaOdyi+SDGkkvUHni6zw==:I2kqDgvf9GiwD7zzT1UWjQ==',
             DOCKERHUB_PASSWORD: 'AES:B2dXEmk4/HMqgLITXECK2A==:dfe+7OkQVOss4fFcXbACy1ZMqW8kVWvt8jyMmgzMDb8='
           ]
-          
+
           jobs {
             job('centos-6') {
               elasticProfileId = 'ecs-dind-gocd-agent'
@@ -53,25 +53,41 @@ GoCD.script {
                 }
               }
             }
-            job('windows') {
-             elasticProfileId = 'azure-windows-server-container'
-             timeout = 90
-             tasks {
-               exec {
-                 commandLine = ['powershell', 'docker login --username "%DOCKERHUB_USERNAME%" --password "%DOCKERHUB_PASSWORD%"']
-               }
-               exec {
-                 commandLine = ['powershell', 'git fetch --all']
-               }
-               exec {
-                 commandLine = ['powershell', 'docker build -f Dockerfile.windowsservercore -t gocddev/gocd-dev-build:windows-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .']
-               }
-               exec {
-                 commandLine = ['powershell', 'docker push gocddev/gocd-dev-build:windows-$(git tag --points-at HEAD --sort=version:refname | tail -n1)']
-               }
-             }
+            job('ubuntu-16.04') {
+              elasticProfileId = 'ecs-dind-gocd-agent'
+              tasks {
+                bash {
+                  commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
+                }
+
+                bash {
+                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.ubuntu -t gocddev/gocd-dev-build:ubuntu-16-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
+                }
+
+                bash {
+                  commandString = 'docker push gocddev/gocd-dev-build:ubuntu-16-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
+                }
+              }
             }
-            
+            job('windows') {
+              elasticProfileId = 'azure-windows-server-container'
+              timeout = 90
+              tasks {
+                exec {
+                  commandLine = ['powershell', 'docker login --username "%DOCKERHUB_USERNAME%" --password "%DOCKERHUB_PASSWORD%"']
+                }
+                exec {
+                  commandLine = ['powershell', 'git fetch --all']
+                }
+                exec {
+                  commandLine = ['powershell', 'docker build -f Dockerfile.windowsservercore -t gocddev/gocd-dev-build:windows-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .']
+                }
+                exec {
+                  commandLine = ['powershell', 'docker push gocddev/gocd-dev-build:windows-$(git tag --points-at HEAD --sort=version:refname | tail -n1)']
+                }
+              }
+            }
+
           }
         }
       }
