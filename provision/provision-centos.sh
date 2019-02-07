@@ -169,6 +169,8 @@ function install_ant() {
 }
 
 function install_awscli() {
+  # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3. Without this file, all files in s3 will have content type `application/octet-stream`
+  try yum install --assumeyes mailcap
   try pip install awscli
 }
 

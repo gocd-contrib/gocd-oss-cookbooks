@@ -111,6 +111,8 @@ function install_tini() {
 }
 
 function install_awscli() {
+  # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3. Without this file, all files in s3 will have content type `application/octet-stream`
+  try apt-get install -y mime-support
   try pip install awscli
 }
 
