@@ -30,10 +30,10 @@ GoCD.script {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
                 bash {
-                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.dind -t gocddev/gocd-dev-build-dind:"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
+                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.dind -t gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
                 }
                 bash {
-                  commandString = 'docker push gocddev/gocd-dev-build-dind:"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
+                  commandString = 'docker push gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
                 }
               }
             }
