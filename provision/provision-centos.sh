@@ -18,6 +18,10 @@ function setup_epel() {
   try yum install --assumeyes epel-release
 }
 
+function setup_scl() { #for gcc, ruby, git
+  try yum install --assumeyes centos-release-scl
+}
+
 function install_basic_utils() {
   # add some basic utils
   try yum install --assumeyes \
@@ -76,8 +80,6 @@ function install_jdk11() {
 }
 
 function install_native_build_packages() {
-  try yum install --assumeyes centos-release-scl # for gcc-6
-
   try yum install --assumeyes \
       libxml2-devel libxslt-devel \
       zlib-devel bzip2-devel \
@@ -94,7 +96,6 @@ EOF
 }
 
 function install_ruby() {
-  try yum install --assumeyes centos-release-scl # for ruby-2.3
   try yum install --assumeyes \
       rh-ruby23 rh-ruby23-ruby-devel rh-ruby23-rubygem-bundler rh-ruby23-ruby-irb rh-ruby23-rubygem-rake rh-ruby23-rubygem-psych libffi-devel
 
@@ -128,7 +129,8 @@ else
     try yum install --assumeyes mercurial
   fi
 
-  try yum install --assumeyes git subversion
+  try yum install --assumeyes subversion
+  install_git
 
   try mkdir -p /usr/local/bin
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
@@ -140,6 +142,16 @@ else
   try hg --version
   try p4 -V
   try p4d -V
+}
+
+function install_git() {
+  try yum install --assumeyes rh-git29
+  cat <<-EOF > /etc/profile.d/scl-git29.sh
+source /opt/rh/rh-git29/enable
+export PATH=\$PATH:/opt/rh/rh-git29/root/usr/bin
+export X_SCLS="\$(scl enable rh-git29 'echo \$X_SCLS')"
+EOF
+  source /opt/rh/rh-git29/enable
 }
 
 function install_installer_tools() {
@@ -310,6 +322,7 @@ function build_gocd() {
 }
 
 setup_epel
+setup_scl
 install_basic_utils
 # setup gocd user to use internal mirrors for builds
 add_gocd_user
