@@ -7,11 +7,11 @@ if (!${env:JAVA_VERSION}) {
 if ("${env:JAVA_VERSION}" -eq "1.8") {
     jabba use "1.8"
 }
-elseif ("${env:JAVA_VERSION}" -eq "10") {
-    jabba use "openjdk@1.10"
-}
 elseif ("${env:JAVA_VERSION}" -eq "11") {
     jabba use "openjdk@1.11"
+}
+elseif ("${env:JAVA_VERSION}" -eq "12") {
+    jabba use "openjdk@1.12"
 }
 
 if ($args.Length -eq 0) {
