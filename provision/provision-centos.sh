@@ -97,12 +97,12 @@ EOF
 
 function install_ruby() {
   try yum install --assumeyes \
-      rh-ruby23 rh-ruby23-ruby-devel rh-ruby23-rubygem-bundler rh-ruby23-ruby-irb rh-ruby23-rubygem-rake rh-ruby23-rubygem-psych libffi-devel
+      rh-ruby24 rh-ruby24-ruby-devel rh-ruby24-rubygem-bundler rh-ruby24-ruby-irb rh-ruby24-rubygem-rake rh-ruby24-rubygem-psych libffi-devel
 
-cat <<-EOF > /etc/profile.d/scl-rh-ruby23.sh
-source /opt/rh/rh-ruby23/enable
-export PATH=\$PATH:/opt/rh/rh-ruby23/root/usr/local/bin
-export X_SCLS="\$(scl enable rh-ruby23 'echo \$X_SCLS')"
+cat <<-EOF > /etc/profile.d/scl-rh-ruby24.sh
+source /opt/rh/rh-ruby24/enable
+export PATH=\$PATH:/opt/rh/rh-ruby24/root/usr/local/bin
+export X_SCLS="\$(scl enable rh-ruby24 'echo \$X_SCLS')"
 EOF
   try bash -lc "ruby --version"
 }
