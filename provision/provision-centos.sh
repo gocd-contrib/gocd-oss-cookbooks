@@ -321,6 +321,12 @@ function build_gocd() {
   try rm -rf /tmp/gocd /home/go/.gradle/caches/build-cache-*
 }
 
+function install_docker() {
+  try curl --silent --fail --location 'https://download.docker.com/linux/centos/docker-ce.repo' --output /etc/yum.repos.d/docker-ce.repo
+  try yum install --assumeyes docker-ce
+  try usermod -a -G docker go
+}
+
 setup_epel
 setup_scl
 install_basic_utils
@@ -348,6 +354,7 @@ if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
   install_firefox_dependencies
   install_firefox_latest
   install_xvfb
+  install_docker
 fi
 
 setup_git_config
