@@ -4,6 +4,14 @@ yell() { echo "$0: $*" >&2; }
 die() { yell "$*"; exit 111; }
 try() { echo "$ $@" 1>&2; "$@" || die "cannot $*"; }
 
+if [ "$1" == "--contrib" ]; then
+  PRIMARY_USER="dojo"
+  SKIP_INTERNAL_CONFIG="yes"
+else
+  PRIMARY_USER="go"
+fi
+
+
 NSIS_VERSION=2.51-15
 MAVEN_VERSION=3.5.4
 ANT_VERSION=1.10.4
@@ -72,11 +80,11 @@ function install_jdk8() {
 }
 
 function install_jdk11() {
-  try su - go -c "jabba install openjdk@1.11"
+  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.11"
 }
 
 function install_jdk12() {
-  try su - go -c "jabba install openjdk@1.12"
+  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.12"
 }
 
 function install_native_build_packages() {
@@ -268,7 +276,7 @@ function add_gocd_user() {
 }
 
 function install_jabba() {
-  try su - go -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
+  try su - ${PRIMARY_USER} -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
 }
 
 function setup_git_config() {
@@ -277,24 +285,28 @@ function setup_git_config() {
 }
 
 function setup_gradle_config() {
+  # internal nexus config
   try mkdir -p /go/.gradle/
   try cp /usr/local/src/provision/init.gradle /go/.gradle/init.gradle
   try chown go:go -R /go/.gradle
 }
 
 function setup_maven_config() {
+  # internal nexus config
   try mkdir -p /go/.m2/
   try cp /usr/local/src/provision/settings.xml /go/.m2/settings.xml
   try chown go:go -R /go/.m2
 }
 
 function setup_rubygems_config() {
+  # internal nexus config
   try mkdir -p /go/.bundle/
   try cp /usr/local/src/provision/bundle-config /go/.bundle/config
   try chown go:go -R /go/.bundle
 }
 
 function setup_npm_config() {
+  # internal nexus config
   try mkdir -p /go/.bundle/
   try cp /usr/local/src/provision/npmrc /go/.npmrc
   try chown go:go -R /go/.npmrc
@@ -315,30 +327,36 @@ function setup_entrypoint() {
 }
 
 function build_gocd() {
-  try su - go -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
+  try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
               ./gradlew compileAll yarnInstall --no-build-cache"
-  try rm -rf /tmp/gocd /home/go/.gradle/caches/build-cache-*
+  try rm -rf /tmp/gocd /home/${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
 function install_docker() {
   try curl --silent --fail --location 'https://download.docker.com/linux/centos/docker-ce.repo' --output /etc/yum.repos.d/docker-ce.repo
   try yum install --assumeyes docker-ce
-  try usermod -a -G docker go
+  try usermod -a -G docker ${PRIMARY_USER}
 }
 
 setup_epel
 setup_scl
 install_basic_utils
-# setup gocd user to use internal mirrors for builds
-add_gocd_user
+if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+  # setup gocd user to use internal mirrors for builds
+  add_gocd_user
+fi
 install_node
 install_yarn
 install_gauge
-install_jabba
+if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+  install_jabba
+fi
 install_jdk8
-install_jdk11
-install_jdk12
+if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+  install_jdk11
+  install_jdk12
+fi
 install_native_build_packages
 install_ruby
 install_python
@@ -354,19 +372,27 @@ if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
   install_firefox_dependencies
   install_firefox_latest
   install_xvfb
-  install_docker
+  if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+    install_docker
+  fi
 fi
 
-setup_git_config
+if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+  setup_git_config
+fi
 build_gocd
 
-setup_gradle_config
-setup_maven_config
-setup_rubygems_config
-setup_npm_config
+if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+  setup_gradle_config
+  setup_maven_config
+  setup_rubygems_config
+  setup_npm_config
+fi
 
-add_golang_gocd_bootstrapper
-setup_entrypoint
+if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+  add_golang_gocd_bootstrapper
+  setup_entrypoint
+fi
 install_tini
 
 upgrade_os_packages
