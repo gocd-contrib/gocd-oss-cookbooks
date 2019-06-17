@@ -19,7 +19,7 @@ GoCD.script {
 
           secureEnvironmentVariables = [
             DOCKERHUB_USERNAME: 'AES:C6gaOdyi+SDGkkvUHni6zw==:I2kqDgvf9GiwD7zzT1UWjQ==',
-            DOCKERHUB_PASSWORD: 'AES:B2dXEmk4/HMqgLITXECK2A==:dfe+7OkQVOss4fFcXbACy1ZMqW8kVWvt8jyMmgzMDb8='
+            DOCKERHUB_PASSWORD: 'AES:m6tzpXAyd1ykOQ34u9Q2bA==:kZNY5M2XX4DTSxkOpIL1zw=='
           ]
 
           jobs {
