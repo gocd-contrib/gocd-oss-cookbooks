@@ -342,18 +342,18 @@ function install_docker() {
 setup_epel
 setup_scl
 install_basic_utils
-if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   # setup gocd user to use internal mirrors for builds
   add_gocd_user
 fi
 install_node
 install_yarn
 install_gauge
-if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   install_jabba
 fi
 install_jdk8
-if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   install_jdk11
   install_jdk12
 fi
@@ -372,24 +372,24 @@ if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
   install_firefox_dependencies
   install_firefox_latest
   install_xvfb
-  if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     install_docker
   fi
 fi
 
-if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   setup_git_config
 fi
 build_gocd
 
-if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   setup_gradle_config
   setup_maven_config
   setup_rubygems_config
   setup_npm_config
 fi
 
-if [ ${SKIP_INTERNAL_CONFIG} != "yes" ]; then
+if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   add_golang_gocd_bootstrapper
   setup_entrypoint
 fi
