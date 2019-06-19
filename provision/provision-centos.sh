@@ -87,6 +87,10 @@ function install_jdk12() {
   try su - ${PRIMARY_USER} -c "jabba install openjdk@1.12"
 }
 
+function install_sysvinit_tools() {
+  try yum install --assumeyes sysvinit-tools
+}
+
 function install_native_build_packages() {
   try yum install --assumeyes \
       libxml2-devel libxslt-devel \
@@ -366,6 +370,7 @@ install_maven
 install_ant
 install_awscli
 install_postgresql
+install_sysvinit_tools
 
 if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
   install_geckodriver
