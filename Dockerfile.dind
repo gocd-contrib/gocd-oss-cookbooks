@@ -1,4 +1,4 @@
-FROM gocd/gocd-agent-docker-dind:v19.5.0	
+FROM gocd/gocd-agent-docker-dind:v19.6.0	
 
 RUN apk add --no-cache ruby-rake ruby-dev build-base && \
 	gem install bundler json docker-api --no-ri --no-rdoc
