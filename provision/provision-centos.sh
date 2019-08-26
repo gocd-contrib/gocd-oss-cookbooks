@@ -212,6 +212,10 @@ function install_xvfb() {
   try yum install --assumeyes xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
 }
 
+function install_xss() {
+  try yum install --assumeyes libXScrnSaver # Headless Chrome needs this for some reason
+}
+
 # for FF
 function install_firefox_dependencies() {
   if [ "$CENTOS_MAJOR_VERSION" == "6" ]; then
@@ -377,6 +381,7 @@ if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
   install_firefox_dependencies
   install_firefox_latest
   install_xvfb
+  install_xss
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     install_docker
   fi
