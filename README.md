@@ -11,7 +11,8 @@ To build images a new image, create a new tag and push to this repository.
 
 - ```docker build . -t gocddev/gocd-dev-build:centos6-v2.0.29 -f Dockerfile.centos6```
 - ```docker build . -t gocddev/gocd-dev-build:centos7-v2.0.29 -f Dockerfile.centos7```
-- ```docker build . -t gocddev/gocd-dev-build:windows-v2.0.29 -f Dockerfile.windowsservercore```
+- ```docker build . -t gocddev/gocd-dev-build:windows2016-v2.0.29 -f Dockerfile.windowsservercore2016```
+- ```docker build . -t gocddev/gocd-dev-build:windows2019-v2.0.29 -f Dockerfile.windowsservercore2019```
 - ```docker build . -t gocddev/gocd-dev-build-dind:19.1.0 -f Dockerfile.dind```
 
 # License
