@@ -17,9 +17,9 @@ GoCD.script {
             type = 'manual'
           }
 
-          secureEnvironmentVariables = [
-            DOCKERHUB_USERNAME: 'AES:C6gaOdyi+SDGkkvUHni6zw==:I2kqDgvf9GiwD7zzT1UWjQ==',
-            DOCKERHUB_PASSWORD: 'AES:bnGJzn4AKuHexyOXGvf7yQ==:8GSLNk63O25av9HYewrGGbmMbaxTzyFJYChKrO5SyDE='
+          environmentVariables = [
+            DOCKERHUB_USERNAME: '{{SECRET:[build-pipelines][DOCKERHUB_USER]}}',
+            DOCKERHUB_PASSWORD: '{{SECRET:[build-pipelines][DOCKERHUB_PASS]}}'
           ]
 
           jobs {
