@@ -88,7 +88,7 @@ GoCD.script {
               timeout = 90
               tasks {
                 exec {
-                  commandLine = ['powershell', 'echo "%DOCKERHUB_PASSWORD%" | docker login --username "%DOCKERHUB_USERNAME%" --password-stdin']
+                  commandLine = ['powershell', 'docker login --username "%DOCKERHUB_USERNAME%" --password "%DOCKERHUB_PASSWORD%"']
                 }
                 exec {
                   commandLine = ['powershell', 'git fetch --all']
