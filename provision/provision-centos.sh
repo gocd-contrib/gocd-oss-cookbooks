@@ -74,17 +74,17 @@ EOF
   try gauge --version
 }
 
-function install_jdk8() {
-  try yum install --assumeyes java-1.8.0-openjdk java-1.8.0-openjdk-devel
-  try java -version
-}
-
 function install_jdk11() {
   try su - ${PRIMARY_USER} -c "jabba install openjdk@1.11"
 }
 
 function install_jdk12() {
   try su - ${PRIMARY_USER} -c "jabba install openjdk@1.12"
+}
+
+function install_jdk13() {
+  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.13.0"
+  try java -version
 }
 
 function install_sysvinit_tools() {
@@ -360,10 +360,10 @@ install_gauge
 if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   install_jabba
 fi
-install_jdk8
+install_jdk11
 if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-  install_jdk11
   install_jdk12
+  install_jdk13
 fi
 install_native_build_packages
 install_ruby
