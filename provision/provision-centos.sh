@@ -84,7 +84,6 @@ function install_jdk12() {
 
 function install_jdk13() {
   try su - ${PRIMARY_USER} -c "jabba install openjdk@1.13.0"
-  try java -version
 }
 
 function install_sysvinit_tools() {
