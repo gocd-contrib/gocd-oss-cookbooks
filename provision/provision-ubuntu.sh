@@ -4,6 +4,8 @@ yell() { echo "$0: $*" >&2; }
 die() { yell "$*"; exit 111; }
 try() { echo "$ $@" 1>&2; "$@" || die "cannot $*"; }
 
+PRIMARY_USER="go"
+
 function update_apt_cache() {
   try apt-get update
 }
@@ -41,8 +43,20 @@ function install_yarn() {
   try apt-get install -y yarn
 }
 
-function install_openjdk_headless() {
-  try apt-get install -y openjdk-8-jre-headless
+function install_jabba() {
+  try su - ${PRIMARY_USER} -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
+}
+
+function install_jdk11() {
+  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.11"
+}
+
+function install_jdk12() {
+  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.12"
+}
+
+function install_jdk13() {
+  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.13.0"
 }
 
 function install_native_build_packages() {
@@ -128,7 +142,6 @@ install_basic_utils
 add_gocd_user
 install_node
 install_yarn
-install_openjdk_headless
 install_native_build_packages
 install_ruby
 install_python
@@ -141,6 +154,11 @@ setup_gradle_config
 setup_maven_config
 setup_rubygems_config
 setup_npm_config
+
+install_jabba
+install_jdk11
+install_jdk12
+install_jdk13
 
 add_golang_gocd_bootstrapper
 setup_entrypoint
