@@ -4,13 +4,21 @@ yell() { echo "$0: $*" >&2; }
 die() { yell "$*"; exit 111; }
 try() { echo "$ $@" 1>&2; "$@" || die "cannot $*"; }
 
-if [ "$1" == "--contrib" ]; then
-  PRIMARY_USER="dojo"
-  SKIP_INTERNAL_CONFIG="yes"
-else
-  PRIMARY_USER="go"
-fi
 
+PRIMARY_USER="go"
+
+for arg in $@; do
+  case $arg in
+    --contrib)
+      PRIMARY_USER="dojo"
+      SKIP_INTERNAL_CONFIG="yes"
+      shift
+      ;;
+    *)
+      shift
+      ;;
+  esac
+done
 
 NSIS_VERSION=3.04-2
 MAVEN_VERSION=3.5.4
@@ -21,6 +29,12 @@ TINI_VERSION=0.18.0
 POSTGRESQL_VERSION=9.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3)
+
+if [ "6" = "$CENTOS_MAJOR_VERSION" ]; then
+  GIT="rh-git29"
+else
+  GIT="rh-git218"
+fi
 
 function setup_epel() {
   try yum install --assumeyes epel-release
@@ -96,12 +110,12 @@ function install_native_build_packages() {
       zlib-devel bzip2-devel \
       glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
       openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash \
-      devtoolset-6-gcc-c++ devtoolset-6-gcc
+      "devtoolset-${CENTOS_MAJOR_VERSION}-gcc-c++" "devtoolset-${CENTOS_MAJOR_VERSION}-gcc"
 
 cat <<-EOF > /etc/profile.d/scl-gcc-6.sh
-source /opt/rh/devtoolset-6/enable
-export PATH=\$PATH:/opt/rh/devtoolset-6/root/usr/bin
-export X_SCLS="\$(scl enable devtoolset-6 'echo \$X_SCLS')"
+source /opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/enable
+export PATH=\$PATH:/opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/root/usr/bin
+export X_SCLS="\$(scl enable devtoolset-${CENTOS_MAJOR_VERSION} 'echo \$X_SCLS')"
 EOF
 
 }
@@ -156,13 +170,13 @@ else
 }
 
 function install_git() {
-  try yum install --assumeyes rh-git29
-  cat <<-EOF > /etc/profile.d/scl-git29.sh
-source /opt/rh/rh-git29/enable
-export PATH=\$PATH:/opt/rh/rh-git29/root/usr/bin
-export X_SCLS="\$(scl enable rh-git29 'echo \$X_SCLS')"
+  try yum install --assumeyes "$GIT"
+  cat <<-EOF > /etc/profile.d/scl-git.sh
+source /opt/rh/$GIT/enable
+export PATH=\$PATH:/opt/rh/$GIT/root/usr/bin
+export X_SCLS="\$(scl enable $GIT 'echo \$X_SCLS')"
 EOF
-  source /opt/rh/rh-git29/enable
+  source "/opt/rh/$GIT/enable"
 }
 
 function install_installer_tools() {
@@ -180,7 +194,6 @@ function install_maven() {
   try curl --silent --fail --location http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip --output /usr/local/src/apache-maven-${MAVEN_VERSION}-bin.zip
   try unzip -q /usr/local/src/apache-maven-${MAVEN_VERSION}-bin.zip -d /opt/local
   try ln -sf /opt/local/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/local/bin/mvn
-  try mvn -version
 }
 
 function install_ant() {
@@ -188,7 +201,6 @@ function install_ant() {
   try curl --silent --fail --location http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.zip --output /usr/local/src/apache-ant-${ANT_VERSION}-bin.zip
   try unzip -q /usr/local/src/apache-ant-${ANT_VERSION}-bin.zip -d /opt/local
   try ln -sf /opt/local/apache-ant-${ANT_VERSION}/bin/ant /usr/local/bin/ant
-  try ant -version
 }
 
 function install_awscli() {
@@ -336,7 +348,7 @@ function setup_entrypoint() {
 function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              ./gradlew compileAll yarnInstall --no-build-cache"
+              jabba use openjdk@1.12 && ./gradlew compileAll yarnInstall --no-build-cache"
   try rm -rf /tmp/gocd /home/${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
