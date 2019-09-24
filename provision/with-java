@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 
 source "${HOME}/.jabba/jabba.sh"
-
-if [ "${JAVA_VERSION}" = "11" ]; then
-    jabba use "openjdk@1.11"
-elif [ "${JAVA_VERSION}" = "12" ]; then
-    source "${HOME}/.jabba/jabba.sh"
-    jabba use "openjdk@1.12"
-fi
+jabba use "openjdk@1.${JAVA_VERSION:-11}"
 
 exec "$@"

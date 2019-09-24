@@ -39,13 +39,13 @@ npm install --global --production windows-build-tools
 # install jabba
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
 
-# install openjdk 11, 12 and 13. Make openjdk 12 default
-Write-Host "Installing jabba and openjdk(11, 12, 13), setting openjdk 12 as default"
+# install openjdk 11, 12 and 13. Make openjdk 11 default
+Write-Host "Installing jabba and openjdk(11, 12, 13), setting openjdk 11 as default"
 jabba install openjdk@1.11
 jabba install openjdk@1.12
 jabba install openjdk@1.13.0
 
-jabba use "openjdk@1.12"
+jabba use "openjdk@1.11"
 
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"

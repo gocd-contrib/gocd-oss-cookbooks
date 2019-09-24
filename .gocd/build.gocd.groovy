@@ -26,6 +26,9 @@ GoCD.script {
             job('dind') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
+                bash{
+                  commandString='if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi'
+                }
                 bash {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
@@ -40,6 +43,9 @@ GoCD.script {
             job('centos-6') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
+                bash{
+                  commandString='if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi'
+                }
                 bash {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
@@ -54,6 +60,9 @@ GoCD.script {
             job('centos-7') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
+                bash{
+                  commandString='if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi'
+                }
                 bash {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
@@ -70,6 +79,9 @@ GoCD.script {
             job('ubuntu-16.04') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
+                bash{
+                  commandString='if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi'
+                }
                 bash {
                   commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
                 }
@@ -87,6 +99,9 @@ GoCD.script {
               elasticProfileId = 'azure-windows-server-container'
               timeout = 90
               tasks {
+                exec{
+                  commandLine=['powershell','if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }']
+                }
                 exec {
                   commandLine = ['powershell', 'docker login --username "%DOCKERHUB_USERNAME%" --password "%DOCKERHUB_PASSWORD%"']
                 }

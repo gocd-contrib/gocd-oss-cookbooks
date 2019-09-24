@@ -4,15 +4,7 @@ if (!${env:JAVA_VERSION}) {
     $env:JAVA_VERSION=11
 }
 
-if ("${env:JAVA_VERSION}" -eq "1.8") {
-    jabba use "1.8"
-}
-elseif ("${env:JAVA_VERSION}" -eq "11") {
-    jabba use "openjdk@1.11"
-}
-elseif ("${env:JAVA_VERSION}" -eq "12") {
-    jabba use "openjdk@1.12"
-}
+jabba use "openjdk@1.${env:JAVA_VERSION}"
 
 if ($args.Length -eq 0) {
     Write-Host "Exiting because no command line args specified"
