@@ -6,7 +6,7 @@
 - `gocddev/gocd-dev-build:ubuntu-16-04-<github_tag>`
 - `gocddev/gocd-dev-build:windows2016-<github_tag>`
 
-To build images a new image, create a new tag and push to this repository.
+To build a new version of the images, push a new version tag to this repository.
 
 # Build an image locally
 
