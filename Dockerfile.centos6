@@ -1,4 +1,4 @@
-FROM centos:6
+FROM centos:8
 MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
 COPY provision /usr/local/src/provision/
