@@ -6,12 +6,14 @@ try() { echo "$ $@" 1>&2; "$@" || die "cannot $*"; }
 
 
 PRIMARY_USER="go"
+GRADLE_OPTIONS=""
 
 for arg in $@; do
   case $arg in
     --contrib)
       PRIMARY_USER="dojo"
       SKIP_INTERNAL_CONFIG="yes"
+      GRADLE_OPTIONS="${GRADLE_OPTIONS} --no-daemon --max-workers 1"
       shift
       ;;
     *)
@@ -348,7 +350,7 @@ function setup_entrypoint() {
 function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              jabba use openjdk@1.11 && ./gradlew compileAll yarnInstall --no-build-cache"
+              jabba use openjdk@1.11 && ./gradlew compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
   try rm -rf /tmp/gocd /home/${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
@@ -368,9 +370,7 @@ fi
 install_node
 install_yarn
 install_gauge
-if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-  install_jabba
-fi
+install_jabba
 install_jdk11
 if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
   install_jdk12
