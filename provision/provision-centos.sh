@@ -211,14 +211,14 @@ function install_awscli() {
   try pip install awscli
 }
 
+function setup_postgres_repo() {
+  try yum install --assumeyes https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+}
+
 function install_postgresql() {
-  package_suffix="$(echo ${POSTGRESQL_VERSION} | sed -e 's/\.//g')"
-  try yum install --assumeyes https://download.postgresql.org/pub/repos/yum/${POSTGRESQL_VERSION}/redhat/rhel-${CENTOS_MAJOR_VERSION}-x86_64/pgdg-centos96-${POSTGRESQL_VERSION}-3.noarch.rpm
-  try yum install --assumeyes \
-    postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
-cat <<-EOF > /etc/profile.d/postgresql96.sh
-export PATH=\$PATH:/usr/pgsql-${POSTGRESQL_VERSION}/bin
-EOF
+  local pg_version="$1"
+  package_suffix="$(echo ${pg_version} | sed -e 's/\.//g')"
+  try yum install --assumeyes postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
 }
 
 function install_xvfb() {
@@ -384,7 +384,13 @@ install_installer_tools
 install_maven
 install_ant
 install_awscli
-install_postgresql
+
+setup_postgres_repo
+install_postgresql "9.6"
+install_postgresql "10"
+install_postgresql "11"
+install_postgresql "12"
+
 install_sysvinit_tools
 
 if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
