@@ -31,7 +31,7 @@ function install_python() {
 }
 
 function install_node() {
-  try bash -c "curl -sL https://deb.nodesource.com/setup_8.x | bash -"
+  try bash -c "curl -sL https://deb.nodesource.com/setup_12.x | bash -"
   try apt-get update
   try apt-get install -y nodejs
 }
