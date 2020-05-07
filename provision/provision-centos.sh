@@ -66,7 +66,7 @@ function install_basic_utils() {
 }
 
 function install_node() {
-  try bash -c "curl -sL https://rpm.nodesource.com/setup_10.x | bash -"
+  try bash -c "curl -sL https://rpm.nodesource.com/setup_12.x | bash -"
   try yum install --assumeyes nodejs
   try node --version
 }
