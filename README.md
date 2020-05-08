@@ -1,7 +1,6 @@
 # Images built:
 
 - `gocddev/gocd-dev-build:dind-<github_tag>`
-- `gocddev/gocd-dev-build:centos-6-<github_tag>`
 - `gocddev/gocd-dev-build:centos-7-<github_tag>`
 - `gocddev/gocd-dev-build:ubuntu-16-04-<github_tag>`
 - `gocddev/gocd-dev-build:windows2016-<github_tag>`
@@ -11,7 +10,6 @@ To build a new version of the images, push a new version tag to this repository.
 # Build an image locally
 
 - ```docker build . -t gocddev/gocd-dev-build:dind-SNAPSHOT -f Dockerfile.dind```
-- ```docker build . -t gocddev/gocd-dev-build:centos-6-SNAPSHOT -f Dockerfile.centos6```
 - ```docker build . -t gocddev/gocd-dev-build:centos-7-SNAPSHOT -f Dockerfile.centos7```
 - ```docker build . -t gocddev/gocd-dev-build:ubuntu-16-04-SNAPSHOT -f Dockerfile.ubuntu```
 - ```docker build . -t gocddev/gocd-dev-build:windows2016-SNAPSHOT -f Dockerfile.windowsservercore2016```
@@ -19,7 +17,7 @@ To build a new version of the images, push a new version tag to this repository.
 # License
 
 ```plain
-Copyright 2019 ThoughtWorks, Inc.
+Copyright 2020 ThoughtWorks, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

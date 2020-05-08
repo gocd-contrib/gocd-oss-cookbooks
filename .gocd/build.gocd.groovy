@@ -40,23 +40,6 @@ GoCD.script {
                 }
               }
             }
-            job('centos-6') {
-              elasticProfileId = 'ecs-dind-gocd-agent'
-              tasks {
-                bash{
-                  commandString='if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi'
-                }
-                bash {
-                  commandString = 'echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin'
-                }
-                bash {
-                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.centos6 -t gocddev/gocd-dev-build:centos-6-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
-                }
-                bash {
-                  commandString = 'docker push gocddev/gocd-dev-build:centos-6-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
-                }
-              }
-            }
             job('centos-7') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {

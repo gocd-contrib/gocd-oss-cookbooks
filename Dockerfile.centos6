@@ -1,4 +1,9 @@
-FROM centos:6
+# THIS IMAGE IS EOL on March 18, 2020. The last available centOS 6 based gocd-dev-build release is  gocddev/gocd-dev-build:centos-6-v2.0.88
+# GoCD will not build centOS 6 based gocd-dev-build images anymore.
+# GoCD Developers are encouraged to use centOS 7 based gocd-dev-build images.
+# A typo has been intentionally added in the `FROM` instruction to avoid users accidentally building this image.
+
+xxFROM centos:6
 MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
 COPY provision /usr/local/src/provision/
