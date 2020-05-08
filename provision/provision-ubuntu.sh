@@ -28,6 +28,7 @@ function install_ruby() {
 
 function install_python() {
   try apt-get install -y python python-pip
+  try pip install --upgrade pip
 }
 
 function install_node() {
