@@ -6,7 +6,7 @@ try() { echo "$ $@" 1>&2; "$@" || die "cannot $*"; }
 
 
 PRIMARY_USER="go"
-GRADLE_OPTIONS=""
+GRADLE_OPTIONS="--stacktrace --info"
 
 for arg in $@; do
   case $arg in
