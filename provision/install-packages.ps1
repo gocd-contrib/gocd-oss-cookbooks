@@ -17,7 +17,8 @@ Copy-Item "$PSScriptroot\npmrc"               "${env:USERPROFILE}\.npmrc"
 Copy-Item "$PSScriptroot\settings.xml"        "${env:USERPROFILE}\.m2\settings.xml"
 
 # install chocolatey
-$chocolateyUseWindowsCompression='true'
+$chocolateyUseWindowsCompression = 'true'
+$env:chocolateyUseWindowsCompression = 'true'
 $ErrorActionPreference = "Stop"
 $progressPreference = 'silentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
