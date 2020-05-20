@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows/servercore:ltsc2016-amd64
+FROM stefanscherer/node-windows:12.16.1-windowsservercore-2019
 LABEL maintainer="GoCD Team <go-cd-dev@googlegroups.com>"
 
 ENV TMP=c:\\tmp \

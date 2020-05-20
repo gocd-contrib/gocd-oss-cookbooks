@@ -30,18 +30,6 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 refreshenv
 
-Invoke-WebRequest $('https://nodejs.org/dist/v{0}/node-v{0}-win-x64.zip' -f "$NODE_VERSION") -OutFile 'node.zip' -UseBasicParsing ;
-Expand-Archive node.zip -DestinationPath C:\ ;
-Rename-Item -Path $('C:\node-v{0}-win-x64' -f "$NODE_VERSION") -NewName 'C:\nodejs'
-
-[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\nodejs", "Machine")
-
-refreshenv
-
-# See https://github.com/felixrieseberg/windows-build-tools/issues/172#issuecomment-484091133
-npm install --global --production windows-build-tools@4.0.0
-npm install --global --production windows-build-tools
-
 # install jabba
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
 
