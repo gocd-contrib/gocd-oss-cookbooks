@@ -34,7 +34,7 @@ Invoke-WebRequest $('https://nodejs.org/dist/v{0}/node-v{0}-win-x64.zip' -f "$NO
 Expand-Archive node.zip -DestinationPath C:\ ;
 Rename-Item -Path $('C:\node-v{0}-win-x64' -f "$NODE_VERSION") -NewName 'C:\nodejs'
 
-[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\nodejs\bin", "Machine")
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\nodejs", "Machine")
 
 refreshenv
 
