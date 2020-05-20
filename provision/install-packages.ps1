@@ -38,6 +38,8 @@ Rename-Item -Path $('C:\node-v{0}-win-x64' -f "$NODE_VERSION") -NewName 'C:\node
 
 refreshenv
 
+# See https://github.com/felixrieseberg/windows-build-tools/issues/172#issuecomment-484091133
+npm install --global --production windows-build-tools@4.0.0
 npm install --global --production windows-build-tools
 
 # install jabba
