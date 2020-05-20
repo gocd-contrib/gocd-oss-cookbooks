@@ -30,14 +30,11 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 refreshenv
 
-Invoke-WebRequest $('https://nodejs.org/dist/v{0}/SHASUMS256.txt.asc' -f "$NODE_VERSION") -OutFile 'SHASUMS256.txt.asc' -UseBasicParsing ; \
-    gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc
+Invoke-WebRequest $('https://nodejs.org/dist/v{0}/node-v{0}-win-x64.zip' -f "$NODE_VERSION") -OutFile 'node.zip' -UseBasicParsing ;
+Expand-Archive node.zip -DestinationPath C:\ ;
+Rename-Item -Path $('C:\node-v{0}-win-x64' -f "$NODE_VERSION") -NewName 'C:\nodejs'
 
-Invoke-WebRequest $('https://nodejs.org/dist/v{0}/node-v{0}-win-x64.zip' -f "$NODE_VERSION") -OutFile 'node.zip' -UseBasicParsing ; \
-    $sum = $(cat SHASUMS256.txt.asc | sls $('  node-v{0}-win-x64.zip' -f "$NODE_VERSION")) -Split ' ' ; \
-    if ((Get-FileHash node.zip -Algorithm sha256).Hash -ne $sum[0]) { Write-Error 'SHA256 mismatch' } ; \
-    Expand-Archive node.zip -DestinationPath C:\ ; \
-    Rename-Item -Path $('C:\node-v{0}-win-x64' -f "$NODE_VERSION") -NewName 'C:\nodejs'
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";C:\nodejs\bin", "Machine")
 
 refreshenv
 
