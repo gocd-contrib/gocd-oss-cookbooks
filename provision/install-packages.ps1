@@ -1,7 +1,7 @@
 $GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4_VERSION='15.1'
 $P4D_VERSION='16.2'
-$NODE_VERSION='12.16.3'
+$NODEJS_VERSION='12.16.3'
 $RUBY_VERSION='2.4.3.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.1' # because newer ant versions will pull down a JRE, which we do not want
@@ -29,6 +29,13 @@ $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 refreshenv
+
+# install packages
+choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
+
+refreshenv
+
+npm install --global --production windows-build-tools
 
 # install jabba
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
