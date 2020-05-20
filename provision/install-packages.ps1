@@ -17,7 +17,8 @@ Copy-Item "$PSScriptroot\npmrc"               "${env:USERPROFILE}\.npmrc"
 Copy-Item "$PSScriptroot\settings.xml"        "${env:USERPROFILE}\.m2\settings.xml"
 
 # install chocolatey
-$chocolateyUseWindowsCompression='false'
+$chocolateyUseWindowsCompression = 'true'
+$env:chocolateyUseWindowsCompression = 'true'
 $ErrorActionPreference = "Stop"
 $progressPreference = 'silentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -45,7 +46,7 @@ jabba install openjdk@1.11
 jabba install openjdk@1.12
 jabba install openjdk@1.13.0
 
-jabba use "openjdk@1.11"
+jabba use "openjdk@1.12"
 
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"

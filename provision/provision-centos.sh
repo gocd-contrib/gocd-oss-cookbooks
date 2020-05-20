@@ -350,7 +350,7 @@ function setup_entrypoint() {
 function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              jabba use openjdk@1.11 && ./gradlew compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
+              jabba use openjdk@1.12 && ./gradlew compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
   try rm -rf /tmp/gocd /home/${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
