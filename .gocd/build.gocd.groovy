@@ -86,7 +86,7 @@ GoCD.script {
                   commandLine=['powershell','if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }']
                 }
                 exec {
-                  commandLine = ['powershell', 'docker login --username "%DOCKERHUB_USERNAME%" --password "%DOCKERHUB_PASSWORD%"']
+                  commandLine = ['powershell', 'echo "%DOCKERHUB_PASSWORD%" | docker login --username "%DOCKERHUB_USERNAME%" --password-stdin']
                 }
                 exec {
                   commandLine = ['powershell', 'git fetch --all']
