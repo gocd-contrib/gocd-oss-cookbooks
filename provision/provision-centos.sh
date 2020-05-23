@@ -59,7 +59,7 @@ function provision() {
 
   step install_python
 
-  step install_gauge
+  step install_gauge "1.0.6"
   step install_installer_tools
   step install_awscli
 
@@ -232,16 +232,10 @@ function install_yarn() {
 }
 
 function install_gauge() {
-    cat <<-EOF > /etc/yum.repos.d/gauge-stable.repo
-[gauge-stable]
-name=gauge-stable
-baseurl=http://dl.bintray.com/gauge/gauge-rpm/gauge-stable
-gpgcheck=0
-enabled=1
-EOF
-
-  try yum install --assumeyes gauge
-  try gauge --version
+  local version="$1"
+  try curl -sL -O https://github.com/getgauge/gauge/releases/download/v$version/gauge-$version-linux.x86_64.zip
+  try unzip -d /usr/bin gauge-$version-linux.x86_64.zip
+  try gauge -v
 }
 
 function install_jdks() {
