@@ -29,79 +29,79 @@ CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cu
 
 # Main entrypoint
 function provision() {
-  setup_yum_external_repos
+  step setup_yum_external_repos
 
   # these are build prereqs for subsequent things; install
   # these early during provision
-  install_basic_utils
-  install_native_build_packages
+  step install_basic_utils
+  step install_native_build_packages
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     # setup gocd user to use internal mirrors for builds
-    add_gocd_user
+    step add_gocd_user
   fi
 
   # git, in particular, is used in subsequent provisioning
   # so do this before things like `rbenv` and `nodenv`
-  install_scm_tools
+  step install_scm_tools
 
-  install_rbenv
-  install_global_ruby "2.7.1"
+  step install_rbenv
+  step install_global_ruby "2.7.1"
 
-  install_nodenv
-  install_global_node "14.3.0"
-  install_yarn
+  step install_nodenv
+  step install_global_node "14.3.0"
+  step install_yarn
 
-  install_jabba
-  install_jdks
-  install_maven
-  install_ant
+  step install_jabba
+  step install_jdks
+  step install_maven
+  step install_ant
 
-  install_python
+  step install_python
 
-  install_gauge
-  install_installer_tools
-  install_awscli
+  step install_gauge
+  step install_installer_tools
+  step install_awscli
 
-  setup_postgres_repo
-  install_postgresql "9.6"
-  install_postgresql "10"
-  install_postgresql "11"
-  install_postgresql "12"
+  step setup_postgres_repo
+  step install_postgresql "9.6"
+  step install_postgresql "10"
+  step install_postgresql "11"
+  step install_postgresql "12"
 
-  install_sysvinit_tools
+  step install_sysvinit_tools
 
   if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
-    install_geckodriver
-    install_firefox_dependencies
-    install_firefox_latest
-    install_xvfb
-    install_xss
+    step install_geckodriver
+    step install_firefox_dependencies
+    step install_firefox_latest
+    step install_xvfb
+    step install_xss
     if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-      install_docker
+      step install_docker
     fi
   fi
 
   # on docker for mac, make sure you allocate more
   # than 2G of memoryor gradle might randomly fail
-  build_gocd
+  step build_gocd
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-    setup_nexus_configs
+    step setup_nexus_configs
   fi
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-    add_golang_gocd_bootstrapper
-    setup_entrypoint
+    step add_golang_gocd_bootstrapper
+    step setup_entrypoint
   fi
 
-  install_tini
+  step install_tini
 
-  upgrade_os_packages
-  list_installed_packages
-  clean
+  step upgrade_os_packages
+  step list_installed_packages
+  step clean
 
-  print_versions_summary
+  step print_versions_summary
 }
 
 function print_versions_summary() {
@@ -127,6 +127,7 @@ echo "gauge version:"
 gauge -v
 EOF
 }
+
 function setup_epel() {
   try yum -y install epel-release
 }
@@ -511,8 +512,21 @@ function install_docker() {
   try usermod -a -G docker ${PRIMARY_USER}
 }
 
-function yell() { echo "$0: $*" >&2; }
+function yell() { redalert "$0: $*" >&2; }
 function die() { yell "$*"; exit 111; }
-function try() { echo "\$ $@" 1>&2; "$@" || die "cannot $*"; }
+function try() { magenta "\$ $@" >&2; "$@" || die "cannot $*"; }
+function step() {
+  printf "\n\n" >&2
+  cyan "////////////////////////////////////////////////////////////////////////////////" >&2
+  cyan "  => Step: $*" >&2
+  cyan "////////////////////////////////////////////////////////////////////////////////" >&2
+  printf "\n\n" >&2
+  "$@"
+}
+
+# colors
+function redalert() { printf "\e[1;41m$*\e[0m\n"; }
+function cyan() { printf "\e[36;1m$*\e[0m\n"; }
+function magenta() { printf "\e[35;1m$*\e[0m\n"; }
 
 provision
