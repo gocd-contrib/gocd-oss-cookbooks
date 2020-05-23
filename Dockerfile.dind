@@ -2,6 +2,6 @@ FROM gocd/gocd-agent-docker-dind:v20.3.0
 
 USER root
 RUN apk add --no-cache ruby-rake ruby-dev build-base && \
-	gem install bundler json docker-api --no-ri --no-rdoc
+	gem install bundler json docker-api --no-document
 
 USER go
