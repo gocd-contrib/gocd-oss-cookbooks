@@ -1,8 +1,8 @@
 $GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4_VERSION='15.1'
 $P4D_VERSION='16.2'
-$NODEJS_VERSION='12.16.3'
-$RUBY_VERSION='2.4.3.1'
+$NODEJS_VERSION='14.3.0'
+$RUBY_VERSION='2.7.1.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.1' # because newer ant versions will pull down a JRE, which we do not want
 # Copy over configs
@@ -31,7 +31,7 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 refreshenv
 
 # install packages
-choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
+choco install --no-progress -y choco nodejs --version="${NODEJS_VERSION}"
 
 refreshenv
 

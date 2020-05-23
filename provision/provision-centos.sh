@@ -1,9 +1,4 @@
-#!/usr/bin/env bash
-
-yell() { echo "$0: $*" >&2; }
-die() { yell "$*"; exit 111; }
-try() { echo "$ $@" 1>&2; "$@" || die "cannot $*"; }
-
+#!/bin/bash
 
 PRIMARY_USER="go"
 GRADLE_OPTIONS="--stacktrace --info"
@@ -32,18 +27,128 @@ POSTGRESQL_VERSION=9.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3)
 
-if [ "6" = "$CENTOS_MAJOR_VERSION" ]; then
-  GIT="rh-git29"
-else
-  GIT="rh-git218"
-fi
+# Main entrypoint
+function provision() {
+  setup_yum_external_repos
 
-function setup_epel() {
-  try yum install --assumeyes epel-release
+  # these are build prereqs for subsequent things; install
+  # these early during provision
+  install_basic_utils
+  install_native_build_packages
+
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    # setup gocd user to use internal mirrors for builds
+    add_gocd_user
+  fi
+
+  # git, in particular, is used in subsequent provisioning
+  # so do this before things like `rbenv` and `nodenv`
+  install_scm_tools
+
+  install_rbenv
+  install_global_ruby "2.7.1"
+
+  install_nodenv
+  install_global_node "14.3.0"
+  install_yarn
+
+  install_jabba
+  install_jdks
+  install_maven
+  install_ant
+
+  install_python
+
+  install_gauge
+  install_installer_tools
+  install_awscli
+
+  setup_postgres_repo
+  install_postgresql "9.6"
+  install_postgresql "10"
+  install_postgresql "11"
+  install_postgresql "12"
+
+  install_sysvinit_tools
+
+  if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
+    install_geckodriver
+    install_firefox_dependencies
+    install_firefox_latest
+    install_xvfb
+    install_xss
+    if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+      install_docker
+    fi
+  fi
+
+  # on docker for mac, make sure you allocate more
+  # than 2G of memoryor gradle might randomly fail
+  build_gocd
+
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    setup_nexus_configs
+  fi
+
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    add_golang_gocd_bootstrapper
+    setup_entrypoint
+  fi
+
+  install_tini
+
+  upgrade_os_packages
+  list_installed_packages
+  clean
+
+  print_versions_summary
 }
 
-function setup_scl() { #for gcc, ruby, git
-  try yum install --assumeyes centos-release-scl
+function print_versions_summary() {
+  printf "Important package versions summary:\n\n"
+
+  try su - "$PRIMARY_USER" <<-EOF
+echo "git version:"
+git --version
+
+echo "ruby version:"
+ruby --version
+
+echo "node version:"
+node --version
+
+echo "yarn version:"
+yarn --version
+
+echo "Installed JDKs:"
+jabba ls
+
+echo "gauge version:"
+gauge -v
+EOF
+}
+function setup_epel() {
+  try yum -y install epel-release
+}
+
+# Software Collections Library yum repo
+# For recent-ish versions of `gcc` + friends
+function setup_scl() {
+  try yum -y install centos-release-scl
+}
+
+# https://ius.io/ - Inline with Upstream Stable yum repo
+# For modern versions of `git`
+function setup_ius() {
+  try yum -y install \
+    "https://repo.ius.io/ius-release-el${CENTOS_MAJOR_VERSION}.rpm" \
+    "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm"
+}
+
+function setup_yum_external_repos() {
+  setup_epel
+  setup_ius
+  setup_scl
 }
 
 function install_basic_utils() {
@@ -65,16 +170,64 @@ function install_basic_utils() {
   try chmod 755 /usr/local/bin/jq
 }
 
-function install_node() {
-  try bash -c "curl -sL https://rpm.nodesource.com/setup_12.x | bash -"
-  try yum install --assumeyes nodejs
-  try node --version
+function install_rbenv() {
+  # in case this exists, remove it; the installer will try to symlink this into ~go/.rbenv/versions
+  try rm -rf /opt/rubies
+
+  cat <<-EOF > /etc/profile.d/rbenv.sh
+export PATH="\$HOME/.rbenv/bin:\$PATH"
+if command -v rbenv &> /dev/null; then
+  eval "\$(rbenv init -)"
+fi
+EOF
+  try su - "$PRIMARY_USER" -c "bash /usr/local/src/provision/rbenv-installer"
+  try su - "$PRIMARY_USER" -c "git -C \"\$(rbenv root)/plugins\" clone https://github.com/tpope/rbenv-aliases"
+
+  echo "Validating rbenv installation"
+  try su - "$PRIMARY_USER" -c "curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/master/bin/rbenv-doctor | bash"
+}
+
+function install_nodenv() {
+  # in case this exists, remove it; the installer will try to symlink this into ~go/.nodenv/versions; and yes,
+  # even though this is nodenv and not rbenv...
+  try rm -rf /opt/rubies
+
+  cat <<-EOF > /etc/profile.d/nodenv.sh
+export PATH="\$HOME/.nodenv/bin:\$PATH"
+if command -v nodenv &> /dev/null; then
+  eval "\$(nodenv init -)"
+fi
+EOF
+  try su - "$PRIMARY_USER" -c "bash /usr/local/src/provision/nodenv-installer"
+  try su - "$PRIMARY_USER" -c "git -C \"\$(nodenv root)/plugins\" clone https://github.com/nodenv/node-build-update-defs"
+  try su - "$PRIMARY_USER" -c "git -C \"\$(nodenv root)/plugins\" clone https://github.com/nodenv/nodenv-aliases"
+
+  echo "Validating nodenv installation"
+  try su - "$PRIMARY_USER" -c "curl -fsSL https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-doctor | bash"
+}
+
+function install_jabba() {
+  try su - ${PRIMARY_USER} -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
+}
+
+function major_minor() {
+  local version="$1"
+  printf "$(printf $version | cut -d. -f1).$(printf $version | cut -d. -f2)"
+}
+
+function install_global_ruby() {
+  local version="$1"
+  try su - "$PRIMARY_USER" -c "rbenv install $version && rbenv global $(major_minor $version) && echo \"Default ruby version: \$(ruby --version)\""
+  try su - "$PRIMARY_USER" -c "gem install rake bundler && rbenv rehash && rake --version && bundle --version"
+}
+
+function install_global_node() {
+  local version="$1"
+  try su - "$PRIMARY_USER" -c "nodenv install $version && nodenv global $(major_minor $version) && echo \"Default node version: \$(node --version)\""
 }
 
 function install_yarn() {
-  try curl --silent --fail --location https://dl.yarnpkg.com/rpm/yarn.repo --output /etc/yum.repos.d/yarn.repo
-  try yum install --assumeyes yarn
-  try yarn --version
+  try su - "$PRIMARY_USER" -c "npm install -g yarn && nodenv rehash && yarn --version"
 }
 
 function install_gauge() {
@@ -88,6 +241,15 @@ EOF
 
   try yum install --assumeyes gauge
   try gauge --version
+}
+
+function install_jdks() {
+  install_jdk11
+
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    install_jdk12
+    install_jdk13
+  fi
 }
 
 function install_jdk11() {
@@ -114,24 +276,12 @@ function install_native_build_packages() {
       openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash \
       "devtoolset-${CENTOS_MAJOR_VERSION}-gcc-c++" "devtoolset-${CENTOS_MAJOR_VERSION}-gcc"
 
-cat <<-EOF > /etc/profile.d/scl-gcc-6.sh
+  # activate the newer gcc from SCL
+  cat <<-EOF > /etc/profile.d/scl-gcc.sh
 source /opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/enable
 export PATH=\$PATH:/opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/root/usr/bin
 export X_SCLS="\$(scl enable devtoolset-${CENTOS_MAJOR_VERSION} 'echo \$X_SCLS')"
 EOF
-
-}
-
-function install_ruby() {
-  try yum install --assumeyes \
-      rh-ruby24 rh-ruby24-ruby-devel rh-ruby24-rubygem-bundler rh-ruby24-ruby-irb rh-ruby24-rubygem-rake rh-ruby24-rubygem-psych libffi-devel
-
-cat <<-EOF > /etc/profile.d/scl-rh-ruby24.sh
-source /opt/rh/rh-ruby24/enable
-export PATH=\$PATH:/opt/rh/rh-ruby24/root/usr/local/bin
-export X_SCLS="\$(scl enable rh-ruby24 'echo \$X_SCLS')"
-EOF
-  try bash -lc "ruby --version"
 }
 
 function install_python() {
@@ -140,6 +290,7 @@ function install_python() {
 }
 
 function install_scm_tools() {
+  install_git
 
   if [ "$CENTOS_MAJOR_VERSION" == "6" ]; then
     cat <<-EOF > /etc/yum.repos.d/rpmforge-extras.repo
@@ -157,7 +308,6 @@ else
   fi
 
   try yum install --assumeyes subversion
-  install_git
 
   try mkdir -p /usr/local/bin
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
@@ -172,13 +322,11 @@ else
 }
 
 function install_git() {
-  try yum install --assumeyes "$GIT"
-  cat <<-EOF > /etc/profile.d/scl-git.sh
-source /opt/rh/$GIT/enable
-export PATH=\$PATH:/opt/rh/$GIT/root/usr/bin
-export X_SCLS="\$(scl enable $GIT 'echo \$X_SCLS')"
-EOF
-  source "/opt/rh/$GIT/enable"
+  try yum -y install git224-core
+
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    setup_git_config
+  fi
 }
 
 function install_installer_tools() {
@@ -188,7 +336,7 @@ function install_installer_tools() {
       gnupg2 \
       http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.el6.x86_64.rpm
 
-  try bash -lc "gem install fpm --no-ri --no-rdoc"
+  try su - "$PRIMARY_USER" -c "gem install fpm --no-document"
 }
 
 function install_maven() {
@@ -266,13 +414,13 @@ function install_firefox_latest() {
 }
 
 function install_tini() {
-  URL="$(curl --silent --fail --location https://api.github.com/repos/krallin/tini/releases/latest | jq -r '.assets[] | select(.name | match("-amd64.rpm$")) | .browser_download_url' | grep -v muslc)"
+  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/krallin/tini/releases/latest | jq -r '.assets[] | select(.name | match("-amd64.rpm$")) | .browser_download_url' | grep -v muslc)"
   yum install --assumeyes "${URL}"
   try tini --version
 }
 
 function install_geckodriver() {
-  URL="$(curl --silent --fail --location https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.assets[] | select(.name | contains("linux64.tar.gz")) | .browser_download_url')"
+  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/mozilla/geckodriver/releases/latest | jq -r '.assets[] | select(.name | contains("linux64.tar.gz")) | .browser_download_url')"
   try curl --silent --fail --location "${URL}" --output /usr/local/src/geckodriver-latest.tar.gz
   try tar -zxf /usr/local/src/geckodriver-latest.tar.gz -C /usr/local/bin
 }
@@ -296,45 +444,48 @@ function add_gocd_user() {
   try chmod 0440 /etc/sudoers.d/go
 }
 
-function install_jabba() {
-  try su - ${PRIMARY_USER} -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
+function setup_git_config() {
+  try cp /usr/local/src/provision/gitconfig ~go/.gitconfig
+  try chown go:go ~go/.gitconfig
 }
 
-function setup_git_config() {
-  try cp /usr/local/src/provision/gitconfig /go/.gitconfig
-  try chown go:go /go/.gitconfig
+function setup_nexus_configs() {
+  setup_gradle_config
+  setup_maven_config
+  setup_rubygems_config
+  setup_npm_config
 }
 
 function setup_gradle_config() {
   # internal nexus config
-  try mkdir -p /go/.gradle/
-  try cp /usr/local/src/provision/init.gradle /go/.gradle/init.gradle
-  try chown go:go -R /go/.gradle
+  try mkdir -p ~go/.gradle/
+  try cp /usr/local/src/provision/init.gradle ~go/.gradle/init.gradle
+  try chown go:go -R ~go/.gradle
 }
 
 function setup_maven_config() {
   # internal nexus config
-  try mkdir -p /go/.m2/
-  try cp /usr/local/src/provision/settings.xml /go/.m2/settings.xml
-  try chown go:go -R /go/.m2
+  try mkdir -p ~go/.m2/
+  try cp /usr/local/src/provision/settings.xml ~go/.m2/settings.xml
+  try chown go:go -R ~go/.m2
 }
 
 function setup_rubygems_config() {
   # internal nexus config
-  try mkdir -p /go/.bundle/
-  try cp /usr/local/src/provision/bundle-config /go/.bundle/config
-  try chown go:go -R /go/.bundle
+  try mkdir -p ~go/.bundle/
+  try cp /usr/local/src/provision/bundle-config ~go/.bundle/config
+  try chown go:go -R ~go/.bundle
 }
 
 function setup_npm_config() {
   # internal nexus config
-  try mkdir -p /go/.bundle/
-  try cp /usr/local/src/provision/npmrc /go/.npmrc
-  try chown go:go -R /go/.npmrc
+  try mkdir -p ~go/.bundle/
+  try cp /usr/local/src/provision/npmrc ~go/.npmrc
+  try chown go:go -R ~go/.npmrc
 }
 
 function add_golang_gocd_bootstrapper() {
-  URL="$(curl --silent --fail --location https://api.github.com/repos/ketan/gocd-golang-bootstrapper/releases/latest | jq -r '.assets[] | select(.name | contains("linux.amd64")) | .browser_download_url')"
+  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/ketan/gocd-golang-bootstrapper/releases/latest | jq -r '.assets[] | select(.name | contains("linux.amd64")) | .browser_download_url')"
   try curl --silent --fail --location "${URL}" --output /go/go-agent
   try chown go:go /go/go-agent
   try chmod 755 /go/go-agent
@@ -350,8 +501,8 @@ function setup_entrypoint() {
 function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              jabba use openjdk@1.12 && ./gradlew compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
-  try rm -rf /tmp/gocd /home/${PRIMARY_USER}/.gradle/caches/build-cache-*
+              jabba use openjdk@1.11 && ./gradlew --max-workers 4 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
+  try rm -rf /tmp/gocd /${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
 function install_docker() {
@@ -360,68 +511,8 @@ function install_docker() {
   try usermod -a -G docker ${PRIMARY_USER}
 }
 
-setup_epel
-setup_scl
-install_basic_utils
-if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-  # setup gocd user to use internal mirrors for builds
-  add_gocd_user
-fi
-install_node
-install_yarn
-install_gauge
-install_jabba
-install_jdk11
-if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-  install_jdk12
-  install_jdk13
-fi
-install_native_build_packages
-install_ruby
-install_python
-install_scm_tools
-install_installer_tools
-install_maven
-install_ant
-install_awscli
+function yell() { echo "$0: $*" >&2; }
+function die() { yell "$*"; exit 111; }
+function try() { echo "\$ $@" 1>&2; "$@" || die "cannot $*"; }
 
-setup_postgres_repo
-install_postgresql "9.6"
-install_postgresql "10"
-install_postgresql "11"
-install_postgresql "12"
-
-install_sysvinit_tools
-
-if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
-  install_geckodriver
-  install_firefox_dependencies
-  install_firefox_latest
-  install_xvfb
-  install_xss
-  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-    install_docker
-  fi
-fi
-
-if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-  setup_git_config
-fi
-build_gocd
-
-if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-  setup_gradle_config
-  setup_maven_config
-  setup_rubygems_config
-  setup_npm_config
-fi
-
-if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-  add_golang_gocd_bootstrapper
-  setup_entrypoint
-fi
-install_tini
-
-upgrade_os_packages
-list_installed_packages
-clean
+provision
