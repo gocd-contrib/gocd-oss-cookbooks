@@ -59,7 +59,7 @@ GoCD.script {
                 }
               }
             }
-            job('ubuntu-16.04') {
+            job('ubuntu-20.04') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
                 bash{
