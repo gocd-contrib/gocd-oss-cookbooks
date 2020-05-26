@@ -22,10 +22,11 @@ MAVEN_VERSION=3.5.4
 ANT_VERSION=1.10.4
 P4_VERSION=15.1
 P4D_VERSION=16.2
-TINI_VERSION=0.18.0
-POSTGRESQL_VERSION=9.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3)
+
+# import functions
+source "$(dirname $0)/common.sh"
 
 # Main entrypoint
 function provision() {
@@ -53,9 +54,9 @@ function provision() {
   step install_yarn
 
   step install_jabba
-  step install_jdks
-  step install_maven
-  step install_ant
+  step install_jdks "11" "12" "13"
+  step install_maven "$MAVEN_VERSION"
+  step install_ant "$ANT_VERSION"
 
   step install_python
 
@@ -71,26 +72,21 @@ function provision() {
 
   step install_sysvinit_tools
 
-  if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
+  if [ "$CENTOS_MAJOR_VERSION" -ge "7" ]; then
     step install_geckodriver
     step install_firefox_dependencies
     step install_firefox_latest
     step install_xvfb
     step install_xss
-    if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-      step install_docker
-    fi
   fi
 
-  # on docker for mac, make sure you allocate more
-  # than 2G of memoryor gradle might randomly fail
+  # On Docker for Mac, make sure you allocate more than 2G of memory or
+  # gradle might randomly fail; 6G should fairly reliable.
   step build_gocd
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    step install_docker
     step setup_nexus_configs
-  fi
-
-  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     step add_golang_gocd_bootstrapper
     step setup_entrypoint
   fi
@@ -102,30 +98,6 @@ function provision() {
   step clean
 
   step print_versions_summary
-}
-
-function print_versions_summary() {
-  printf "Important package versions summary:\n\n"
-
-  try su - "$PRIMARY_USER" <<-EOF
-echo "git version:"
-git --version
-
-echo "ruby version:"
-ruby --version
-
-echo "node version:"
-node --version
-
-echo "yarn version:"
-yarn --version
-
-echo "Installed JDKs:"
-jabba ls
-
-echo "gauge version:"
-gauge -v
-EOF
 }
 
 function setup_epel() {
@@ -171,94 +143,6 @@ function install_basic_utils() {
   try chmod 755 /usr/local/bin/jq
 }
 
-function install_rbenv() {
-  # in case this exists, remove it; the installer will try to symlink this into ~go/.rbenv/versions
-  try rm -rf /opt/rubies
-
-  cat <<-EOF > /etc/profile.d/rbenv.sh
-export PATH="\$HOME/.rbenv/bin:\$PATH"
-if command -v rbenv &> /dev/null; then
-  eval "\$(rbenv init -)"
-fi
-EOF
-  try su - "$PRIMARY_USER" -c "bash /usr/local/src/provision/rbenv-installer"
-  try su - "$PRIMARY_USER" -c "git -C \"\$(rbenv root)/plugins\" clone https://github.com/tpope/rbenv-aliases"
-
-  echo "Validating rbenv installation"
-  try su - "$PRIMARY_USER" -c "curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/master/bin/rbenv-doctor | bash"
-}
-
-function install_nodenv() {
-  # in case this exists, remove it; the installer will try to symlink this into ~go/.nodenv/versions; and yes,
-  # even though this is nodenv and not rbenv...
-  try rm -rf /opt/rubies
-
-  cat <<-EOF > /etc/profile.d/nodenv.sh
-export PATH="\$HOME/.nodenv/bin:\$PATH"
-if command -v nodenv &> /dev/null; then
-  eval "\$(nodenv init -)"
-fi
-EOF
-  try su - "$PRIMARY_USER" -c "bash /usr/local/src/provision/nodenv-installer"
-  try su - "$PRIMARY_USER" -c "git -C \"\$(nodenv root)/plugins\" clone https://github.com/nodenv/node-build-update-defs"
-  try su - "$PRIMARY_USER" -c "git -C \"\$(nodenv root)/plugins\" clone https://github.com/nodenv/nodenv-aliases"
-
-  echo "Validating nodenv installation"
-  try su - "$PRIMARY_USER" -c "curl -fsSL https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-doctor | bash"
-}
-
-function install_jabba() {
-  try su - ${PRIMARY_USER} -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
-}
-
-function major_minor() {
-  local version="$1"
-  printf "$(printf $version | cut -d. -f1).$(printf $version | cut -d. -f2)"
-}
-
-function install_global_ruby() {
-  local version="$1"
-  try su - "$PRIMARY_USER" -c "rbenv install $version && rbenv global $(major_minor $version) && echo \"Default ruby version: \$(ruby --version)\""
-  try su - "$PRIMARY_USER" -c "gem install rake bundler && rbenv rehash && rake --version && bundle --version"
-}
-
-function install_global_node() {
-  local version="$1"
-  try su - "$PRIMARY_USER" -c "nodenv install $version && nodenv global $(major_minor $version) && echo \"Default node version: \$(node --version)\""
-}
-
-function install_yarn() {
-  try su - "$PRIMARY_USER" -c "npm install -g yarn && nodenv rehash && yarn --version"
-}
-
-function install_gauge() {
-  local version="$1"
-  try curl -sL -O https://github.com/getgauge/gauge/releases/download/v$version/gauge-$version-linux.x86_64.zip
-  try unzip -d /usr/bin gauge-$version-linux.x86_64.zip
-  try gauge -v
-}
-
-function install_jdks() {
-  install_jdk11
-
-  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-    install_jdk12
-    install_jdk13
-  fi
-}
-
-function install_jdk11() {
-  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.11"
-}
-
-function install_jdk12() {
-  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.12"
-}
-
-function install_jdk13() {
-  try su - ${PRIMARY_USER} -c "jabba install openjdk@1.13.0"
-}
-
 function install_sysvinit_tools() {
   try yum install --assumeyes sysvinit-tools
 }
@@ -287,7 +171,7 @@ function install_python() {
 function install_scm_tools() {
   install_git
 
-  if [ "$CENTOS_MAJOR_VERSION" == "6" ]; then
+  if [ "$CENTOS_MAJOR_VERSION" -lt "7" ]; then
     cat <<-EOF > /etc/yum.repos.d/rpmforge-extras.repo
 [rpmforge-extras]
 name=RHEL $releasever - RPMforge.net - extras
@@ -332,20 +216,6 @@ function install_installer_tools() {
       http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.el6.x86_64.rpm
 
   try su - "$PRIMARY_USER" -c "gem install fpm --no-document"
-}
-
-function install_maven() {
-  try mkdir -p /opt/local/
-  try curl --silent --fail --location http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip --output /usr/local/src/apache-maven-${MAVEN_VERSION}-bin.zip
-  try unzip -q /usr/local/src/apache-maven-${MAVEN_VERSION}-bin.zip -d /opt/local
-  try ln -sf /opt/local/apache-maven-${MAVEN_VERSION}/bin/mvn /usr/local/bin/mvn
-}
-
-function install_ant() {
-  try mkdir -p /opt/local/
-  try curl --silent --fail --location http://archive.apache.org/dist/ant/binaries/apache-ant-${ANT_VERSION}-bin.zip --output /usr/local/src/apache-ant-${ANT_VERSION}-bin.zip
-  try unzip -q /usr/local/src/apache-ant-${ANT_VERSION}-bin.zip -d /opt/local
-  try ln -sf /opt/local/apache-ant-${ANT_VERSION}/bin/ant /usr/local/bin/ant
 }
 
 function install_awscli() {
@@ -408,18 +278,6 @@ function install_firefox_latest() {
   try firefox -version
 }
 
-function install_tini() {
-  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/krallin/tini/releases/latest | jq -r '.assets[] | select(.name | match("-amd64.rpm$")) | .browser_download_url' | grep -v muslc)"
-  yum install --assumeyes "${URL}"
-  try tini --version
-}
-
-function install_geckodriver() {
-  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/mozilla/geckodriver/releases/latest | jq -r '.assets[] | select(.name | contains("linux64.tar.gz")) | .browser_download_url')"
-  try curl --silent --fail --location "${URL}" --output /usr/local/src/geckodriver-latest.tar.gz
-  try tar -zxf /usr/local/src/geckodriver-latest.tar.gz -C /usr/local/bin
-}
-
 function list_installed_packages() {
   try bash -c "rpm -qa | sort"
 }
@@ -433,67 +291,26 @@ function upgrade_os_packages() {
   try yum update --assumeyes --quiet
 }
 
-function add_gocd_user() {
-  try useradd --home-dir /go --shell /bin/bash go
-  try cp /usr/local/src/provision/gocd-sudoers /etc/sudoers.d/go
-  try chmod 0440 /etc/sudoers.d/go
-}
-
-function setup_git_config() {
-  try cp /usr/local/src/provision/gitconfig ~go/.gitconfig
-  try chown go:go ~go/.gitconfig
-}
-
-function setup_nexus_configs() {
-  setup_gradle_config
-  setup_maven_config
-  setup_rubygems_config
-  setup_npm_config
-}
-
-function setup_gradle_config() {
-  # internal nexus config
-  try mkdir -p ~go/.gradle/
-  try cp /usr/local/src/provision/init.gradle ~go/.gradle/init.gradle
-  try chown go:go -R ~go/.gradle
-}
-
-function setup_maven_config() {
-  # internal nexus config
-  try mkdir -p ~go/.m2/
-  try cp /usr/local/src/provision/settings.xml ~go/.m2/settings.xml
-  try chown go:go -R ~go/.m2
-}
-
-function setup_rubygems_config() {
-  # internal nexus config
-  try mkdir -p ~go/.bundle/
-  try cp /usr/local/src/provision/bundle-config ~go/.bundle/config
-  try chown go:go -R ~go/.bundle
-}
-
-function setup_npm_config() {
-  # internal nexus config
-  try mkdir -p ~go/.bundle/
-  try cp /usr/local/src/provision/npmrc ~go/.npmrc
-  try chown go:go -R ~go/.npmrc
-}
-
-function add_golang_gocd_bootstrapper() {
-  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/ketan/gocd-golang-bootstrapper/releases/latest | jq -r '.assets[] | select(.name | contains("linux.amd64")) | .browser_download_url')"
-  try curl --silent --fail --location "${URL}" --output /go/go-agent
-  try chown go:go /go/go-agent
-  try chmod 755 /go/go-agent
-}
-
-function setup_entrypoint() {
-  try cp /usr/local/src/provision/with-java /usr/local/bin/with-java
-  try cp /usr/local/src/provision/bootstrap.sh /bootstrap.sh
-  try chmod 755 /usr/local/bin/with-java
-  try chmod 755 /bootstrap.sh
-}
-
 function build_gocd() {
+  if [ "$(how_much_memory_in_gb)" -lt 6 ]; then
+    yellowalert "                                                                                "
+    yellowalert "////////////////////////////////////////////////////////////////////////////////"
+    yellowalert "////                                Warning!                                ////"
+    yellowalert "////////////////////////////////////////////////////////////////////////////////"
+    yellowalert "                                                                                "
+    yellowalert "Your Docker container has less than 6GB of RAM allocated. Building the GoCD     "
+    yellowalert "codebase may intermittently fail. For best results, allocate AT LEAST 4G of RAM "
+    yellowalert "to this container.                                                              "
+    yellowalert "                                                                                "
+    yellowalert "No, really. In fact, I'd recommend 6G to be safe.                               "
+    yellowalert "                                                                                "
+    yellowalert "As Biggie once said: \"Mo' RAM, fewer problems...\"                               "
+    yellowalert "                                                                                "
+    yellowalert "  (he didn't really say that)                                                   "
+    yellowalert "                                                                                "
+    printf "\n"
+  fi
+
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
               jabba use openjdk@1.11 && GRADLE_OPTS=-Dorg.gradle.daemon=false ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
@@ -501,26 +318,13 @@ function build_gocd() {
 }
 
 function install_docker() {
-  try curl --silent --fail --location 'https://download.docker.com/linux/centos/docker-ce.repo' --output /etc/yum.repos.d/docker-ce.repo
-  try yum install --assumeyes docker-ce
-  try usermod -a -G docker ${PRIMARY_USER}
+  if [ "$CENTOS_MAJOR_VERSION" -ge "7" ]; then
+    try curl --silent --fail --location 'https://download.docker.com/linux/centos/docker-ce.repo' --output /etc/yum.repos.d/docker-ce.repo
+    try yum install --assumeyes docker-ce
+    try usermod -a -G docker ${PRIMARY_USER}
+  else
+    yell "Skipping docker install; need CentOS 7 or better."
+  fi
 }
-
-function yell() { redalert "$0: $*" >&2; }
-function die() { yell "$*"; exit 111; }
-function try() { magenta "\$ $@" >&2; "$@" || die "cannot $*"; }
-function step() {
-  printf "\n\n" >&2
-  cyan "////////////////////////////////////////////////////////////////////////////////" >&2
-  cyan "  => Step: $*" >&2
-  cyan "////////////////////////////////////////////////////////////////////////////////" >&2
-  printf "\n\n" >&2
-  "$@"
-}
-
-# colors
-function redalert() { printf "\e[1;41m$*\e[0m\n"; }
-function cyan() { printf "\e[36;1m$*\e[0m\n"; }
-function magenta() { printf "\e[35;1m$*\e[0m\n"; }
 
 provision
