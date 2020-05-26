@@ -70,11 +70,11 @@ GoCD.script {
                 }
 
                 bash {
-                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.ubuntu -t gocddev/gocd-dev-build:ubuntu-16-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
+                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.ubuntu -t gocddev/gocd-dev-build:ubuntu-20-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
                 }
 
                 bash {
-                  commandString = 'docker push gocddev/gocd-dev-build:ubuntu-16-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
+                  commandString = 'docker push gocddev/gocd-dev-build:ubuntu-20-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
                 }
               }
             }
