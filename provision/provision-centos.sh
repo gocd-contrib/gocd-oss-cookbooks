@@ -108,8 +108,7 @@ function provision() {
 }
 
 function setup_epel() {
-  try $pkg -y install epel-release
-
+  try $pkg -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm
 }
 
 # Software Collections Library yum repo
@@ -133,7 +132,6 @@ function setup_yum_external_repos() {
     try $pkg -y install "${pkg}-command(config-manager)"
     try $pkg config-manager --set-enabled epel-testing
     try $pkg config-manager --set-enabled PowerTools
-    try $pkg -y install https://extras.getpagespeed.com/release-el8-latest.rpm
   else
     setup_ius
     setup_scl
