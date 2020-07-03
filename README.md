@@ -10,7 +10,7 @@ To build a new version of the images, push a new version tag to this repository.
 # Build an image locally
 
 - ```docker build . -t gocddev/gocd-dev-build:dind-SNAPSHOT -f Dockerfile.dind```
-- ```docker build . -t gocddev/gocd-dev-build:centos-7-SNAPSHOT -f Dockerfile.centos7```
+- ```docker build . -t gocddev/gocd-dev-build:centos-8-SNAPSHOT -f Dockerfile.centos```
 - ```docker build . -t gocddev/gocd-dev-build:ubuntu-20-04-SNAPSHOT -f Dockerfile.ubuntu```
 - ```docker build . -t gocddev/gocd-dev-build:windows2019-SNAPSHOT -f Dockerfile.windowsservercore2019```
 

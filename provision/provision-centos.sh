@@ -18,12 +18,17 @@ for arg in $@; do
 done
 
 NSIS_VERSION=3.04-2
-MAVEN_VERSION=3.5.4
-ANT_VERSION=1.10.4
+MAVEN_VERSION=3.6.3
+ANT_VERSION=1.10.8
 P4_VERSION=15.1
 P4D_VERSION=16.2
 
-CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3)
+CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3 | cut -d"." -f1)
+pkg="yum"
+
+if command -v dnf &> /dev/null; then
+  pkg="dnf"
+fi
 
 # import functions
 source "$(dirname $0)/common.sh"
@@ -50,11 +55,11 @@ function provision() {
   step install_global_ruby "2.7.1"
 
   step install_nodenv
-  step install_global_node "14.3.0"
+  step install_global_node "14.5.0"
   step install_yarn
 
   step install_jabba
-  step install_jdks "11" "12" "13"
+  step install_jdks "11" "12" "13" "14"
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
@@ -70,9 +75,11 @@ function provision() {
   step install_postgresql "11"
   step install_postgresql "12"
 
-  step install_sysvinit_tools
+  if [ "$CENTOS_MAJOR_VERSION" -eq 7 ]; then
+    step install_sysvinit_tools
+  fi
 
-  if [ "$CENTOS_MAJOR_VERSION" -ge "7" ]; then
+  if [ "$CENTOS_MAJOR_VERSION" -ge 7 ]; then
     step install_geckodriver
     step install_firefox_dependencies
     step install_firefox_latest
@@ -101,32 +108,41 @@ function provision() {
 }
 
 function setup_epel() {
-  try yum -y install epel-release
+  try $pkg -y install epel-release
+
 }
 
 # Software Collections Library yum repo
 # For recent-ish versions of `gcc` + friends
 function setup_scl() {
-  try yum -y install centos-release-scl
+  try $pkg -y install centos-release-scl
 }
 
 # https://ius.io/ - Inline with Upstream Stable yum repo
 # For modern versions of `git`
 function setup_ius() {
-  try yum -y install \
+  try $pkg -y install \
     "https://repo.ius.io/ius-release-el${CENTOS_MAJOR_VERSION}.rpm" \
     "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm"
 }
 
 function setup_yum_external_repos() {
   setup_epel
-  setup_ius
-  setup_scl
+
+  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
+    try $pkg -y install "${pkg}-command(config-manager)"
+    try $pkg config-manager --set-enabled epel-testing
+    try $pkg config-manager --set-enabled PowerTools
+    try $pkg -y install https://extras.getpagespeed.com/release-el8-latest.rpm
+  else
+    setup_ius
+    setup_scl
+  fi
 }
 
 function install_basic_utils() {
   # add some basic utils
-  try yum install --assumeyes \
+  try $pkg -y install \
       ncurses \
       file \
       wget \
@@ -144,49 +160,47 @@ function install_basic_utils() {
 }
 
 function install_sysvinit_tools() {
-  try yum install --assumeyes sysvinit-tools
+  try $pkg -y install sysvinit-tools
 }
 
 function install_native_build_packages() {
-  try yum install --assumeyes \
+  try $pkg -y install \
       libxml2-devel libxslt-devel \
       zlib-devel bzip2-devel \
       glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
-      openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash \
-      "devtoolset-${CENTOS_MAJOR_VERSION}-gcc-c++" "devtoolset-${CENTOS_MAJOR_VERSION}-gcc"
+      openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash
 
-  # activate the newer gcc from SCL
-  cat <<-EOF > /etc/profile.d/scl-gcc.sh
+  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
+    try $pkg -y groupinstall "Development Tools"
+  else
+    try $pkg -y install \
+      "devtoolset-${CENTOS_MAJOR_VERSION}-gcc-c++" \
+      "devtoolset-${CENTOS_MAJOR_VERSION}-gcc"
+
+    # activate the newer gcc from SCL
+    cat <<-EOF > /etc/profile.d/scl-gcc.sh
 source /opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/enable
 export PATH=\$PATH:/opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/root/usr/bin
 export X_SCLS="\$(scl enable devtoolset-${CENTOS_MAJOR_VERSION} 'echo \$X_SCLS')"
 EOF
+  fi
 }
 
 function install_python() {
-  try yum install --assumeyes python-devel python-pip python-virtualenv
+  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
+    try $pkg -y install python3 python3-devel
+    try alternatives --set python /usr/bin/python3
+    try ln -s /usr/bin/pip3 /usr/bin/pip
+  else
+    try $pkg -y install python-devel python-pip python-virtualenv
+  fi
   try python --version
 }
 
 function install_scm_tools() {
   install_git
-
-  if [ "$CENTOS_MAJOR_VERSION" -lt "7" ]; then
-    cat <<-EOF > /etc/yum.repos.d/rpmforge-extras.repo
-[rpmforge-extras]
-name=RHEL $releasever - RPMforge.net - extras
-enabled=0
-fastestmirror_enabled=0
-gpgcheck=1
-gpgkey=http://repository.it4i.cz/mirrors/repoforge/RPM-GPG-KEY.dag.txt
-mirrorlist=http://mirrorlist.repoforge.org/el6/mirrors-rpmforge-extras
-EOF
-    try yum install --assumeyes mercurial --enablerepo=rpmforge-extras
-else
-    try yum install --assumeyes mercurial
-  fi
-
-  try yum install --assumeyes subversion
+  try $pkg -y install mercurial
+  try $pkg -y install subversion
 
   try mkdir -p /usr/local/bin
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
@@ -201,7 +215,8 @@ else
 }
 
 function install_git() {
-  try yum -y install git224-core
+  local git_pkg="$([ "$CENTOS_MAJOR_VERSION" -ge 8 ] && printf git || printf git224-core)"
+  try $pkg -y install $git_pkg
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     setup_git_config
@@ -209,9 +224,20 @@ function install_git() {
 }
 
 function install_installer_tools() {
-  try yum install --assumeyes \
+  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
+    try $pkg -y install python2 python2-devel \
+      xz-lzma-compat # needed by dpkg-dev
+    try pip2 install kid
+
+    # python2-kid does not exist for CentOS 8; so broken dependencies using `dnf install`
+    try rpm -Uvh --nodeps https://forensics.cert.org/centos/cert/8/x86_64/repoview-0.6.6-13.el8.noarch.rpm
+  else
+    try $pkg -y install repoview
+  fi
+
+  try $pkg -y install \
       dpkg-devel dpkg-dev \
-      createrepo repoview yum-utils rpm-build fakeroot yum-utils \
+      createrepo yum-utils rpm-build fakeroot \
       gnupg2 \
       http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.el6.x86_64.rpm
 
@@ -220,45 +246,44 @@ function install_installer_tools() {
 
 function install_awscli() {
   # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3. Without this file, all files in s3 will have content type `application/octet-stream`
-  try yum install --assumeyes mailcap
+  try $pkg -y install mailcap
   try pip install awscli
 }
 
 function setup_postgres_repo() {
-  try yum install --assumeyes https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+  try $pkg -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+
+  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
+    try $pkg -qy module disable postgresql
+  fi
 }
 
 function install_postgresql() {
   local pg_version="$1"
-  package_suffix="$(echo ${pg_version} | sed -e 's/\.//g')"
-  try yum install --assumeyes postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
+  package_suffix="$(printf "${pg_version}" | sed -e 's/\.//g')"
+  try $pkg -y install postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
 }
 
 function install_xvfb() {
-  try yum install --assumeyes xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
+  try $pkg -y install xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
 }
 
 function install_xss() {
-  try yum install --assumeyes libXScrnSaver # Headless Chrome needs this for some reason
+  try $pkg -y install libXScrnSaver # Headless Chrome needs this for some reason
 }
 
 # for FF
 function install_firefox_dependencies() {
-  if [ "$CENTOS_MAJOR_VERSION" == "6" ]; then
-    try yum install --assumeyes gnome-themes nspluginwrapper
-  else
-    try yum install --assumeyes gtk3
-  fi
-
-  try yum install --assumeyes libcroco
-  try yum install --assumeyes \
+  try $pkg -y install \
+      gtk3 \
+      libcroco \
       xdotool \
       hicolor-icon-theme \
       dbus dbus-x11 xauth liberation-sans-fonts liberation-serif-fonts liberation-mono-fonts mesa-dri-drivers \
       xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts
 
   # install just the FF dependencies, without FF
-  try yum install --assumeyes $(yum deplist firefox | awk '/provider:/ {print $2}' | sort -u)
+  try $pkg -y install $($pkg deplist firefox | awk '/provider:/ {print $2}' | sort -u)
 }
 
 function install_firefox_latest() {
@@ -283,12 +308,12 @@ function list_installed_packages() {
 }
 
 function clean() {
-  try yum clean all
+  try $pkg clean all
   try rm -rf /usr/local/src/*
 }
 
 function upgrade_os_packages() {
-  try yum update --assumeyes --quiet
+  try $pkg -y update --quiet
 }
 
 function build_gocd() {
@@ -318,9 +343,11 @@ function build_gocd() {
 }
 
 function install_docker() {
-  if [ "$CENTOS_MAJOR_VERSION" -ge "7" ]; then
+  if [ "$CENTOS_MAJOR_VERSION" -ge 7 ]; then
+    try systemctl disable firewalld # firewalld is probably not installed anyway, but it would need to be disabled to allow DNS in containers
+    try $pkg -y install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
     try curl --silent --fail --location 'https://download.docker.com/linux/centos/docker-ce.repo' --output /etc/yum.repos.d/docker-ce.repo
-    try yum install --assumeyes docker-ce
+    try $pkg -y install docker-ce
     try usermod -a -G docker ${PRIMARY_USER}
   else
     yell "Skipping docker install; need CentOS 7 or better."

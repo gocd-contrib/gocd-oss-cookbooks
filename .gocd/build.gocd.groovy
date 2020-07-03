@@ -40,7 +40,7 @@ GoCD.script {
                 }
               }
             }
-            job('centos-7') {
+            job('centos-8') {
               elasticProfileId = 'ecs-dind-gocd-agent'
               tasks {
                 bash{
@@ -51,11 +51,11 @@ GoCD.script {
                 }
 
                 bash {
-                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.centos7 -t gocddev/gocd-dev-build:centos-7-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
+                  commandString = 'set -x; git fetch --all; docker build -f Dockerfile.centos -t gocddev/gocd-dev-build:centos-8-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .'
                 }
 
                 bash {
-                  commandString = 'docker push gocddev/gocd-dev-build:centos-7-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
+                  commandString = 'docker push gocddev/gocd-dev-build:centos-8-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"'
                 }
               }
             }
