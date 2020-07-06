@@ -120,9 +120,7 @@ function setup_scl() {
 # https://ius.io/ - Inline with Upstream Stable yum repo
 # For modern versions of `git`
 function setup_ius() {
-  try $pkg -y install \
-    "https://repo.ius.io/ius-release-el${CENTOS_MAJOR_VERSION}.rpm" \
-    "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm"
+  try $pkg -y install "https://repo.ius.io/ius-release-el${CENTOS_MAJOR_VERSION}.rpm"
 }
 
 function setup_yum_external_repos() {
