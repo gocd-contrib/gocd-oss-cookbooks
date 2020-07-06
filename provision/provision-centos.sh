@@ -222,6 +222,7 @@ function install_git() {
 function install_installer_tools() {
   if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
     try $pkg -y install python2 python2-devel \
+      http://www.nosuchhost.net/~cheese/fedora/packages/epel-8/x86_64/python2-rpmUtils-0.1-1.el8.noarch.rpm \
       xz-lzma-compat # needed by dpkg-dev
     try pip2 install kid
 
