@@ -222,19 +222,19 @@ function install_git() {
 function install_installer_tools() {
   if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
     try $pkg -y install python2 python2-devel \
-      http://www.nosuchhost.net/~cheese/fedora/packages/epel-8/x86_64/python2-rpmUtils-0.1-1.el8.noarch.rpm \
+      https://nexus.gocd.io/repository/legacy-packages-for-centos-8/python2-rpmUtils-0.1-1.el8.noarch.rpm \
       xz-lzma-compat # needed by dpkg-dev
     try pip2 install kid
 
     # python2-kid does not exist for CentOS 8; so broken dependencies using `dnf install`
-    try rpm -Uvh --nodeps https://forensics.cert.org/centos/cert/8/x86_64/repoview-0.6.6-13.el8.noarch.rpm
+    try rpm -Uvh --nodeps https://nexus.gocd.io/repository/legacy-packages-for-centos-8/repoview-0.6.6-13.el8.noarch.rpm
   else
     try $pkg -y install repoview
   fi
 
   try $pkg -y install \
       dpkg-devel dpkg-dev \
-      createrepo yum-utils rpm-build fakeroot \
+      createrepo yum-utils rpm-build rpm-sign fakeroot \
       gnupg2 \
       http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.el6.x86_64.rpm
 
