@@ -221,14 +221,15 @@ function install_git() {
 
 function install_installer_tools() {
   if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
-    try $pkg -y install python2 python2-devel \
-      https://nexus.gocd.io/repository/legacy-packages-for-centos-8/python2-rpmUtils-0.1-1.el8.noarch.rpm \
-      xz-lzma-compat # needed by dpkg-dev
-    try pip2 install kid
-
-    # python2-kid does not exist for CentOS 8; so broken dependencies using `dnf install`
-    try rpm -Uvh --nodeps https://nexus.gocd.io/repository/legacy-packages-for-centos-8/repoview-0.6.6-13.el8.noarch.rpm
+    # needed by dpkg-dev
+    try $pkg -y install xz-lzma-compat
   else
+    # While repoview and python2-rpmUtils RPMs do exist for CentOS/RHEL 8, none work in
+    # practice (i.e., at runtime) due to the lack of python2 RPM bindings on the platform.
+    #
+    # If this is _really_ needed, the easiest thing to do would be to port the script to
+    # python3, or reimplement EVR comparison without the dependency on RPM bindings, which
+    # appears to be the only function used from the rpmUtils library.
     try $pkg -y install repoview
   fi
 
