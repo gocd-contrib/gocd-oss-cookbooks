@@ -53,8 +53,7 @@ choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
 choco install --no-progress -y hg yarn svn git gpg4win-vanilla windows-sdk-8.1 awscli
-choco install --no-progress -y microsoft-edge
-choco install --no-progress -y firefox --params "/NoTaskbarShortcut /NoDesktopShortcut /NoStartMenuShortcut /NoMaintenanceService /RemoveDistributionDir /NoAutoUpdate"
+choco install --no-progress -y googlechrome
 
 RefreshEnv
 
