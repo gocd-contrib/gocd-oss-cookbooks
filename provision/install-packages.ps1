@@ -28,12 +28,12 @@ iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/in
 $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
-refreshenv
+RefreshEnv
 
 # install packages
-choco install --no-progress -y choco nodejs --version="${NODEJS_VERSION}"
+choco install --no-progress -y nodejs --version="${NODEJS_VERSION}"
 
-refreshenv
+RefreshEnv
 
 npm install --global --production windows-build-tools
 
@@ -60,7 +60,6 @@ RefreshEnv
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
 
-
 # install p4
 New-Item "${env:ProgramFiles(x86)}\\Perforce\\bin\\" -ItemType Directory | Out-Null
 Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4_VERSION/bin.ntx64/p4.exe -Outfile "C:\\Program Files (x86)\\Perforce\\bin\\p4.exe"
@@ -75,4 +74,3 @@ $env:Path = $newSystemPath + ";" + [System.Environment]::GetEnvironmentVariable(
 [Environment]::SetEnvironmentVariable("Path", $newSystemPath, [EnvironmentVariableTarget]::Machine)
 
 Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
-# npm config set msvs_version 2015

@@ -1,5 +1,13 @@
 FROM mcr.microsoft.com/windows/servercore:ltsc2019-amd64
-LABEL maintainer="GoCD Team <go-cd-dev@googlegroups.com>"
+
+# Shamelessly nabbed from https://github.com/gantrior/docker-chrome-windows
+#
+# Fonts are needed for Chrome to launch and function. Windows Server Core 2019
+# does not include fonts, so we need to install them ourselves.
+ADD Files/FontsToAdd.tar /Fonts/
+WORKDIR /Fonts/
+RUN powershell -File .\\Add-Font.ps1 Fonts
+WORKDIR /
 
 ENV TMP=c:\\tmp \
     TEMP=c:\\tmp
