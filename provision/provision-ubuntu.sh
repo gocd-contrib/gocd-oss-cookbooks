@@ -20,7 +20,7 @@ function provision() {
   step install_global_ruby "2.7.1"
 
   step install_nodenv
-  step install_global_node "14.5.0"
+  step install_global_node "14.10.0"
   step install_yarn
 
   step install_jabba
