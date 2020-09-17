@@ -8,7 +8,7 @@ for arg in $@; do
     --contrib)
       PRIMARY_USER="dojo"
       SKIP_INTERNAL_CONFIG="yes"
-      GRADLE_OPTIONS="${GRADLE_OPTIONS} --no-daemon --max-workers 1"
+      GRADLE_OPTIONS="${GRADLE_OPTIONS} --no-daemon"
       shift
       ;;
     *)
