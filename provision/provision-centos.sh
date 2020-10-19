@@ -52,14 +52,14 @@ function provision() {
   step install_scm_tools
 
   step install_rbenv
-  step install_global_ruby "2.7.1"
+  step install_global_ruby "2.7.2"
 
   step install_nodenv
-  step install_global_node "14.10.0"
+  step install_global_node "14.13.1"
   step install_yarn
 
   step install_jabba
-  step install_jdks "11" "12" "13" "14"
+  step install_jdks "11" "12" "13" "14" "15"
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
@@ -88,7 +88,7 @@ function provision() {
   fi
 
   # On Docker for Mac, make sure you allocate more than 2G of memory or
-  # gradle might randomly fail; 6G should fairly reliable.
+  # gradle might randomly fail; 6G should be fairly reliable.
   step build_gocd
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then

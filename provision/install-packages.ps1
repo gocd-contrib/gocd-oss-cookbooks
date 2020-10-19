@@ -1,8 +1,8 @@
 $GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4_VERSION='15.1'
 $P4D_VERSION='16.2'
-$NODEJS_VERSION='14.10.0'
-$RUBY_VERSION='2.7.1.1'
+$NODEJS_VERSION='14.13.1'
+$RUBY_VERSION='2.7.2.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.1' # because newer ant versions will pull down a JRE, which we do not want
 # Copy over configs
@@ -41,11 +41,12 @@ npm install --global --production windows-build-tools
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
 
 # install openjdk 11, 12 and 13. Make openjdk 11 default
-Write-Host "Installing jabba and openjdk(11, 12, 13, 14), setting openjdk 11 as default"
+Write-Host "Installing jabba and openjdk(11, 12, 13, 14, 15), setting openjdk 11 as default"
 jabba install openjdk@1.11
 jabba install openjdk@1.12
 jabba install openjdk@1.13
 jabba install openjdk@1.14
+jabba install openjdk@1.15
 
 jabba use "openjdk@1.11"
 

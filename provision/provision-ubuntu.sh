@@ -17,14 +17,14 @@ function provision() {
   step install_scm_tools
 
   step install_rbenv
-  step install_global_ruby "2.7.1"
+  step install_global_ruby "2.7.2"
 
   step install_nodenv
-  step install_global_node "14.10.0"
+  step install_global_node "14.13.1"
   step install_yarn
 
   step install_jabba
-  step install_jdks "11" "12" "13" "14"
+  step install_jdks "11" "12" "13" "14" "15"
 
   step install_python
   step install_awscli
