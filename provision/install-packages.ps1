@@ -1,7 +1,7 @@
 $GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4_VERSION='15.1'
 $P4D_VERSION='16.2'
-$NODEJS_VERSION='14.13.1'
+$NODEJS_VERSION='14.14.0'
 $RUBY_VERSION='2.7.2.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.1' # because newer ant versions will pull down a JRE, which we do not want

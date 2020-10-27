@@ -55,7 +55,7 @@ function provision() {
   step install_global_ruby "2.7.2"
 
   step install_nodenv
-  step install_global_node "14.13.1"
+  step install_global_node "14.14.0"
   step install_yarn
 
   step install_jabba
@@ -65,7 +65,7 @@ function provision() {
 
   step install_python
 
-  step install_gauge "1.0.6"
+  step install_gauge "1.1.4"
   step install_installer_tools
   step install_awscli
 
