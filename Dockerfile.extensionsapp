@@ -1,4 +1,4 @@
-FROM gocd/gocd-agent-docker-dind:v20.7.0
+FROM gocd/gocd-agent-docker-dind:v20.10.0
 MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
 RUN apk add --no-cache python3 groff && \
