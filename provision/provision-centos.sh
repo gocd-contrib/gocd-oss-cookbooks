@@ -23,7 +23,7 @@ ANT_VERSION=1.10.8
 P4_VERSION=15.1
 P4D_VERSION=16.2
 
-CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f3 | cut -d"." -f1)
+CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
 pkg="yum"
 
 if command -v dnf &> /dev/null; then
