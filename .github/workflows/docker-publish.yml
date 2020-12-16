@@ -24,8 +24,8 @@ jobs:
       - name: Log into dockerhub
         run: echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
         env:
-          DOCKERHUB_PASSWORD: "${{ secrets.DOCKERHUB_PASSWORD }}"
           DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
+          DOCKERHUB_PASSWORD: "${{ secrets.DOCKERHUB_PASSWORD }}"
 
       - name: Build the image
         run: |
