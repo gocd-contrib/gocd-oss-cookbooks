@@ -129,7 +129,7 @@ function setup_yum_external_repos() {
   if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
     try $pkg -y install "${pkg}-command(config-manager)"
     try $pkg config-manager --set-enabled epel-testing
-    try $pkg config-manager --set-enabled PowerTools
+    try $pkg config-manager --set-enabled powertools
   else
     setup_ius
     setup_scl
