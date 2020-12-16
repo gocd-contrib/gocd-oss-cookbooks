@@ -76,3 +76,22 @@ jobs:
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:ubuntu-20-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+  windows-2019:
+    runs-on: windows-2019
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Verify a tag is present
+        run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
+
+      - name: Log into dockerhub
+        run: (echo "%DOCKERHUB_PASSWORD%" | docker login --username "%DOCKERHUB_USERNAME%" --password-stdin) -or (ls)
+        env:
+          DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
+          DOCKERHUB_PASSWORD: "${{ secrets.DOCKERHUB_PASSWORD }}"
+
+      - name: Build the image
+        run: docker build -f Dockerfile.windowsservercore2019 -t gocddev/gocd-dev-build:windows2019-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
+
+      - name: Publish the image
+        run: docker push gocddev/gocd-dev-build:windows2019-$(git tag --points-at HEAD --sort=version:refname | tail -n1)
