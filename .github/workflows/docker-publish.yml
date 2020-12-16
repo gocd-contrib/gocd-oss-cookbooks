@@ -1,0 +1,36 @@
+name: Build Docker Images
+
+on:
+  # Build images when a tag is pushed
+  push:
+    tags:
+      - 'v*'
+  create:
+    tags:
+      - 'v*'
+  release:
+    types: [ published, created, released ]
+
+
+jobs:
+  dind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Verify a tag is present
+        run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
+
+      - name: Log into dockerhub
+        run: echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
+        env:
+          DOCKERHUB_PASSWORD: "${{ secrets.DOCKERHUB_PASSWORD }}"
+          DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
+
+      - name: Build the image
+        run: |
+          set -x
+          docker build -f Dockerfile.dind -t gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
+
+      - name: Publish the image
+        run: docker push gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
