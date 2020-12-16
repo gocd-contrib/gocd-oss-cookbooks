@@ -55,7 +55,7 @@ jobs:
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:centos-8-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
-  ubuntu-20.04:
+  ubuntu-20-04:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
