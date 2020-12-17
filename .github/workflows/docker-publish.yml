@@ -82,7 +82,7 @@ jobs:
         run: docker build -f Dockerfile.windowsservercore2019 -t gocddev/gocd-dev-build:windows2019-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
 
       - name: Log into dockerhub
-        run: (echo "%DOCKERHUB_TOKEN%" | docker login --username "%DOCKERHUB_USERNAME%" --password-stdin) -or (ls)
+        run: (echo "$env:DOCKERHUB_TOKEN" | docker login --username "$env:DOCKERHUB_USERNAME" --password-stdin) -or (ls)
         env:
           DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
           DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
