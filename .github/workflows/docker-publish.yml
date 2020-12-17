@@ -1,15 +1,9 @@
 name: Build Docker Images
 
 on:
-  # Build images when a tag is pushed
-  push:
-    tags:
-      - 'v*'
   create:
     tags:
       - 'v*'
-  release:
-    types: [ published, created, released ]
 
 
 jobs:
