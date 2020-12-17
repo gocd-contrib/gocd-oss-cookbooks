@@ -48,7 +48,7 @@ jabba install openjdk@1.13
 jabba install openjdk@1.14
 jabba install openjdk@1.15
 
-jabba use "openjdk@1.11"
+jabba use "openjdk@1.15"
 
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"

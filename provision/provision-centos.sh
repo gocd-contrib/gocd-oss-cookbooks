@@ -60,6 +60,7 @@ function provision() {
 
   step install_jabba
   step install_jdks "11" "12" "13" "14" "15"
+  try jabba use openjdk@1.15
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
@@ -336,7 +337,7 @@ function build_gocd() {
 
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              jabba use openjdk@1.11 && GRADLE_OPTS=-Dorg.gradle.daemon=false ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
+              GRADLE_OPTS=-Dorg.gradle.daemon=false ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
   try rm -rf /tmp/gocd /${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
