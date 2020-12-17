@@ -126,6 +126,10 @@ function install_jdks() {
   done
 }
 
+function default_jdk() {
+    try su - ${PRIMARY_USER:-go} -c "jabba use openjdk@1.$1"
+}
+
 function install_maven() {
   local version="$1"
   try mkdir -p /opt/local/

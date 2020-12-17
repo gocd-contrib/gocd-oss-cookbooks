@@ -60,7 +60,7 @@ function provision() {
 
   step install_jabba
   step install_jdks "11" "12" "13" "14" "15"
-  try jabba use openjdk@1.15
+  step default_jdk "15"
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
