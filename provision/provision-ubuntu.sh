@@ -17,10 +17,10 @@ function provision() {
   step install_scm_tools
 
   step install_rbenv
-  step install_global_ruby "2.7.2"
+  step install_global_ruby "3.0.0"
 
   step install_nodenv
-  step install_global_node "14.14.0"
+  step install_global_node "15.7.0"
   step install_yarn
 
   step install_jabba
