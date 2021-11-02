@@ -32,10 +32,9 @@ RefreshEnv
 
 # install packages
 choco install --no-progress -y nodejs --version="${NODEJS_VERSION}"
-
+choco install --no-progress -y python visualstudio2017-workload-vctools
 RefreshEnv
-
-npm install --global --production windows-build-tools
+npm config --global set msvs_version 2017
 
 # install jabba
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
