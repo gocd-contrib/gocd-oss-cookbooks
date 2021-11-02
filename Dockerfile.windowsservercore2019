@@ -9,8 +9,8 @@ WORKDIR /Fonts/
 RUN powershell -File .\\Add-Font.ps1 Fonts
 WORKDIR /
 
-ENV TMP=c:\\tmp \
-    TEMP=c:\\tmp
+ENV TMP=C:\\tmp \
+    TEMP=C:\\tmp
 
 COPY provision C:\\Users\\ContainerAdministrator\\provision
 
