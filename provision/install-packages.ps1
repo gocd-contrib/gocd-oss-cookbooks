@@ -34,9 +34,7 @@ RefreshEnv
 choco install --no-progress -y nodejs --version="${NODEJS_VERSION}"
 
 # Install tools to support node-gyp compilation of native stuff on Windows
-# See https://github.com/jberezanski/ChocolateyPackages/issues/97#issuecomment-798688284
-choco upgrade --no-progress -y visualstudio2019enterprise
-choco install --no-progress -y python visualstudio2017-workload-vctools
+choco install --no-progress -y python visualstudio2017buildtools visualstudio2017-workload-vctools
 RefreshEnv
 npm config --global set msvs_version 2017
 
