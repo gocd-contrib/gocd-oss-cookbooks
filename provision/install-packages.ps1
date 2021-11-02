@@ -40,13 +40,11 @@ npm install --global --production windows-build-tools
 # install jabba
 Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
 
-# install openjdk 11, 12 and 13. Make openjdk 11 default
-Write-Host "Installing jabba and openjdk(11, 12, 13, 14, 15), setting openjdk 11 as default"
+# install multiple openjdk versions
+Write-Host "Installing openjdk variants"
 jabba install openjdk@1.11
-jabba install openjdk@1.12
-jabba install openjdk@1.13
-jabba install openjdk@1.14
 jabba install openjdk@1.15
+jabba install openjdk@1.17
 
 jabba use "openjdk@1.15"
 
