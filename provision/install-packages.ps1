@@ -2,7 +2,7 @@ $GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4_VERSION='15.1'
 $P4D_VERSION='16.2'
 $NODEJS_VERSION='14.18.1'
-$RUBY_VERSION='2.7.2.1' # For available versions see https://community.chocolatey.org/packages/ruby#versionhistory
+$RUBY_VERSION='2.7.2.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.1' # because newer ant versions will pull down a JRE, which we do not want
 # Copy over configs
