@@ -76,17 +76,11 @@ function provision() {
   step install_postgresql "11"
   step install_postgresql "12"
 
-  if [ "$CENTOS_MAJOR_VERSION" -eq 7 ]; then
-    step install_sysvinit_tools
-  fi
-
-  if [ "$CENTOS_MAJOR_VERSION" -ge 7 ]; then
-    step install_geckodriver
-    step install_firefox_dependencies
-    step install_firefox_latest
-    step install_xvfb
-    step install_xss
-  fi
+  step install_geckodriver
+  step install_firefox_dependencies
+  step install_firefox_latest
+  step install_xvfb
+  step install_xss
 
   # On Docker for Mac, make sure you allocate more than 2G of memory or
   # gradle might randomly fail; 6G should be fairly reliable.
@@ -112,29 +106,12 @@ function setup_epel() {
   try $pkg -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm
 }
 
-# Software Collections Library yum repo
-# For recent-ish versions of `gcc` + friends
-function setup_scl() {
-  try $pkg -y install centos-release-scl
-}
-
-# https://ius.io/ - Inline with Upstream Stable yum repo
-# For modern versions of `git`
-function setup_ius() {
-  try $pkg -y install "https://repo.ius.io/ius-release-el${CENTOS_MAJOR_VERSION}.rpm"
-}
-
 function setup_yum_external_repos() {
   setup_epel
 
-  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
-    try $pkg -y install "${pkg}-command(config-manager)"
-    try $pkg config-manager --set-enabled epel-testing
-    try $pkg config-manager --set-enabled powertools
-  else
-    setup_ius
-    setup_scl
-  fi
+  try $pkg -y install "${pkg}-command(config-manager)"
+  try $pkg config-manager --set-enabled epel-testing
+  try $pkg config-manager --set-enabled powertools
 }
 
 function install_basic_utils() {
@@ -156,10 +133,6 @@ function install_basic_utils() {
   try chmod 755 /usr/local/bin/jq
 }
 
-function install_sysvinit_tools() {
-  try $pkg -y install sysvinit-tools
-}
-
 function install_native_build_packages() {
   try $pkg -y install \
       libxml2-devel libxslt-devel \
@@ -167,30 +140,13 @@ function install_native_build_packages() {
       glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
       openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash
 
-  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
-    try $pkg -y groupinstall "Development Tools"
-  else
-    try $pkg -y install \
-      "devtoolset-${CENTOS_MAJOR_VERSION}-gcc-c++" \
-      "devtoolset-${CENTOS_MAJOR_VERSION}-gcc"
-
-    # activate the newer gcc from SCL
-    cat <<-EOF > /etc/profile.d/scl-gcc.sh
-source /opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/enable
-export PATH=\$PATH:/opt/rh/devtoolset-${CENTOS_MAJOR_VERSION}/root/usr/bin
-export X_SCLS="\$(scl enable devtoolset-${CENTOS_MAJOR_VERSION} 'echo \$X_SCLS')"
-EOF
-  fi
+  try $pkg -y groupinstall "Development Tools"
 }
 
 function install_python() {
-  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
-    try $pkg -y install python3 python3-devel
-    try alternatives --set python /usr/bin/python3
-    try ln -s /usr/bin/pip3 /usr/bin/pip
-  else
-    try $pkg -y install python-devel python-pip python-virtualenv
-  fi
+  try $pkg -y install python3 python3-devel
+  try alternatives --set python /usr/bin/python3
+  try ln -s /usr/bin/pip3 /usr/bin/pip
   try python --version
 }
 
@@ -212,8 +168,7 @@ function install_scm_tools() {
 }
 
 function install_git() {
-  local git_pkg="$([ "$CENTOS_MAJOR_VERSION" -ge 8 ] && printf git || printf git224-core)"
-  try $pkg -y install $git_pkg
+  try $pkg -y install git
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     setup_git_config
@@ -221,20 +176,8 @@ function install_git() {
 }
 
 function install_installer_tools() {
-  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
-    # needed by dpkg-dev
-    try $pkg -y install xz-lzma-compat
-  else
-    # While repoview and python2-rpmUtils RPMs do exist for CentOS/RHEL 8, none work in
-    # practice (i.e., at runtime) due to the lack of python2 RPM bindings on the platform.
-    #
-    # If this is _really_ needed, the easiest thing to do would be to port the script to
-    # python3, or reimplement EVR comparison without the dependency on RPM bindings, which
-    # appears to be the only function used from the rpmUtils library.
-    try $pkg -y install repoview
-  fi
-
   try $pkg -y install \
+      xz-lzma-compat \
       dpkg-devel dpkg-dev \
       createrepo yum-utils rpm-build rpm-sign fakeroot \
       gnupg2 \
@@ -251,10 +194,7 @@ function install_awscli() {
 
 function setup_postgres_repo() {
   try $pkg -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-
-  if [ "$CENTOS_MAJOR_VERSION" -ge 8 ]; then
-    try $pkg -qy module disable postgresql
-  fi
+  try $pkg -qy module disable postgresql
 }
 
 function install_postgresql() {
@@ -282,7 +222,7 @@ function install_firefox_dependencies() {
       xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts
 
   # install just the FF dependencies, without FF
-  try $pkg -y install $($pkg deplist firefox | awk '/provider:/ {print $2}' | sort -u)
+  try $pkg -y install $($pkg deplist --arch x86_64 firefox | awk '/provider:/ {print $2}' | sort -u)
 }
 
 function install_firefox_latest() {
@@ -291,11 +231,7 @@ function install_firefox_latest() {
   try mkdir -p /opt/local/firefox-latest
   try curl --silent --fail --location 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US' --output /usr/local/src/firefox-latest.tar.bz2
   try tar -jxf /usr/local/src/firefox-latest.tar.bz2 -C /opt/local/firefox-latest --strip-components=1
-  if [ "$CENTOS_MAJOR_VERSION" == "7" ]; then
-    try bash -c "dbus-uuidgen > /etc/machine-id"
-  else
-    try bash -c "dbus-uuidgen > /var/lib/dbus/machine-id"
-  fi
+  try bash -c "dbus-uuidgen > /var/lib/dbus/machine-id"
 
   try ln -sf /opt/local/firefox-latest/firefox /usr/local/bin/firefox
   try /opt/local/firefox-latest/firefox -version
@@ -342,15 +278,9 @@ function build_gocd() {
 }
 
 function install_docker() {
-  if [ "$CENTOS_MAJOR_VERSION" -ge 7 ]; then
-    try systemctl disable firewalld # firewalld is probably not installed anyway, but it would need to be disabled to allow DNS in containers
-    try $pkg -y install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.6-3.3.el7.x86_64.rpm
-    try curl --silent --fail --location 'https://download.docker.com/linux/centos/docker-ce.repo' --output /etc/yum.repos.d/docker-ce.repo
-    try $pkg -y install docker-ce
-    try usermod -a -G docker ${PRIMARY_USER}
-  else
-    yell "Skipping docker install; need CentOS 7 or better."
-  fi
+  try yum config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  try $pkg -y install docker-ce containerd.io
+  try usermod -a -G docker ${PRIMARY_USER}
 }
 
 provision
