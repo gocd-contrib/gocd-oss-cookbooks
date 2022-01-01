@@ -28,7 +28,7 @@ addListener new BuildAdapter() {
 }
 
 // if a build cache url is specified, use it
-if (GradleVersion.current() >= GradleVersion.version("3.5") && System.getenv().containsKey('GOCD_BUILD_CACHE_URL')) {
+if (System.getenv().containsKey('GOCD_BUILD_CACHE_URL')) {
   gradle.settingsEvaluated { settings ->
     settings.buildCache {
 
