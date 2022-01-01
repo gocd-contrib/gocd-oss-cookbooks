@@ -4,7 +4,7 @@ $P4D_VERSION='16.2'
 $NODEJS_VERSION='16.13.1'
 $RUBY_VERSION='2.7.2.1'
 $NANT_VERSION='0.92.2'
-$ANT_VERSION='1.10.1' # because newer ant versions will pull down a JRE, which we do not want
+$ANT_VERSION='1.10.12'
 # Copy over configs
 New-Item "${env:USERPROFILE}\.gradle" -ItemType Directory | Out-Null
 New-Item "${env:USERPROFILE}\.m2" -ItemType Directory | Out-Null
