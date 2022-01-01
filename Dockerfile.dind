@@ -1,4 +1,4 @@
-FROM gocd/gocd-agent-docker-dind:v21.3.0
+FROM gocd/gocd-agent-docker-dind:v21.4.0
 
 USER root
 RUN apk add --no-cache ruby-rake ruby-dev build-base && \
