@@ -66,7 +66,7 @@ function provision() {
 
   step install_python
 
-  step install_gauge "1.4.2"
+  step install_gauge "1.4.3"
   step install_installer_tools
   step install_awscli
 
