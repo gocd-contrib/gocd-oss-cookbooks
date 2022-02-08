@@ -43,11 +43,10 @@ Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/
 
 # install multiple openjdk versions
 Write-Host "Installing openjdk variants"
-jabba install openjdk@1.11
 jabba install openjdk@1.15
 jabba install openjdk@1.17
 
-jabba use "openjdk@1.15"
+jabba use "openjdk@1.17"
 
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"

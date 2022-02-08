@@ -24,8 +24,8 @@ function provision() {
   step install_yarn
 
   step install_jabba
-  step install_jdks "11" "15" "17"
-  step default_jdk "15"
+  step install_jdks "15" "17"
+  step default_jdk "17"
 
   step install_python
   step install_awscli
