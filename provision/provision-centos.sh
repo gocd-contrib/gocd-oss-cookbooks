@@ -117,6 +117,7 @@ function setup_yum_external_repos() {
 function install_basic_utils() {
   # add some basic utils
   try $pkg -y install \
+      glibc-langpack-en \
       ncurses \
       file \
       wget \
