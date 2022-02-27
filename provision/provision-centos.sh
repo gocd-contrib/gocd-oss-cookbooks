@@ -118,6 +118,7 @@ function install_basic_utils() {
   # add some basic utils
   try $pkg -y install \
       glibc-langpack-en \
+      procps \
       ncurses \
       file \
       wget \
