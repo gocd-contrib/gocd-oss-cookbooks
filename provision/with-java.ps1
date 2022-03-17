@@ -1,7 +1,6 @@
 
-# default to Java 11
 if (!${env:JAVA_VERSION}) {
-    $env:JAVA_VERSION=11
+    $env:JAVA_VERSION=17
 }
 
 jabba use "openjdk@1.${env:JAVA_VERSION}"
