@@ -21,6 +21,7 @@ NSIS_VERSION=3.04-2
 ANT_VERSION=1.10.12
 P4_VERSION=15.1
 P4D_VERSION=16.2
+JQ_VERSION=1.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
 pkg="yum"
@@ -129,7 +130,7 @@ function install_basic_utils() {
       which \
       sudo
 
-  try curl --silent --fail --location https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 --output /usr/local/bin/jq
+  try curl --silent --fail --location "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64" --output /usr/local/bin/jq
   try chmod 755 /usr/local/bin/jq
 }
 
