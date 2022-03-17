@@ -22,12 +22,17 @@ function add_gocd_user() {
 
 function setup_nexus_configs() {
   setup_gradle_config
+  setup_maven_config
   setup_rubygems_config
   setup_npm_config
 }
 
 function setup_gradle_config() {
   copy_to_home_dir init.gradle .gradle/init.gradle
+}
+
+function setup_maven_config() {
+  copy_to_home_dir settings.xml .m2/settings.xml
 }
 
 function setup_rubygems_config() {
@@ -123,6 +128,14 @@ function install_jdks() {
 
 function default_jdk() {
     try su - ${PRIMARY_USER:-go} -c "jabba use openjdk@1.$1"
+}
+
+function install_maven() {
+  local version="$1"
+  try mkdir -p /opt/local/
+  try curl --silent --fail --location http://archive.apache.org/dist/maven/maven-3/${version}/binaries/apache-maven-${version}-bin.zip --output /usr/local/src/apache-maven-${version}-bin.zip
+  try unzip -q /usr/local/src/apache-maven-${version}-bin.zip -d /opt/local
+  try ln -sf /opt/local/apache-maven-${version}/bin/mvn /usr/local/bin/mvn
 }
 
 function install_ant() {
