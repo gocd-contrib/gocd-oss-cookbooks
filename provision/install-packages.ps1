@@ -43,7 +43,6 @@ Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/
 
 # install multiple openjdk versions
 Write-Host "Installing openjdk variants"
-jabba install openjdk@1.15
 jabba install openjdk@1.17
 
 jabba use "openjdk@1.17"
