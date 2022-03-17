@@ -18,7 +18,6 @@ for arg in $@; do
 done
 
 NSIS_VERSION=3.04-2
-MAVEN_VERSION=3.8.4
 ANT_VERSION=1.10.12
 P4_VERSION=15.1
 P4D_VERSION=16.2
@@ -61,7 +60,6 @@ function provision() {
   step install_jabba
   step install_jdks "17"
   step default_jdk "17"
-  step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
   step install_python
