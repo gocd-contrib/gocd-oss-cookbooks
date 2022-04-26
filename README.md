@@ -2,7 +2,7 @@
 
 - `gocddev/gocd-dev-build:dind-<github_tag>`
 - `gocddev/gocd-dev-build:centos-8-<github_tag>`
-- `gocddev/gocd-dev-build:ubuntu-22-04-<github_tag>`
+- `gocddev/gocd-dev-build:ubuntu-20-04-<github_tag>`
 - `gocddev/gocd-dev-build:windows2019-<github_tag>`
 
 To build a new version of the images, push a new version tag to this repository.
@@ -11,7 +11,7 @@ To build a new version of the images, push a new version tag to this repository.
 
 - ```docker build . -t gocddev/gocd-dev-build:dind-SNAPSHOT -f Dockerfile.dind```
 - ```docker build . -t gocddev/gocd-dev-build:centos-8-SNAPSHOT -f Dockerfile.centos```
-- ```docker build . -t gocddev/gocd-dev-build:ubuntu-22-04-SNAPSHOT -f Dockerfile.ubuntu```
+- ```docker build . -t gocddev/gocd-dev-build:ubuntu-20-04-SNAPSHOT -f Dockerfile.ubuntu```
 - ```docker build . -t gocddev/gocd-dev-build:windows2019-SNAPSHOT -f Dockerfile.windowsservercore2019```
 
 
