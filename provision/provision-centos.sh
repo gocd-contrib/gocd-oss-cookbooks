@@ -17,7 +17,7 @@ for arg in $@; do
   esac
 done
 
-NSIS_VERSION=3.04-2
+NSIS_VERSION=3.08-2.el8.x86_64
 MAVEN_VERSION=3.8.5
 ANT_VERSION=1.10.12
 P4_VERSION=15.1
@@ -184,7 +184,7 @@ function install_installer_tools() {
       dpkg-devel dpkg-dev \
       createrepo yum-utils rpm-build rpm-sign fakeroot \
       gnupg2 \
-      http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.el6.x86_64.rpm
+      http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.rpm
 
   try su - "$PRIMARY_USER" -c "gem install fpm --no-document"
 }
