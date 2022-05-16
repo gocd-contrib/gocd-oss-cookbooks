@@ -53,7 +53,7 @@ function provision() {
   step install_scm_tools
 
   step install_rbenv
-  step install_global_ruby "2.7.5"
+  step install_global_ruby "2.7.6"
 
   step install_nodenv
   step install_global_node "16.14.2"
