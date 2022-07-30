@@ -66,7 +66,7 @@ function install_basic_utils() {
 }
 
 function install_python() {
-  try apt-get install -y python python3-pip
+  try apt-get install -y python3 python3-pip
   try pip3 install --upgrade pip
 }
 
