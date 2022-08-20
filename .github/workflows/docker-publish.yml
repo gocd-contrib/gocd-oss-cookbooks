@@ -28,7 +28,7 @@ jobs:
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
-  centos-8:
+  centos:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -45,10 +45,10 @@ jobs:
       - name: Build the image
         run: |
           set -x
-          docker build -f Dockerfile.centos -t gocddev/gocd-dev-build:centos-8-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
+          docker build -f Dockerfile.centos -t gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
 
       - name: Publish the image
-        run: docker push gocddev/gocd-dev-build:centos-8-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+        run: docker push gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
   ubuntu:
     runs-on: ubuntu-latest
     steps:

@@ -22,7 +22,6 @@ MAVEN_VERSION=3.8.6
 ANT_VERSION=1.10.12
 P4_VERSION=22.1
 P4D_VERSION=22.1
-JQ_VERSION=1.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
 # import functions
@@ -30,7 +29,8 @@ source "$(dirname $0)/common.sh"
 
 # Main entrypoint
 function provision() {
-  step setup_yum_external_repos
+  step setup_external_repos
+  step upgrade_os_packages
 
   # these are build prereqs for subsequent things; install
   # these early during provision
@@ -90,7 +90,6 @@ function provision() {
 
   step install_tini
 
-  step upgrade_os_packages
   step list_installed_packages
   step clean
 
@@ -101,50 +100,31 @@ function setup_epel() {
   try dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm
 }
 
-function setup_yum_external_repos() {
+function setup_external_repos() {
   setup_epel
 
   try dnf -y install "dnf-command(config-manager)"
-  try dnf config-manager --set-enabled epel-testing
-  try dnf config-manager --set-enabled powertools
+  try dnf config-manager --set-enabled crb
 }
 
 function install_basic_utils() {
-  # add some basic utils
-  try dnf -y install \
-      glibc-langpack-en \
-      procps \
-      ncurses \
-      file \
-      wget \
-      curl \
-      zip \
-      unzip \
-      tar \
-      gzip \
-      bzip2 \
-      which \
-      sudo
-
-  try curl --silent --fail --location "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64" --output /usr/local/bin/jq
-  try chmod 755 /usr/local/bin/jq
+  try dnf -y install procps ncurses file which bzip2 gzip unzip zip sudo curl-minimal wget jq
 }
 
 function install_native_build_packages() {
-  try dnf -y install \
-      libxml2-devel libxslt-devel \
-      zlib-devel bzip2-devel \
-      glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
-      openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash
+  # Core stuff
+  try dnf -y install autoconf automake make patch
 
-  try dnf -y groupinstall "Development Tools"
+  # Ruby-build dependencies for rbenv/ASDF: https://github.com/rbenv/ruby-build#centos
+  try dnf -y install patch gcc bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
+
+  # To allow rbenv/ASDF installation of Ruby 2.7 and earlier where OpenSSL 1.1.1 needs to be available
+  try dnf -y install perl-FindBin
 }
 
 function install_python() {
   try dnf -y install python3 python3-devel
-  try alternatives --set python /usr/bin/python3
-  try ln -s /usr/bin/pip3 /usr/bin/pip
-  try python --version
+  try ln -s /usr/bin/python3 /usr/bin/python
 }
 
 function install_scm_tools() {
@@ -153,8 +133,8 @@ function install_scm_tools() {
   try dnf -y install subversion
 
   try mkdir -p /usr/local/bin
-  try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
-  try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d --output /usr/local/bin/p4d
+  try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4" --output /usr/local/bin/p4
+  try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d" --output /usr/local/bin/p4d
   try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
 
   try git --version
@@ -191,7 +171,6 @@ function install_awscli() {
 
 function setup_postgres_repo() {
   try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-  try dnf -qy module disable postgresql
 }
 
 function install_postgresql() {
@@ -210,16 +189,13 @@ function install_xss() {
 
 # for FF
 function install_firefox_dependencies() {
+  # install just the FF dependencies, without FF
+  try dnf -y install $(dnf deplist --arch x86_64 firefox | awk '/provider:/ {print $2}' | sort -u)
+
   try dnf -y install \
-      gtk3 \
-      libcroco \
-      xdotool \
       hicolor-icon-theme \
       dbus dbus-x11 xauth liberation-sans-fonts liberation-serif-fonts liberation-mono-fonts mesa-dri-drivers \
       xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts
-
-  # install just the FF dependencies, without FF
-  try dnf -y install $(dnf deplist --arch x86_64 firefox | awk '/provider:/ {print $2}' | sort -u)
 }
 
 function install_firefox_latest() {
@@ -241,6 +217,7 @@ function list_installed_packages() {
 
 function clean() {
   try dnf clean all
+  try rm -rf /var/cache/dnf
   try rm -rf /usr/local/src/*
 }
 
