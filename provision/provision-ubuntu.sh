@@ -6,7 +6,7 @@ PRIMARY_USER="go"
 source "$(dirname $0)/common.sh"
 
 function provision() {
-  step setup_apt_external_repos
+  step setup_external_repos
   step upgrade_os_packages
 
   step install_basic_utils
@@ -46,7 +46,7 @@ function update_apt_cache() {
   try apt-get update
 }
 
-function setup_apt_external_repos() {
+function setup_external_repos() {
   update_apt_cache
   DEBIAN_FRONTEND=noninteractive try apt-get -y install software-properties-common
   try bash -c "yes | add-apt-repository ppa:git-core/ppa"
