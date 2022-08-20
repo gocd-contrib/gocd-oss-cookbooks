@@ -20,8 +20,8 @@ done
 NSIS_VERSION=3.08-2.el8.x86_64
 MAVEN_VERSION=3.8.6
 ANT_VERSION=1.10.12
-P4_VERSION=21.2
-P4D_VERSION=21.2
+P4_VERSION=22.1
+P4D_VERSION=22.1
 JQ_VERSION=1.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
@@ -137,7 +137,8 @@ function install_native_build_packages() {
       glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
       openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash
 
-  try dnf -y groupinstall "Development Tools"
+  # To allow installation of Ruby 2.7 and earlier where OpenSSL 1.1.1 needs to be available
+  try dnf -y install perl-FindBin
 }
 
 function install_python() {
