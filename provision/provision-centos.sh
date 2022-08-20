@@ -25,12 +25,6 @@ P4D_VERSION=21.2
 JQ_VERSION=1.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
-pkg="yum"
-
-if command -v dnf &> /dev/null; then
-  pkg="dnf"
-fi
-
 # import functions
 source "$(dirname $0)/common.sh"
 
@@ -104,20 +98,20 @@ function provision() {
 }
 
 function setup_epel() {
-  try $pkg -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm
+  try dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm
 }
 
 function setup_yum_external_repos() {
   setup_epel
 
-  try $pkg -y install "${pkg}-command(config-manager)"
-  try $pkg config-manager --set-enabled epel-testing
-  try $pkg config-manager --set-enabled powertools
+  try dnf -y install "dnf-command(config-manager)"
+  try dnf config-manager --set-enabled epel-testing
+  try dnf config-manager --set-enabled powertools
 }
 
 function install_basic_utils() {
   # add some basic utils
-  try $pkg -y install \
+  try dnf -y install \
       glibc-langpack-en \
       procps \
       ncurses \
@@ -137,17 +131,17 @@ function install_basic_utils() {
 }
 
 function install_native_build_packages() {
-  try $pkg -y install \
+  try dnf -y install \
       libxml2-devel libxslt-devel \
       zlib-devel bzip2-devel \
       glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
       openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash
 
-  try $pkg -y groupinstall "Development Tools"
+  try dnf -y groupinstall "Development Tools"
 }
 
 function install_python() {
-  try $pkg -y install python3 python3-devel
+  try dnf -y install python3 python3-devel
   try alternatives --set python /usr/bin/python3
   try ln -s /usr/bin/pip3 /usr/bin/pip
   try python --version
@@ -155,8 +149,8 @@ function install_python() {
 
 function install_scm_tools() {
   install_git
-  try $pkg -y install mercurial
-  try $pkg -y install subversion
+  try dnf -y install mercurial
+  try dnf -y install subversion
 
   try mkdir -p /usr/local/bin
   try curl --silent --fail --location https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 --output /usr/local/bin/p4
@@ -171,7 +165,7 @@ function install_scm_tools() {
 }
 
 function install_git() {
-  try $pkg -y install git
+  try dnf -y install git
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     setup_git_config
@@ -179,7 +173,7 @@ function install_git() {
 }
 
 function install_installer_tools() {
-  try $pkg -y install \
+  try dnf -y install \
       xz-lzma-compat \
       dpkg-devel dpkg-dev \
       createrepo yum-utils rpm-build rpm-sign fakeroot \
@@ -191,32 +185,32 @@ function install_installer_tools() {
 
 function install_awscli() {
   # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3. Without this file, all files in s3 will have content type `application/octet-stream`
-  try $pkg -y install mailcap
+  try dnf -y install mailcap
   try pip install awscli
 }
 
 function setup_postgres_repo() {
-  try $pkg -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-  try $pkg -qy module disable postgresql
+  try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+  try dnf -qy module disable postgresql
 }
 
 function install_postgresql() {
   local pg_version="$1"
   package_suffix="$(printf "${pg_version}" | sed -e 's/\.//g')"
-  try $pkg -y install postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
+  try dnf -y install postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
 }
 
 function install_xvfb() {
-  try $pkg -y install xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
+  try dnf -y install xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
 }
 
 function install_xss() {
-  try $pkg -y install libXScrnSaver # Headless Chrome needs this for some reason
+  try dnf -y install libXScrnSaver # Headless Chrome needs this for some reason
 }
 
 # for FF
 function install_firefox_dependencies() {
-  try $pkg -y install \
+  try dnf -y install \
       gtk3 \
       libcroco \
       xdotool \
@@ -225,7 +219,7 @@ function install_firefox_dependencies() {
       xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts
 
   # install just the FF dependencies, without FF
-  try $pkg -y install $($pkg deplist --arch x86_64 firefox | awk '/provider:/ {print $2}' | sort -u)
+  try dnf -y install $(dnf deplist --arch x86_64 firefox | awk '/provider:/ {print $2}' | sort -u)
 }
 
 function install_firefox_latest() {
@@ -246,12 +240,12 @@ function list_installed_packages() {
 }
 
 function clean() {
-  try $pkg clean all
+  try dnf clean all
   try rm -rf /usr/local/src/*
 }
 
 function upgrade_os_packages() {
-  try $pkg -y update --quiet
+  try dnf -y update --quiet
 }
 
 function build_gocd() {
@@ -282,7 +276,7 @@ function build_gocd() {
 
 function install_docker() {
   try yum config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-  try $pkg -y install docker-ce containerd.io
+  try dnf -y install docker-ce containerd.io
   try usermod -a -G docker ${PRIMARY_USER}
 }
 
