@@ -1,7 +1,7 @@
 $GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4_VERSION='15.1'
 $P4D_VERSION='16.2'
-$NODEJS_VERSION='16.16.0'
+$NODEJS_VERSION='16.17.0'
 $RUBY_VERSION='2.7.6.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.12'
@@ -31,7 +31,7 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 RefreshEnv
 
 # install packages
-choco install --no-progress -y nodejs --version="${NODEJS_VERSION}"
+choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
 
 # Install tools to support node-gyp compilation of native stuff on Windows
 choco upgrade --no-progress -y python visualstudio2017buildtools visualstudio2017-workload-vctools
