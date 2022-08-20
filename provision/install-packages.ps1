@@ -1,6 +1,5 @@
 $GOLANG_BOOTSTRAPPER_VERSION='2.3'
-$P4_VERSION='15.1'
-$P4D_VERSION='16.2'
+$P4D_VERSION='21.2'
 $NODEJS_VERSION='16.17.0'
 $RUBY_VERSION='2.7.6.1'
 $NANT_VERSION='0.92.2'
@@ -50,7 +49,7 @@ jabba use "openjdk@1.17"
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
-choco install --no-progress -y hg yarn svn git gpg4win-vanilla windows-sdk-8.1 awscli
+choco install --no-progress -y hg yarn svn git p4 gpg4win-vanilla windows-sdk-8.1 awscli
 choco install --no-progress -y googlechrome
 
 RefreshEnv
@@ -59,15 +58,14 @@ RefreshEnv
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
 
 # install p4
-New-Item "${env:ProgramFiles(x86)}\\Perforce\\bin\\" -ItemType Directory | Out-Null
-Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4_VERSION/bin.ntx64/p4.exe -Outfile "C:\\Program Files (x86)\\Perforce\\bin\\p4.exe"
-Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4D_VERSION/bin.ntx64/p4d.exe -Outfile "C:\\Program Files (x86)\\Perforce\\bin\\p4d.exe"
+New-Item "${env:ProgramFiles}\\Perforce\\bin\\" -ItemType Directory | Out-Null
+Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4D_VERSION/bin.ntx64/p4d.exe -Outfile "${env:ProgramFiles}\\Perforce\\bin\\p4d.exe"
 
 # install gocd bootstrapper
 Invoke-WebRequest https://github.com/ketan/gocd-golang-bootstrapper/releases/download/${GOLANG_BOOTSTRAPPER_VERSION}/go-bootstrapper-${GOLANG_BOOTSTRAPPER_VERSION}.windows.amd64.exe -Outfile C:\\go-agent.exe
 
 $newSystemPath = [System.Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)
-$newSystemPath = "${newSystemPath};${env:ProgramFiles(x86)}\\Perforce\\bin;${env:USERPROFILE}\\.jabba\\bin"
+$newSystemPath = "${newSystemPath};${env:ProgramFiles}\\Perforce\\bin;${env:USERPROFILE}\\.jabba\\bin"
 $env:Path = $newSystemPath + ";" + [System.Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
 [Environment]::SetEnvironmentVariable("Path", $newSystemPath, [EnvironmentVariableTarget]::Machine)
 

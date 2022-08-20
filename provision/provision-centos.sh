@@ -20,8 +20,8 @@ done
 NSIS_VERSION=3.08-2.el8.x86_64
 MAVEN_VERSION=3.8.6
 ANT_VERSION=1.10.12
-P4_VERSION=15.1
-P4D_VERSION=16.2
+P4_VERSION=21.2
+P4D_VERSION=21.2
 JQ_VERSION=1.6
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
