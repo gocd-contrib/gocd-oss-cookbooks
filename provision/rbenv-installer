@@ -2,11 +2,8 @@
 set -e
 
 # This script has been modified from (current at time of writing)
-# https://raw.githubusercontent.com/rbenv/rbenv-installer/784e9b8593775f3b85f84b2813dc328d75bb0d3f/bin/rbenv-installer
-# in the following ways:
-#   1. Remove `try_bash_extension()` - just don't.
-#   2. Do not run `rbenv-doctor` because it will fail unless
-#      we reload the shell; run this separately after installation
+# https://raw.githubusercontent.com/rbenv/rbenv-installer/222a5967ab7c2f3d0a5a08f96d5d6c169a14b49f/bin/rbenv-installer
+# to remove `try_bash_extension()` - just don't.
 
 homebrew=
 type -p brew >/dev/null && homebrew=1
@@ -27,9 +24,8 @@ if [ -n "$rbenv" ]; then
   if [ -x ./brew ]; then
     echo "Trying to update with Homebrew..."
     brew update >/dev/null
-    if [ "$(./rbenv --version)" < "1.0.0" ] && brew list rbenv | grep -q rbenv/HEAD; then
-      brew uninstall rbenv
-      brew install rbenv --without-ruby-build
+    if brew list rbenv | grep -q rbenv/HEAD; then
+      brew reinstall rbenv
     else
       brew upgrade rbenv
     fi
@@ -42,7 +38,7 @@ else
   if [ -n "$homebrew" ]; then
     echo "Installing rbenv with Homebrew..."
     brew update
-    brew install rbenv --without-ruby-build
+    brew install rbenv
     rbenv="$(brew --prefix)/bin/rbenv"
   else
     echo "Installing rbenv with git..."
@@ -92,11 +88,20 @@ mkdir -p "${rbenv_root}/cache"
 
 echo
 echo "All done!"
-echo "Note that this installer doesn't yet configure your shell startup files:"
+echo "Note that this installer does NOT edit your shell configuration files:"
 i=0
 if [ -x ~/.rbenv/bin ]; then
   echo "$((++i)). You'll want to ensure that \`~/.rbenv/bin' is added to PATH."
 fi
-echo "$((++i)). Run \`rbenv init' to see instructions how to configure rbenv for your shell."
-echo "$((++i)). Launch a new terminal window to verify that the configuration is correct."
+echo "$((++i)). Run \`rbenv init' to view instructions on how to configure rbenv for your shell."
+echo "$((++i)). Launch a new terminal window after editing shell configuration files."
+
+url="https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-doctor"
+if false && type -p curl >/dev/null; then
+  echo "$((++i)). (Optional) Run the doctor command to verify the installation:"
+  printf '   curl -fsSL "%s" | bash\n' "$url"
+elif type -p wget >/dev/null; then
+  echo "$((++i)). (Optional) Run the doctor command to verify the installation:"
+  printf '   wget -q "%s" -O- | bash\n' "$url"
+fi
 echo
