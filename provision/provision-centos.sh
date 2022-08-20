@@ -137,8 +137,7 @@ function install_native_build_packages() {
       glibc-devel autoconf bison flex kernel-devel libcurl-devel make cmake \
       openssl-devel libffi-devel libyaml-devel readline-devel libedit-devel bash
 
-  # To allow installation of Ruby 2.7 and earlier where OpenSSL 1.1.1 needs to be available
-  try dnf -y install perl-FindBin
+  try dnf -y groupinstall "Development Tools"
 }
 
 function install_python() {
