@@ -14,9 +14,10 @@ function provision() {
 
   step add_gocd_user
 
+  # git, in particular, is used in subsequent provisioning so do this before things like `asdf`
   step install_scm_tools
 
-  step install_asdf "v0.10.2" "java" "ruby"
+  step install_asdf "v0.10.2" "java" "ruby" "nodejs"
 
   step install_global_asdf "java" "temurin-17.0.4+101"
   step install_multi_asdf "java" "temurin-17.0.4+101"
@@ -24,8 +25,7 @@ function provision() {
   step install_global_asdf "ruby" "3.1.2"
   step install_global_ruby_default_gems
 
-  step install_nodenv
-  step install_global_node "16.17.0"
+  step install_global_asdf "nodejs" "16.17.0"
   step install_yarn
 
   step install_python

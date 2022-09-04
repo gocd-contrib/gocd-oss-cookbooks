@@ -70,7 +70,7 @@ EOF
 function install_global_asdf() {
   local plugin="$1"
   local version="$2"
-  try su - "${PRIMARY_USER:-go}" -c "asdf install ${plugin} ${version} && asdf global ${plugin} ${version} && echo \"Default ${plugin} version: \$(${plugin} --version)\""
+  try su - "${PRIMARY_USER:-go}" -c "asdf install ${plugin} ${version} && asdf global ${plugin} ${version} && echo \"Default ${plugin} version: \$(asdf current ${plugin})\""
 }
 
 function install_multi_asdf() {
@@ -84,41 +84,12 @@ function install_multi_asdf() {
   done
 }
 
-function install_nodenv() {
-  # in case this exists, remove it; the installer will try to symlink this into ~go/.nodenv/versions; and yes,
-  # even though this is nodenv and not rbenv...
-  try rm -rf /opt/rubies
-
-  cat <<-EOF > /etc/profile.d/nodenv.sh
-export PATH="\$HOME/.nodenv/bin:\$PATH"
-if command -v nodenv &> /dev/null; then
-  eval "\$(nodenv init -)"
-fi
-EOF
-  try su - "${PRIMARY_USER:-go}" -c "bash /usr/local/src/provision/nodenv-installer"
-  try su - "${PRIMARY_USER:-go}" -c "git -C \"\$(nodenv root)/plugins\" clone https://github.com/nodenv/node-build-update-defs"
-  try su - "${PRIMARY_USER:-go}" -c "git -C \"\$(nodenv root)/plugins\" clone https://github.com/nodenv/nodenv-aliases"
-
-  echo "Validating nodenv installation"
-  try su - "${PRIMARY_USER:-go}" -c "curl -fsSL https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-doctor | bash"
-}
-
-function major_minor() {
-  local version="$1"
-  printf "$(printf $version | cut -d. -f1).$(printf $version | cut -d. -f2)"
-}
-
 function install_global_ruby_default_gems() {
   try su - "${PRIMARY_USER:-go}" -c "gem install rake bundler && rake --version && bundle --version"
 }
 
-function install_global_node() {
-  local version="$1"
-  try su - "${PRIMARY_USER:-go}" -c "nodenv install $version && nodenv global $(major_minor $version) && echo \"Default node version: \$(node --version)\""
-}
-
 function install_yarn() {
-  try su - "${PRIMARY_USER:-go}" -c "npm install -g yarn && nodenv rehash && yarn --version"
+  try su - "${PRIMARY_USER:-go}" -c "npm install -g yarn && yarn --version"
 }
 
 function install_gauge() {
