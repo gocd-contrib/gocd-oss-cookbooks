@@ -1,6 +1,0 @@
-#!/bin/bash
-
-source "${HOME}/.jabba/jabba.sh"
-jabba use "openjdk@1.${JAVA_VERSION:-17}"
-
-exec "$@"

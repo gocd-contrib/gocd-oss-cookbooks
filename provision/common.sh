@@ -49,6 +49,38 @@ function setup_git_config() {
 
 # devtools
 
+# Install multi-tool version manager ASDF: https://asdf-vm.com/
+function install_asdf() {
+  local version="$1"
+
+  cat <<-EOF > /etc/profile.d/asdf.sh
+. \${HOME}/.asdf/asdf.sh
+EOF
+
+  try su - "${PRIMARY_USER:-go}" -c "git clone --depth 1 --branch ${version} https://github.com/asdf-vm/asdf.git \${HOME}/.asdf"
+
+  # See https://asdf-vm.com/manage/configuration.html
+#  try su - "${PRIMARY_USER:-go}" -c "echo \"legacy_version_file = yes\" > \${HOME}/.asdfrc"
+  try su - "${PRIMARY_USER:-go}" -c "asdf plugin-add java"
+}
+
+function install_global_asdf() {
+  local plugin="$1"
+  local version="$2"
+  try su - "${PRIMARY_USER:-go}" -c "asdf install ${plugin} ${version} && asdf global ${plugin} ${version} && echo \"Default ${plugin} version: \$(${plugin} --version)\""
+}
+
+function install_multi_asdf() {
+  if [ $# -lt 1 ]; then
+    die "install_multi_asdf() must be given at least 1 plugin argument and 1 version argument"
+  fi
+
+  local plugin="$1"
+  for version in "${@:2}"; do
+    try su - ${PRIMARY_USER:-go} -c "asdf install ${plugin} ${version}"
+  done
+}
+
 function install_rbenv() {
   # in case this exists, remove it; the installer will try to symlink this into ~go/.rbenv/versions
   try rm -rf /opt/rubies
@@ -85,10 +117,6 @@ EOF
   try su - "${PRIMARY_USER:-go}" -c "curl -fsSL https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-doctor | bash"
 }
 
-function install_jabba() {
-  try su - ${PRIMARY_USER:-go} -c 'curl -sL https://github.com/shyiko/jabba/raw/master/install.sh | bash'
-}
-
 function major_minor() {
   local version="$1"
   printf "$(printf $version | cut -d. -f1).$(printf $version | cut -d. -f2)"
@@ -114,20 +142,6 @@ function install_gauge() {
   try curl -sL -O https://github.com/getgauge/gauge/releases/download/v$version/gauge-$version-linux.x86_64.zip
   try unzip -d /usr/bin gauge-$version-linux.x86_64.zip
   try gauge -v
-}
-
-function install_jdks() {
-  if [ $# -eq 0 ]; then
-    die "install_jdks() must be given at least 1 version argument"
-  fi
-
-  for version in $@; do
-    try su - ${PRIMARY_USER:-go} -c "jabba install openjdk@1.${version}"
-  done
-}
-
-function default_jdk() {
-    try su - ${PRIMARY_USER:-go} -c "jabba use openjdk@1.$1"
 }
 
 function install_maven() {
@@ -169,9 +183,7 @@ function add_golang_gocd_bootstrapper() {
 }
 
 function setup_entrypoint() {
-  try cp /usr/local/src/provision/with-java /usr/local/bin/with-java
   try cp /usr/local/src/provision/bootstrap.sh /bootstrap.sh
-  try chmod a+rx /usr/local/bin/with-java
   try chmod a+rx /bootstrap.sh
 }
 
@@ -202,7 +214,7 @@ yarn --version | pr -to 2
 printf "\n"
 
 printf "Installed JDKs:\n"
-jabba ls | pr -to 2
+asdf list java
 printf "\n"
 
 if type gauge &> /dev/null; then

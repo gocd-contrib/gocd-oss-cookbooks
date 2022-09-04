@@ -16,16 +16,17 @@ function provision() {
 
   step install_scm_tools
 
+  step install_asdf "v0.10.2"
+
+  step install_global_asdf "java" "temurin-17.0.4+101"
+  step install_multi_asdf "java" "temurin-17.0.4+101"
+
   step install_rbenv
   step install_global_ruby "2.7.6"
 
   step install_nodenv
   step install_global_node "16.17.0"
   step install_yarn
-
-  step install_jabba
-  step install_jdks "17"
-  step default_jdk "17"
 
   step install_python
   step install_awscli

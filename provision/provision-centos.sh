@@ -46,6 +46,11 @@ function provision() {
   # so do this before things like `rbenv` and `nodenv`
   step install_scm_tools
 
+  step install_asdf "v0.10.2"
+
+  step install_global_asdf "java" "temurin-17.0.4+101"
+  step install_multi_asdf "java" "temurin-17.0.4+101"
+
   step install_rbenv
   step install_global_ruby "2.7.6"
 
@@ -53,9 +58,6 @@ function provision() {
   step install_global_node "16.17.0"
   step install_yarn
 
-  step install_jabba
-  step install_jdks "17"
-  step default_jdk "17"
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
@@ -250,7 +252,7 @@ function build_gocd() {
 
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              jabba use openjdk@1.17 && GRADLE_OPTS=-Dorg.gradle.daemon=false ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
+              GRADLE_OPTS=-Dorg.gradle.daemon=false ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
   try rm -rf /tmp/gocd /${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
