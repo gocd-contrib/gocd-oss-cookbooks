@@ -117,7 +117,7 @@ function install_native_build_packages() {
   # Core stuff
   try dnf -y install autoconf automake make patch
 
-  # Ruby-build dependencies for ASDF: https://github.com/rbenv/ruby-build#centos
+  # Ruby-build dependencies for ASDF: https://github.com/rbenv/ruby-build/wiki#centos
   try dnf -y install patch gcc bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
 }
 
