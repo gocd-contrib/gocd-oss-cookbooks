@@ -16,13 +16,13 @@ function provision() {
 
   step install_scm_tools
 
-  step install_asdf "v0.10.2"
+  step install_asdf "v0.10.2" "java" "ruby"
 
   step install_global_asdf "java" "temurin-17.0.4+101"
   step install_multi_asdf "java" "temurin-17.0.4+101"
 
-  step install_rbenv
-  step install_global_ruby "2.7.6"
+  step install_global_asdf "ruby" "3.1.2"
+  step install_global_ruby_default_gems
 
   step install_nodenv
   step install_global_node "16.17.0"

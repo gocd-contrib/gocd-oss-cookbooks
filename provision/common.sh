@@ -52,6 +52,7 @@ function setup_git_config() {
 # Install multi-tool version manager ASDF: https://asdf-vm.com/
 function install_asdf() {
   local version="$1"
+  local plugins=( "${@:2}" )
 
   cat <<-EOF > /etc/profile.d/asdf.sh
 . \${HOME}/.asdf/asdf.sh
@@ -60,8 +61,10 @@ EOF
   try su - "${PRIMARY_USER:-go}" -c "git clone --depth 1 --branch ${version} https://github.com/asdf-vm/asdf.git \${HOME}/.asdf"
 
   # See https://asdf-vm.com/manage/configuration.html
-#  try su - "${PRIMARY_USER:-go}" -c "echo \"legacy_version_file = yes\" > \${HOME}/.asdfrc"
-  try su - "${PRIMARY_USER:-go}" -c "asdf plugin-add java"
+  try su - "${PRIMARY_USER:-go}" -c "echo \"legacy_version_file = yes\" > \${HOME}/.asdfrc"
+  for plugin in "${plugins[@]}"; do
+    try su - "${PRIMARY_USER:-go}" -c "asdf plugin-add ${plugin}"
+  done
 }
 
 function install_global_asdf() {
@@ -79,23 +82,6 @@ function install_multi_asdf() {
   for version in "${@:2}"; do
     try su - ${PRIMARY_USER:-go} -c "asdf install ${plugin} ${version}"
   done
-}
-
-function install_rbenv() {
-  # in case this exists, remove it; the installer will try to symlink this into ~go/.rbenv/versions
-  try rm -rf /opt/rubies
-
-  cat <<-EOF > /etc/profile.d/rbenv.sh
-export PATH="\$HOME/.rbenv/bin:\$PATH"
-if command -v rbenv &> /dev/null; then
-  eval "\$(rbenv init -)"
-fi
-EOF
-  try su - "${PRIMARY_USER:-go}" -c "bash /usr/local/src/provision/rbenv-installer"
-  try su - "${PRIMARY_USER:-go}" -c "git -C \"\$(rbenv root)/plugins\" clone https://github.com/tpope/rbenv-aliases"
-
-  echo "Validating rbenv installation"
-  try su - "${PRIMARY_USER:-go}" -c "curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/master/bin/rbenv-doctor | bash"
 }
 
 function install_nodenv() {
@@ -122,10 +108,8 @@ function major_minor() {
   printf "$(printf $version | cut -d. -f1).$(printf $version | cut -d. -f2)"
 }
 
-function install_global_ruby() {
-  local version="$1"
-  try su - "${PRIMARY_USER:-go}" -c "rbenv install $version && rbenv global $(major_minor $version) && echo \"Default ruby version: \$(ruby --version)\""
-  try su - "${PRIMARY_USER:-go}" -c "gem install rake bundler && rbenv rehash && rake --version && bundle --version"
+function install_global_ruby_default_gems() {
+  try su - "${PRIMARY_USER:-go}" -c "gem install rake bundler && rake --version && bundle --version"
 }
 
 function install_global_node() {

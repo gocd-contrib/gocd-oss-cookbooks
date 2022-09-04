@@ -43,16 +43,16 @@ function provision() {
   fi
 
   # git, in particular, is used in subsequent provisioning
-  # so do this before things like `rbenv` and `nodenv`
+  # so do this before things like `asdf` and `nodenv`
   step install_scm_tools
 
-  step install_asdf "v0.10.2"
+  step install_asdf "v0.10.2" "java" "ruby"
 
   step install_global_asdf "java" "temurin-17.0.4+101"
   step install_multi_asdf "java" "temurin-17.0.4+101"
 
-  step install_rbenv
-  step install_global_ruby "2.7.6"
+  step install_global_asdf "ruby" "3.1.2"
+  step install_global_ruby_default_gems
 
   step install_nodenv
   step install_global_node "16.17.0"
@@ -117,11 +117,8 @@ function install_native_build_packages() {
   # Core stuff
   try dnf -y install autoconf automake make patch
 
-  # Ruby-build dependencies for rbenv/ASDF: https://github.com/rbenv/ruby-build#centos
+  # Ruby-build dependencies for ASDF: https://github.com/rbenv/ruby-build#centos
   try dnf -y install patch gcc bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
-
-  # To allow rbenv/ASDF installation of Ruby 2.7 and earlier where OpenSSL 1.1.1 needs to be available
-  try dnf -y install perl-FindBin
 }
 
 function install_python() {
