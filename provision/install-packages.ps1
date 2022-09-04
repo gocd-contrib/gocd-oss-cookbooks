@@ -1,9 +1,12 @@
-$GOLANG_BOOTSTRAPPER_VERSION='2.3'
-$P4D_VERSION='22.1'
+$JAVA_VERSION='17.0.4.10100'
 $NODEJS_VERSION='16.17.0'
 $RUBY_VERSION='3.1.2.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.12'
+
+$GOLANG_BOOTSTRAPPER_VERSION='2.3'
+$P4D_VERSION='22.1'
+
 # Copy over configs
 New-Item "${env:USERPROFILE}\.gradle" -ItemType Directory | Out-Null
 New-Item "${env:USERPROFILE}\.m2" -ItemType Directory | Out-Null
@@ -37,15 +40,8 @@ choco upgrade --no-progress -y python visualstudio2017buildtools visualstudio201
 RefreshEnv
 npm config --global set msvs_version 2017
 
-# install jabba
-Invoke-Expression (Invoke-WebRequest https://github.com/shyiko/jabba/raw/master/install.ps1 -UseBasicParsing).Content
-
-# install multiple openjdk versions
-Write-Host "Installing openjdk variants"
-jabba install openjdk@1.17
-
-jabba use "openjdk@1.17"
-
+$JAVA_MAJOR_VERSION=$JAVA_VERSION.Split(".")[0]
+choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
@@ -65,7 +61,7 @@ Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4D_
 Invoke-WebRequest https://github.com/ketan/gocd-golang-bootstrapper/releases/download/${GOLANG_BOOTSTRAPPER_VERSION}/go-bootstrapper-${GOLANG_BOOTSTRAPPER_VERSION}.windows.amd64.exe -Outfile C:\\go-agent.exe
 
 $newSystemPath = [System.Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine)
-$newSystemPath = "${newSystemPath};${env:ProgramFiles}\\Perforce\\bin;${env:USERPROFILE}\\.jabba\\bin"
+$newSystemPath = "${newSystemPath};${env:ProgramFiles}\\Perforce\\bin"
 $env:Path = $newSystemPath + ";" + [System.Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
 [Environment]::SetEnvironmentVariable("Path", $newSystemPath, [EnvironmentVariableTarget]::Machine)
 
