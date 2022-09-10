@@ -8,7 +8,7 @@ $GOLANG_BOOTSTRAPPER_VERSION='2.3'
 $P4D_VERSION='22.1'
 
 Invoke-WebRequest https://github.com/gocd/gocd-database-migrator/releases/download/1.0.0-39/gocd-database-migrator-1.0.0.zip -Outfile C:\\something.zip
-regedit import C:\\Users\\ContainerAdministrator\\provision\\compressed-folders.reg
+reg import C:\\Users\\ContainerAdministrator\\provision\\compressed-folders.reg
 cscript //nologo C:\\Users\\ContainerAdministrator\\provision\\test.vbs C:\\something.zip .
 dir
 
