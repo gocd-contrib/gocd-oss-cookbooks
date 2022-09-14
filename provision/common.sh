@@ -96,7 +96,9 @@ function install_gauge() {
   local version="$1"
   try curl -sL -O https://github.com/getgauge/gauge/releases/download/v$version/gauge-$version-linux.x86_64.zip
   try unzip -d /usr/bin gauge-$version-linux.x86_64.zip
-  try gauge install ruby html-report screenshot
+  for plugin in ruby html-report screenshot; do
+    try gauge install "${plugin}"
+  done
   try gauge -v
 }
 
