@@ -24,7 +24,7 @@ jobs:
       - name: Build the image
         run: |
           set -x
-          docker build -f Dockerfile.dind -t gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
+          docker build -f dind.Dockerfile -t gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
@@ -45,7 +45,7 @@ jobs:
       - name: Build the image
         run: |
           set -x
-          docker build -f Dockerfile.centos -t gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
+          docker build -f centos.Dockerfile -t gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
@@ -66,7 +66,7 @@ jobs:
       - name: Build the image
         run: |
           set -x
-          docker build -f Dockerfile.ubuntu -t gocddev/gocd-dev-build:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
+          docker build -f ubuntu.Dockerfile -t gocddev/gocd-dev-build:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
@@ -79,7 +79,7 @@ jobs:
         run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
 
       - name: Build the image
-        run: docker build -f Dockerfile.windowsservercore2019 -t gocddev/gocd-dev-build:windows2019-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
+        run: docker build -f windowsservercore2019.Dockerfile -t gocddev/gocd-dev-build:windows2019-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
 
       - name: Log into dockerhub
         run: (echo "$env:DOCKERHUB_TOKEN" | docker login --username "$env:DOCKERHUB_USERNAME" --password-stdin) -or (ls)
