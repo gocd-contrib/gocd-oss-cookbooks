@@ -45,7 +45,8 @@ choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VE
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
-choco install --no-progress -y hg yarn svn git p4 gnupg windows-sdk-8.1 awscli
+choco install --no-progress -y hg yarn svn git p4 gnupg awscli
+choco install --no-progress -y windows-sdk-10.1 --install-arguments='/features OptionId.SigningTools'
 choco install --no-progress -y googlechrome
 
 RefreshEnv
