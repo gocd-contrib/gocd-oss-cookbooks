@@ -1,4 +1,5 @@
 $JAVA_VERSION='17.0.4.10100'
+$JAVA_MAJOR_VERSION=$JAVA_VERSION.Split(".")[0]
 $NODEJS_VERSION='16.17.1'
 $RUBY_VERSION='3.1.2.1'
 $NANT_VERSION='0.92.2'
@@ -34,13 +35,6 @@ RefreshEnv
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
-
-# Install tools to support node-gyp compilation of native stuff on Windows
-choco upgrade --no-progress -y python visualstudio2017buildtools visualstudio2017-workload-vctools
-RefreshEnv
-npm config --global set msvs_version 2017
-
-$JAVA_MAJOR_VERSION=$JAVA_VERSION.Split(".")[0]
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}"
