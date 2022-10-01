@@ -54,7 +54,7 @@ RefreshEnv
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
 
-# install p4
+# install p4d / helix-core-server
 New-Item "${env:ProgramFiles}\\Perforce\\bin\\" -ItemType Directory | Out-Null
 Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4D_VERSION/bin.ntx64/p4d.exe -Outfile "${env:ProgramFiles}\\Perforce\\bin\\p4d.exe"
 
