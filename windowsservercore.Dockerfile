@@ -1,8 +1,8 @@
-FROM mcr.microsoft.com/dotnet/framework/runtime:4.8-windowsservercore-ltsc2019
+FROM mcr.microsoft.com/dotnet/framework/runtime:4.8-windowsservercore-ltsc2022
 
 # Shamelessly nabbed from https://github.com/gantrior/docker-chrome-windows
 #
-# Fonts are needed for Chrome to launch and function. Windows Server Core 2019
+# Fonts are needed for Chrome to launch and function. Windows Server Core
 # does not include fonts, so we need to install them ourselves.
 ADD Files/FontsToAdd.tar /Fonts/
 WORKDIR /Fonts/

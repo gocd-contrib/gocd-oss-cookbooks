@@ -28,6 +28,7 @@ jobs:
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+
   centos:
     runs-on: ubuntu-latest
     steps:
@@ -49,6 +50,7 @@ jobs:
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+
   ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -70,8 +72,9 @@ jobs:
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
-  windows-2019:
-    runs-on: windows-2019
+
+  windows:
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v3
 
@@ -79,7 +82,7 @@ jobs:
         run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
 
       - name: Build the image
-        run: docker build -f windowsservercore2019.Dockerfile -t gocddev/gocd-dev-build:windows2019-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
+        run: docker build -f windowsservercore.Dockerfile -t gocddev/gocd-dev-build:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
 
       - name: Log into dockerhub
         run: (echo "$env:DOCKERHUB_TOKEN" | docker login --username "$env:DOCKERHUB_USERNAME" --password-stdin) -or (ls)
@@ -88,4 +91,4 @@ jobs:
           DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
 
       - name: Publish the image
-        run: docker push gocddev/gocd-dev-build:windows2019-$(git tag --points-at HEAD --sort=version:refname | tail -n1)
+        run: docker push gocddev/gocd-dev-build:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1)
