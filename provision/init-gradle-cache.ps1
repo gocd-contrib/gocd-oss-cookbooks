@@ -9,11 +9,10 @@ yarn.cmd config set network-timeout 300000
 ./gradlew.bat prepare --no-build-cache --quiet
 yarn.cmd config delete network-timeout
 
+Write-Host "Cleaning up build artifacts..."
+./gradlew.bat clean --no-build-cache --quiet
 Write-Host "Stopping Gradle daemons..."
 ./gradlew.bat --stop
-
-Write-Host "Cleaning up Git..."
-git clean -ffddx
 Write-Host "Cleaning up entire gocd clone..."
 cd \
 cmd /c "rmdir /s /q C:\\gocd"
