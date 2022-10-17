@@ -2,7 +2,7 @@
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "Builing gocd to install gradle and build gradle cache..."
+Write-Host "Building gocd to install gradle and build gradle cache..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
 yarn.cmd config set network-timeout 300000
