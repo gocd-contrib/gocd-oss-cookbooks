@@ -53,7 +53,7 @@ function provision() {
   step install_global_asdf "ruby" "3.1.2"
   step install_global_ruby_default_gems
 
-  step install_global_asdf "nodejs" "16.17.1"
+  step install_global_asdf "nodejs" "16.18.0"
   step install_yarn
 
   step install_maven "$MAVEN_VERSION"
