@@ -22,7 +22,7 @@ function provision() {
   step install_global_asdf "java" "temurin-17.0.5+8"
   step install_multi_asdf "java" "temurin-17.0.5+8"
 
-  step install_global_asdf "ruby" "3.1.2"
+  step install_global_asdf "ruby" "3.1.3"
   step install_global_ruby_default_gems
 
   step install_global_asdf "nodejs" "18.12.1"
