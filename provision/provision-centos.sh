@@ -220,9 +220,6 @@ function clean() {
 
 function upgrade_os_packages() {
   try dnf -y update --quiet
-
-  # Something wrong with tzdata on stream9. If ls /usr/share/zoneinfo isn't there off the shelf, something is wrong...
-  try dnf -y reinstall tzdata
 }
 
 function build_gocd() {
