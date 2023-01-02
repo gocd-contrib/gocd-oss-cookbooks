@@ -101,6 +101,8 @@ function setup_epel() {
 }
 
 function setup_external_repos() {
+  try echo -n 'fastestmirror=1' >> /etc/dnf/dnf.conf
+
   setup_epel
 
   try dnf -y install "dnf-command(config-manager)"
