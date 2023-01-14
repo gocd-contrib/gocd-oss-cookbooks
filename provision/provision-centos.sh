@@ -133,8 +133,8 @@ function install_scm_tools() {
   try git --version
   try svn --version
   try hg --version
-  try p4 -V
-  try p4d -V
+#  try p4 -V
+#  try p4d -V
 }
 
 function install_git() {
@@ -164,7 +164,7 @@ function install_awscli_mimetypes() {
 }
 
 function setup_postgres_repo() {
-  try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+  try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm
 }
 
 function install_postgresql() {
@@ -181,10 +181,10 @@ function install_xss() {
   try dnf -y install libXScrnSaver # Headless Chrome needs this for some reason
 }
 
-# for FF
 function install_firefox_dependencies() {
   # install just the FF dependencies, without FF
-  try dnf -y install $(dnf deplist --arch x86_64 firefox | awk '/provider:/ {print $2}' | sort -u)
+  # shellcheck disable=SC2046
+  try dnf -y install $(dnf deplist --arch "$(arch)" firefox | awk '/provider:/ {print $2}' | sort -u)
 
   try dnf -y install \
       hicolor-icon-theme \

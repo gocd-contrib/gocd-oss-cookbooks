@@ -126,7 +126,8 @@ function install_ant() {
 }
 
 function install_geckodriver() {
-  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/mozilla/geckodriver/releases/latest | jq -r '.assets[] | select(.name | endswith("linux64.tar.gz")) | .browser_download_url')"
+  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "linux64"; else echo "aarch64"; fi)"
+  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/mozilla/geckodriver/releases/latest | jq -r ".assets[] | select(.name | endswith(\"$arch.tar.gz\")) | .browser_download_url")"
   try curl --silent --fail --location "${URL}" --output /usr/local/src/geckodriver-latest.tar.gz
   try tar -zxf /usr/local/src/geckodriver-latest.tar.gz -C /usr/local/bin
 }
@@ -134,7 +135,8 @@ function install_geckodriver() {
 # startup services
 
 function install_tini() {
-  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/krallin/tini/releases/latest | jq -r '.assets[] | select(.name | endswith("-static-amd64")) | .browser_download_url' | grep -v muslc)"
+  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
+  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/krallin/tini/releases/latest | jq -r ".assets[] | select(.name | endswith(\"-static-$arch\")) | .browser_download_url" | grep -v muslc)"
   try curl -fsSL --output /usr/bin/tini "$URL"
   try chmod a+rx /usr/bin/tini
   try tini --version
