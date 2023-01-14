@@ -66,10 +66,10 @@ function provision() {
   step install_awscli
 
   step setup_postgres_repo
-  step install_postgresql "11"
   step install_postgresql "12"
   step install_postgresql "13"
   step install_postgresql "14"
+  step install_postgresql "15"
 
   step install_geckodriver
   step install_firefox_dependencies
