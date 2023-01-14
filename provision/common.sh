@@ -102,6 +102,13 @@ function install_gauge() {
   try gauge -v
 }
 
+function install_awscli() {
+  try curl --silent --fail --location "https://awscli.amazonaws.com/awscli-exe-linux-$(arch).zip" --output "/tmp/awscliv2.zip"
+  try unzip -q /tmp/awscliv2.zip
+  try ./aws/install
+  try rm -rf /aws /tmp/awscliv2.zip
+}
+
 function install_maven() {
   local version="$1"
   try mkdir -p /opt/local/
@@ -169,6 +176,10 @@ printf "\n"
 
 printf "yarn version:\n"
 yarn --version | pr -to 2
+printf "\n"
+
+printf "aws version:\n"
+aws --version | pr -to 2
 printf "\n"
 
 printf "Installed JDKs:\n"

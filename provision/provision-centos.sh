@@ -59,10 +59,9 @@ function provision() {
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
-  step install_python
-
   step install_gauge "1.4.3"
   step install_installer_tools
+  step install_awscli_mimetypes
   step install_awscli
 
   step setup_postgres_repo
@@ -121,11 +120,6 @@ function install_native_build_packages() {
   try dnf -y install patch gcc bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
 }
 
-function install_python() {
-  try dnf -y install python3 python3-devel
-  try ln -s /usr/bin/python3 /usr/bin/python
-}
-
 function install_scm_tools() {
   install_git
   try dnf -y install mercurial
@@ -162,10 +156,11 @@ function install_installer_tools() {
   try su - "$PRIMARY_USER" -c "gem install fpm --no-document"
 }
 
-function install_awscli() {
-  # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3. Without this file, all files in s3 will have content type `application/octet-stream`
-  try dnf -y install mailcap
-  try pip install awscli
+function install_awscli_mimetypes() {
+  # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3.
+  # Without this file, all files in s3 will have content type `application/octet-stream`
+  # See https://github.com/aws/aws-cli/issues/1249
+  try apt-get install -y mime-support
 }
 
 function setup_postgres_repo() {

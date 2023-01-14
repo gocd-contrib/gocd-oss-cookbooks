@@ -28,7 +28,7 @@ function provision() {
   step install_global_asdf "nodejs" "18.13.0"
   step install_yarn
 
-  step install_python
+  step install_awscli_mimetypes
   step install_awscli
 
   step setup_nexus_configs
@@ -66,11 +66,6 @@ function install_basic_utils() {
   try apt-get install -y debsigs gnupg gnupg-agent dpkg-sig apt-utils bzip2 gzip unzip zip sudo curl wget jq
 }
 
-function install_python() {
-  try apt-get install -y python3 python3-pip
-  try pip3 install --upgrade pip
-}
-
 function install_native_build_packages() {
   try apt-get install -y build-essential zlib1g-dev libcurl4 libssl-dev
 }
@@ -80,10 +75,11 @@ function install_scm_tools() {
   setup_git_config
 }
 
-function install_awscli() {
-  # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3. Without this file, all files in s3 will have content type `application/octet-stream`
+function install_awscli_mimetypes() {
+  # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3.
+  # Without this file, all files in s3 will have content type `application/octet-stream`
+  # See https://github.com/aws/aws-cli/issues/1249
   try apt-get install -y mime-support
-  try pip3 install awscli
 }
 
 function clean() {
