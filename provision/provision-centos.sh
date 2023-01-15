@@ -133,8 +133,8 @@ function install_scm_tools() {
   try git --version
   try svn --version
   try hg --version
-#  try p4 -V
-#  try p4d -V
+  try p4 -V
+  try p4d -V
 }
 
 function install_git() {
