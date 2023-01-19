@@ -125,16 +125,18 @@ function install_scm_tools() {
   try dnf -y install mercurial
   try dnf -y install subversion
 
-  try mkdir -p /usr/local/bin
-  try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4" --output /usr/local/bin/p4
-  try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d" --output /usr/local/bin/p4d
-  try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
-
   try git --version
-  try svn --version
   try hg --version
-  try p4 -V
-  try p4d -V
+  try svn --version
+
+  if [ "$(arch)" == "x86_64" ]; then
+    try mkdir -p /usr/local/bin
+    try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4" --output /usr/local/bin/p4
+    try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d" --output /usr/local/bin/p4d
+    try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
+    try p4 -V
+    try p4d -V
+  fi
 }
 
 function install_git() {
