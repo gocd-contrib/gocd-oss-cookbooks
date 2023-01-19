@@ -126,7 +126,7 @@ function install_ant() {
 }
 
 function install_geckodriver() {
-  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "linux64"; else echo "aarch64"; fi)"
+  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "linux64"; else echo "linux-aarch64"; fi)"
   local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/mozilla/geckodriver/releases/latest | jq -r ".assets[] | select(.name | endswith(\"$arch.tar.gz\")) | .browser_download_url")"
   try curl --silent --fail --location "${URL}" --output /usr/local/src/geckodriver-latest.tar.gz
   try tar -zxf /usr/local/src/geckodriver-latest.tar.gz -C /usr/local/bin
