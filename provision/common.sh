@@ -143,7 +143,8 @@ function install_tini() {
 }
 
 function add_golang_gocd_bootstrapper() {
-  local URL="$(curl -fsSL https://github-api-proxy.gocd.org/repos/ketan/gocd-golang-bootstrapper/releases/latest | jq -r '.assets[] | select(.name | endswith("linux.amd64")) | .browser_download_url')"
+  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
+  local URL="$(curl -fsSL https://github-api-proxy.gocd.org/repos/gocd-contrib/gocd-golang-bootstrapper/releases/latest | jq -r ".assets[] | select(.name | endswith(\"linux.$arch\")) | .browser_download_url")"
   try curl -fsSL --output /go/go-agent "${URL}"
   try chown go:go /go/go-agent
   try chmod a+rx /go/go-agent
