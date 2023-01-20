@@ -198,15 +198,20 @@ function install_firefox_dependencies() {
 }
 
 function install_firefox_latest() {
-  # latest versions of FF
-  try mkdir -p /opt/local/firefox
-  try mkdir -p /opt/local/firefox-latest
-  try curl --silent --fail --location 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US' --output /usr/local/src/firefox-latest.tar.bz2
-  try tar -jxf /usr/local/src/firefox-latest.tar.bz2 -C /opt/local/firefox-latest --strip-components=1
-  try bash -c "dbus-uuidgen > /var/lib/dbus/machine-id"
+  if [ "$(arch)" == "x86_64" ]; then
+    # latest versions of FF
+    try mkdir -p /opt/local/firefox
+    try mkdir -p /opt/local/firefox-latest
+    try curl --silent --fail --location 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US' --output /usr/local/src/firefox-latest.tar.bz2
+    try tar -jxf /usr/local/src/firefox-latest.tar.bz2 -C /opt/local/firefox-latest --strip-components=1
+    try bash -c "dbus-uuidgen > /var/lib/dbus/machine-id"
 
-  try ln -sf /opt/local/firefox-latest/firefox /usr/local/bin/firefox
-  try /opt/local/firefox-latest/firefox -version
+    try ln -sf /opt/local/firefox-latest/firefox /usr/local/bin/firefox
+    try /opt/local/firefox-latest/firefox -version
+  else
+    # Install latest official LTS/ESR release that is available for the platform
+    try dnf -y install firefox
+  fi
   try firefox -version
 }
 
