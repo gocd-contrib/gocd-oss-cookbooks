@@ -1,4 +1,4 @@
-# This file is managed by chef, any changes will be lost
+# This file is managed by automation, any changes will be lost
 
 go ALL=(ALL) NOPASSWD:ALL
 
