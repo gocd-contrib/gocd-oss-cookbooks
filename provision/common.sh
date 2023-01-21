@@ -97,9 +97,14 @@ function install_gauge() {
   local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "x86_64"; else echo "arm64"; fi)"
   try curl --silent --fail --location "https://github.com/getgauge/gauge/releases/download/v$version/gauge-$version-linux.$arch.zip" --output /usr/local/src/gauge.zip
   try unzip -d /usr/bin /usr/local/src/gauge.zip
-  for plugin in ruby html-report screenshot; do
-    try su - "$PRIMARY_USER" -c "gauge install ${plugin}"
-  done
+
+  # Only pre-install plugins for x64 for now, as ruby plugin isn't compatible as of 0.5.4 https://github.com/getgauge/gauge-ruby/issues/287
+  if [ "$(arch)" == "x86_64" ]; then
+    for plugin in ruby html-report screenshot; do
+      try su - "$PRIMARY_USER" -c "gauge install ${plugin}"
+    done
+  fi
+
   try su - "$PRIMARY_USER" -c "gauge -v"
 }
 
