@@ -34,7 +34,6 @@ function provision() {
   step setup_nexus_configs
 
   step add_golang_gocd_bootstrapper
-  step setup_entrypoint
   step install_tini
 
   step list_installed_packages

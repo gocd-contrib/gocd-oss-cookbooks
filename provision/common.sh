@@ -151,11 +151,6 @@ function add_golang_gocd_bootstrapper() {
   try chmod a+rx /go/go-agent
 }
 
-function setup_entrypoint() {
-  try cp /usr/local/src/provision/bootstrap.sh /bootstrap.sh
-  try chmod a+rx /bootstrap.sh
-}
-
 # helpers
 
 function print_versions_summary() {

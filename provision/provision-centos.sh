@@ -73,8 +73,6 @@ function provision() {
   step install_geckodriver
   step install_firefox_dependencies
   step install_firefox_latest
-  step install_xvfb
-  step install_xss
 
   # On Docker for Mac, make sure you allocate more than 2G of memory or
   # gradle might randomly fail; 6G should be fairly reliable.
@@ -84,7 +82,6 @@ function provision() {
     step install_docker
     step setup_nexus_configs
     step add_golang_gocd_bootstrapper
-    step setup_entrypoint
   fi
 
   step install_tini
@@ -183,23 +180,10 @@ function install_postgresql() {
   try dnf -y install postgresql${package_suffix} postgresql${package_suffix}-devel postgresql${package_suffix}-server postgresql${package_suffix}-contrib
 }
 
-function install_xvfb() {
-  try dnf -y install xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-server-Xvfb mesa-libGL
-}
-
-function install_xss() {
-  try dnf -y install libXScrnSaver # Headless Chrome needs this for some reason
-}
-
 function install_firefox_dependencies() {
   # install just the FF dependencies, without FF
   # shellcheck disable=SC2046
   try dnf -y install $(dnf deplist --arch "$(arch)" firefox | awk '/provider:/ {print $2}' | sort -u)
-
-  try dnf -y install \
-      hicolor-icon-theme \
-      dbus dbus-x11 xauth liberation-sans-fonts liberation-serif-fonts liberation-mono-fonts mesa-dri-drivers \
-      xorg-x11-fonts-100dpi xorg-x11-fonts-75dpi xorg-x11-fonts-Type1 xorg-x11-fonts-cyrillic urw-fonts
 }
 
 function install_firefox_latest() {
