@@ -97,7 +97,8 @@ function setup_epel() {
 }
 
 function setup_external_repos() {
-  try echo -n 'fastestmirror=1' >> /etc/dnf/dnf.conf
+  try echo 'fastestmirror=1' >> /etc/dnf/dnf.conf
+  try echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf
 
   setup_epel
 
