@@ -180,7 +180,7 @@ function setup_postgres_repo() {
 function install_postgresql() {
   local pg_version="$1"
   package_suffix="$(printf "${pg_version}" | sed -e 's/\.//g')"
-  try dnf -y install postgresql${package_suffix} postgresql${package_suffix}-server
+  try dnf -y install postgresql${package_suffix} postgresql${package_suffix}-server postgresql${package_suffix}-contrib
 }
 
 function install_firefox_dependencies() {
