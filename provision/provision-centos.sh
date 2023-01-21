@@ -120,6 +120,9 @@ function install_native_build_packages() {
   if [ "$(arch)" == "aarch64" ]; then
     try dnf -y install libstdc++-static
   fi
+
+  # For native extensions for libraries
+  try dnf -y install gcc-c++ # Required by unf_ext (try removing if no need for this)
 }
 
 function install_scm_tools() {
