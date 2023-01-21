@@ -121,8 +121,8 @@ function install_native_build_packages() {
     try dnf -y install libstdc++-static
   fi
 
-  # For native extensions for libraries
-  try dnf -y install gcc-c++ # Required by unf_ext (try removing if no need for this)
+  # Ruby dependencies that need to build native extensions (no pre-built binaries)
+  try dnf -y install gcc-c++ # Required by unf_ext + eventmachine (try removing if no need for these)
 }
 
 function install_scm_tools() {
