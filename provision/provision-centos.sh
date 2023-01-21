@@ -187,7 +187,7 @@ function install_postgresql() {
 function install_firefox_dependencies() {
   # install just the FF dependencies, without FF
   # shellcheck disable=SC2046
-  try dnf -y install $(dnf deplist --arch "$(arch)" firefox | awk '/provider:/ {print $2}' | sort -u)
+  try dnf -y install $(dnf deplist -y --arch "$(arch)" --latest-limit=1 firefox | awk '/provider:/ {print $2}' | sort -u)
 }
 
 function install_firefox_latest() {
