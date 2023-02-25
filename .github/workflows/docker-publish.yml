@@ -51,7 +51,7 @@ jobs:
           set -x
           docker buildx build \
             --platform linux/amd64,linux/arm64 \
-            --output "image,push=false" \
+            --output "type=image,push=false" \
             -f centos.Dockerfile \
             -t gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" \
             --push \
