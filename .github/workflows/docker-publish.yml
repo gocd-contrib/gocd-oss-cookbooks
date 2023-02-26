@@ -37,11 +37,11 @@ jobs:
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
       - name: Log into dockerhub
         run: echo "${DOCKERHUB_TOKEN}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
