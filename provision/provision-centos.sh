@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PRIMARY_USER="go"
-GRADLE_OPTIONS="--stacktrace --info --no-daemon"
+GRADLE_OPTIONS="--stacktrace --no-daemon"
 
 for arg in $@; do
   case $arg in
