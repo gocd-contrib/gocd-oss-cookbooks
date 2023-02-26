@@ -1,6 +1,9 @@
 FROM quay.io/centos/centos:stream9
 MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
+ARG BUILDARCH
+ARG TARGETARCH
+
 COPY provision /usr/local/src/provision/
 
 RUN /usr/local/src/provision/provision-centos.sh

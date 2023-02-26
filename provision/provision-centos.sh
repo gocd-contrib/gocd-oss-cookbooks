@@ -75,7 +75,10 @@ function provision() {
 
   # On Docker for Mac, make sure you allocate more than 2G of memory or
   # gradle might randomly fail; 6G should be fairly reliable.
-  step build_gocd
+  if [ "${BUILDARCH}" == "${TARGETARCH}" ]; then
+    # only do a pre-build to cache dependencies when not cross-compiling
+    step build_gocd
+  fi
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     step install_docker
