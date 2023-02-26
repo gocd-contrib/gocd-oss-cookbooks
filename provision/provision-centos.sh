@@ -1,14 +1,13 @@
 #!/bin/bash
 
 PRIMARY_USER="go"
-GRADLE_OPTIONS="--stacktrace --info"
+GRADLE_OPTIONS="--stacktrace --info --no-daemon"
 
 for arg in $@; do
   case $arg in
     --contrib)
       PRIMARY_USER="dojo"
       SKIP_INTERNAL_CONFIG="yes"
-      GRADLE_OPTIONS="${GRADLE_OPTIONS} --no-daemon"
       shift
       ;;
     *)
@@ -244,7 +243,7 @@ function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
               asdf install && \
-              GRADLE_OPTS=-Dorg.gradle.daemon=false ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
+              ./gradlew --max-workers 1 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
   try rm -rf /tmp/gocd /${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
