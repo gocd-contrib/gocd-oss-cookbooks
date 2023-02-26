@@ -243,7 +243,7 @@ function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
               asdf install && \
-              ./gradlew --max-workers 1 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
+              ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache ${GRADLE_OPTIONS}"
   try rm -rf /tmp/gocd /${PRIMARY_USER}/.gradle/caches/build-cache-*
 }
 
