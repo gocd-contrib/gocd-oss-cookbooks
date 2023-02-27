@@ -82,6 +82,7 @@ function provision() {
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     step install_docker
+    step install_regctl
     step setup_nexus_configs
     step add_golang_gocd_bootstrapper
   fi
@@ -254,6 +255,14 @@ function install_docker() {
   try dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
   try dnf -y install docker-ce containerd.io docker-buildx-plugin
   try usermod -a -G docker ${PRIMARY_USER}
+}
+
+function install_regctl() {
+  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
+  try mkdir -p /usr/local/bin
+  try curl --silent --fail --location "https://github.com/regclient/regclient/releases/latest/download/regctl-linux-${arch}" --output /usr/local/bin/regctl
+  try chmod 755 /usr/local/bin/regctl
+  try regctl version
 }
 
 provision
