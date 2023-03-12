@@ -3,7 +3,7 @@
 PRIMARY_USER="go"
 
 # import functions
-source "$(dirname $0)/common.sh"
+source "$(dirname $0)/provision-common.sh"
 
 function provision() {
   step setup_external_repos

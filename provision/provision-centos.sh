@@ -24,7 +24,7 @@ P4D_VERSION=22.1
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
 # import functions
-source "$(dirname $0)/common.sh"
+source "$(dirname $0)/provision-common.sh"
 
 # Main entrypoint
 function provision() {
