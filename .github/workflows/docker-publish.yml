@@ -20,6 +20,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
           DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+          DOCKER_BUILDKIT: 1
 
       - name: Build the image
         run: |
@@ -45,6 +46,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
           DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+          DOCKER_BUILDKIT: 1
 
       - name: Build the image
         run: |
@@ -70,6 +72,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
           DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+          DOCKER_BUILDKIT: 1
 
       - name: Build the image
         run: |
@@ -95,6 +98,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
           DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+          DOCKER_BUILDKIT: 1
 
       - name: Publish the image
         run: docker push gocddev/gocd-dev-build:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1)
