@@ -46,7 +46,7 @@ jobs:
 
       - name: Build the image
         run: |
-            DOCKER_BUILDKIT=1 docker buildx build \
+          docker buildx build \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=false" \
             -f centos.Dockerfile \
@@ -83,7 +83,7 @@ jobs:
         run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
 
       - name: Build the image
-        run: DOCKER_BUILDKIT=1 docker build -f windowsservercore.Dockerfile -t gocddev/gocd-dev-build:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
+        run: docker build -f windowsservercore.Dockerfile -t gocddev/gocd-dev-build:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
 
       - name: Log into dockerhub
         run: (echo "$env:DOCKERHUB_TOKEN" | docker login --username "$env:DOCKERHUB_USERNAME" --password-stdin) -or (ls)
