@@ -45,7 +45,8 @@ jobs:
           DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
 
       - name: Build the image
-        run: DOCKER_BUILDKIT=1 docker buildx build \
+        run: |
+            DOCKER_BUILDKIT=1 docker buildx build \
             --platform linux/amd64,linux/arm64 \
             --output "type=image,push=false" \
             -f centos.Dockerfile \
