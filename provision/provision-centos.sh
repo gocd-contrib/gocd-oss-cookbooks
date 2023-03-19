@@ -149,7 +149,7 @@ function install_scm_tools() {
 }
 
 function install_git() {
-  try dnf -y install git
+  try dnf -y install git-core
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     setup_git_config
