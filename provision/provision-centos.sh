@@ -221,7 +221,7 @@ function clean() {
 }
 
 function upgrade_os_packages() {
-  try dnf -y update --quiet
+  try dnf -y upgrade --quiet
 }
 
 function build_gocd() {
