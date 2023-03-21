@@ -17,7 +17,7 @@ function provision() {
   # git, in particular, is used in subsequent provisioning so do this before things like `asdf`
   step install_scm_tools
 
-  step install_asdf "v0.11.2" "java" "ruby" "nodejs"
+  step install_asdf "v0.11.3" "java" "ruby" "nodejs"
 
   step install_global_asdf "java" "temurin-17.0.6+10"
   step install_multi_asdf "java" "temurin-17.0.6+10"
