@@ -16,7 +16,7 @@ for arg in $@; do
   esac
 done
 
-NSIS_VERSION=3.08-2.el9
+NSIS_VERSION=3.08-4.el9
 MAVEN_VERSION=3.9.1
 ANT_VERSION=1.10.13
 P4_VERSION=22.1
@@ -164,7 +164,9 @@ function install_installer_tools() {
       gnupg2
 
   if [ "$(arch)" == "x86_64" ]; then
-    try dnf -y install "http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.$(arch).rpm"
+    try dnf -y install "http://gocd.github.io/nsis-rpm/rpms/mingw-nsis-base-${NSIS_VERSION}.$(arch).rpm"
+    try dnf -y install "http://gocd.github.io/nsis-rpm/rpms/mingw64-nsis-${NSIS_VERSION}.noarch.rpm"
+    try dnf -y install "http://gocd.github.io/nsis-rpm/rpms/mingw32-nsis-${NSIS_VERSION}.noarch.rpm"
   fi
 
   try su - "$PRIMARY_USER" -c "gem install fpm --no-document"
