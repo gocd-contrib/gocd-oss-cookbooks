@@ -19,8 +19,8 @@ done
 NSIS_VERSION=3.08-4.el9
 MAVEN_VERSION=3.9.1
 ANT_VERSION=1.10.13
-P4_VERSION=22.1
-P4D_VERSION=22.1
+P4_VERSION=22.2
+P4D_VERSION=22.2
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
 # import functions
@@ -140,8 +140,8 @@ function install_scm_tools() {
 
   if [ "$(arch)" == "x86_64" ]; then
     try mkdir -p /usr/local/bin
-    try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4_VERSION}/bin.linux26x86_64/p4" --output /usr/local/bin/p4
-    try curl --silent --fail --location "https://s3.amazonaws.com/mirrors-archive/local/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d" --output /usr/local/bin/p4d
+    try curl --silent --fail --location "https://cdist2.perforce.com/perforce/r${P4_VERSION}/bin.linux26x86_64/p4" --output /usr/local/bin/p4
+    try curl --silent --fail --location "https://cdist2.perforce.com/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d" --output /usr/local/bin/p4d
     try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
     try p4 -V
     try p4d -V

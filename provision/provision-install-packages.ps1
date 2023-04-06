@@ -6,7 +6,7 @@ $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.13'
 
 $GOLANG_BOOTSTRAPPER_VERSION='2.5'
-$P4D_VERSION='22.1'
+$P4D_VERSION='22.2'
 
 # Copy over configs
 New-Item "${env:USERPROFILE}\.gradle" -ItemType Directory | Out-Null
@@ -50,7 +50,7 @@ Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey 
 
 # install p4d / helix-core-server
 New-Item "${env:ProgramFiles}\\Perforce\\bin\\" -ItemType Directory | Out-Null
-Invoke-WebRequest https://s3.amazonaws.com/mirrors-archive/local/perforce/r$P4D_VERSION/bin.ntx64/p4d.exe -Outfile "${env:ProgramFiles}\\Perforce\\bin\\p4d.exe"
+Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4D_VERSION/bin.ntx64/p4d.exe -Outfile "${env:ProgramFiles}\\Perforce\\bin\\p4d.exe"
 
 # install gocd bootstrapper
 Invoke-WebRequest https://github.com/ketan/gocd-golang-bootstrapper/releases/download/${GOLANG_BOOTSTRAPPER_VERSION}/go-bootstrapper-${GOLANG_BOOTSTRAPPER_VERSION}.windows.amd64.exe -Outfile C:\\go-agent.exe
