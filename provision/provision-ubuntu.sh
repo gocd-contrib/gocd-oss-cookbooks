@@ -25,7 +25,7 @@ function provision() {
   step install_global_asdf "ruby" "3.1.4"
   step install_global_ruby_default_gems
 
-  step install_global_asdf "nodejs" "18.15.0"
+  step install_global_asdf "nodejs" "18.16.0"
   step install_yarn
 
   step install_awscli_mimetypes
