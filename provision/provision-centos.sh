@@ -181,11 +181,6 @@ function install_awscli_mimetypes() {
 
 function setup_postgres_repo() {
   try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm
-
-  # Temporary workaround for use of disallowed SHA1 signatures within Postgres repos/packages https://redmine.postgresql.org/issues/7802
-  # These arent allowed on RHEL 9 and seem to fail after gnugp2-2.3.3-3.el9. Can remove after signatures at
-  # https://download.postgresql.org/pub/repos/yum/common/redhat/rhel-9-x86_64/repodata/ are allowed (not SHA1 digests mainly)
-  try sed -i -e "s@gpgcheck.*@gpgcheck=0@g" /etc/yum.repos.d/pgdg-redhat-all.repo
 }
 
 function install_postgresql() {
