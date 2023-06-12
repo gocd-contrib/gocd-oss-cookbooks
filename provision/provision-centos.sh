@@ -19,8 +19,8 @@ done
 NSIS_VERSION=3.08-4.el9
 MAVEN_VERSION=3.9.2
 ANT_VERSION=1.10.13
-P4_VERSION=22.2
-P4D_VERSION=22.2
+P4_VERSION=23.1
+P4D_VERSION=23.1
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
 # import functions
