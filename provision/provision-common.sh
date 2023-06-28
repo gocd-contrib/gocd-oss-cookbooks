@@ -98,9 +98,12 @@ function install_gauge() {
   try curl --silent --fail --location "https://github.com/getgauge/gauge/releases/download/v$version/gauge-$version-linux.$arch.zip" --output /usr/local/src/gauge.zip
   try unzip -d /usr/bin /usr/local/src/gauge.zip
 
-  for plugin in ruby html-report screenshot; do
-    try su - "$PRIMARY_USER" -c "gauge install ${plugin}"
-  done
+  local gauge_ruby_version=0.6.0
+  try curl --silent --fail --location "https://github.com/getgauge/gauge-ruby/releases/download/v${gauge_ruby_version}/gauge-ruby-${gauge_ruby_version}-linux.$arch.zip" --output "/tmp/gauge-ruby-${gauge_ruby_version}-linux.$arch.zip"
+  try su - "$PRIMARY_USER" -c "gauge install ruby -f /tmp/gauge-ruby-${gauge_ruby_version}-linux.$arch.zip"
+
+  try su - "$PRIMARY_USER" -c "gauge install html-report"
+  try su - "$PRIMARY_USER" -c "gauge install screenshot"
 
   try su - "$PRIMARY_USER" -c "gauge -v"
 }
