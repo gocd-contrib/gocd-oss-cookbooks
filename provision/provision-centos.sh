@@ -16,7 +16,7 @@ for arg in $@; do
   esac
 done
 
-NSIS_VERSION=3.08-4.el9
+NSIS_VERSION=3.09-1.el9
 MAVEN_VERSION=3.9.3
 ANT_VERSION=1.10.13
 P4_VERSION=23.1
