@@ -46,8 +46,8 @@ function provision() {
 
   step install_asdf "v0.12.0" "java" "ruby" "nodejs"
 
-  step install_global_asdf "java" "temurin-17.0.7+7"
-  step install_multi_asdf "java" "temurin-17.0.7+7"
+  step install_global_asdf "java" "temurin-17.0.8+7"
+  step install_multi_asdf "java" "temurin-17.0.8+7"
 
   step install_global_asdf "ruby" "3.1.4"
   step install_global_ruby_default_gems
@@ -58,7 +58,7 @@ function provision() {
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
-  step install_gauge "1.5.1"
+  step install_gauge "1.5.2"
   step install_installer_tools
   step install_awscli_mimetypes
   step install_awscli
