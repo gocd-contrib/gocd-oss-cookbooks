@@ -66,7 +66,8 @@ function install_basic_utils() {
 }
 
 function install_native_build_packages() {
-  try apt-get install -y build-essential zlib1g-dev libcurl4 libssl-dev
+  # Ruby-build dependencies for ASDF: https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
+  try apt-get install -y autoconf patch build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
 }
 
 function install_scm_tools() {
