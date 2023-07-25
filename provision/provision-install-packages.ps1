@@ -37,8 +37,6 @@ RefreshEnv
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
 choco install --no-progress -y ruby.portable --version="${RUBY_VERSION}"
-gem install rake
-rake --version
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
 choco install --no-progress -y hg yarn sliksvn git p4 gnupg awscli
@@ -46,6 +44,8 @@ choco install --no-progress -y windows-sdk-11-version-22h2-all --install-argumen
 choco install --no-progress -y googlechrome
 
 RefreshEnv
+gem install rake
+rake --version
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
