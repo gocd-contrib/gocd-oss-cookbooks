@@ -85,7 +85,7 @@ function install_multi_asdf() {
 }
 
 function install_global_ruby_default_gems() {
-  try su - "${PRIMARY_USER:-go}" -c "gem install rake bundler && rake --version && bundle --version"
+  try su - "${PRIMARY_USER:-go}" -c "gem install rake --no-document && rake --version"
 }
 
 function install_yarn() {
