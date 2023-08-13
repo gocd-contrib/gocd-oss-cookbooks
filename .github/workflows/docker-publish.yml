@@ -5,6 +5,8 @@ on:
     tags:
       - 'v*'
 
+env:
+  REGISTRY_IMAGE: ${{ env.REGISTRY_IMAGE }}
 
 jobs:
   dind:
@@ -15,44 +17,109 @@ jobs:
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
 
-      - name: Log into dockerhub
-        run: echo "${DOCKERHUB_TOKEN}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
-        env:
-          DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
-          DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build the image
-        run: DOCKER_BUILDKIT=1 docker build -f dind.Dockerfile -t gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
+        run: DOCKER_BUILDKIT=1 docker build -f dind.Dockerfile -t ${{ env.REGISTRY_IMAGE }}:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
 
       - name: Publish the image
-        run: docker push gocddev/gocd-dev-build:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+        run: docker push ${{ env.REGISTRY_IMAGE }}:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
 
-  centos:
+  centos-build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
       - uses: actions/checkout@v3
 
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          tags: type=semver,pattern=centos-9-{{version}}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+        with:
+          platforms: 'linux/amd64,linux/arm64'
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log into dockerhub
-        run: echo "${DOCKERHUB_TOKEN}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
-        env:
-          DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
-          DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build the image
+      - name: Build and push by digest
+        id: centos-build
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: centos.Dockerfile
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
         run: |
-          docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --output "type=image,push=false" \
-            -f centos.Dockerfile \
-            -t gocddev/gocd-dev-build:centos-9-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" \
-            --push \
-            .
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+          
+      - name: Upload digest
+        uses: actions/upload-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  centos-push:
+    runs-on: ubuntu-latest
+    needs:
+      - centos-build
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          tags: type=semver,pattern=centos-9-{{version}}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
 
   ubuntu:
     runs-on: ubuntu-latest
@@ -62,17 +129,17 @@ jobs:
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
 
-      - name: Log into dockerhub
-        run: echo "${DOCKERHUB_TOKEN}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
-        env:
-          DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
-          DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build the image
-        run: DOCKER_BUILDKIT=1 docker build -f ubuntu.Dockerfile -t gocddev/gocd-dev-build:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
+        run: DOCKER_BUILDKIT=1 docker build -f ubuntu.Dockerfile -t ${{ env.REGISTRY_IMAGE }}:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
 
       - name: Publish the image
-        run: docker push gocddev/gocd-dev-build:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+        run: docker push ${{ env.REGISTRY_IMAGE }}:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
 
   windows:
     runs-on: windows-2022
@@ -83,13 +150,13 @@ jobs:
         run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
 
       - name: Build the image
-        run: docker build -f windowsservercore.Dockerfile -t gocddev/gocd-dev-build:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
+        run: docker build -f windowsservercore.Dockerfile -t ${{ env.REGISTRY_IMAGE }}:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
 
-      - name: Log into dockerhub
-        run: (echo "$env:DOCKERHUB_TOKEN" | docker login --username "$env:DOCKERHUB_USERNAME" --password-stdin) -or (ls)
-        env:
-          DOCKERHUB_USERNAME: "${{ secrets.DOCKERHUB_USERNAME }}"
-          DOCKERHUB_TOKEN: "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Publish the image
-        run: docker push gocddev/gocd-dev-build:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1)
+        run: docker push ${{ env.REGISTRY_IMAGE }}:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1)
