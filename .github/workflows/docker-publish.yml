@@ -17,17 +17,32 @@ jobs:
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          flavor: |
+            latest=false
+            prefix=dind-
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build the image
-        run: DOCKER_BUILDKIT=1 docker build -f dind.Dockerfile -t ${{ env.REGISTRY_IMAGE }}:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
-
-      - name: Publish the image
-        run: docker push ${{ env.REGISTRY_IMAGE }}:dind-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: dind.Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          pull: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   centos-build:
     runs-on: ubuntu-latest
@@ -55,7 +70,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
-          platforms: 'linux/amd64,linux/arm64'
+          platforms: ${{ matrix.platform }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -67,7 +82,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push by digest
-        id: centos-build
+        id: build
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -75,11 +90,14 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          pull: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Export digest
         run: |
           mkdir -p /tmp/digests
-          digest="${{ steps.centos-build.outputs.digest }}"
+          digest="${{ steps.build.outputs.digest }}"
           touch "/tmp/digests/${digest#sha256:}"
           
       - name: Upload digest
@@ -133,17 +151,32 @@ jobs:
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          flavor: |
+            latest=false
+            prefix=ubuntu-22-04-
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build the image
-        run: DOCKER_BUILDKIT=1 docker build -f ubuntu.Dockerfile -t ${{ env.REGISTRY_IMAGE }}:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)" .
-
-      - name: Publish the image
-        run: docker push ${{ env.REGISTRY_IMAGE }}:ubuntu-22-04-"$(git tag --points-at HEAD --sort=version:refname | tail -n1)"
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ubuntu.Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          pull: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   windows:
     runs-on: windows-2022
@@ -153,8 +186,14 @@ jobs:
       - name: Verify a tag is present
         run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
 
-      - name: Build the image
-        run: docker build -f windowsservercore.Dockerfile -t ${{ env.REGISTRY_IMAGE }}:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1) .
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          flavor: |
+            latest=false
+            prefix=windows2022-
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -162,5 +201,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Publish the image
-        run: docker push ${{ env.REGISTRY_IMAGE }}:windows2022-$(git tag --points-at HEAD --sort=version:refname | tail -n1)
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: windowsservercore.Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          pull: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
