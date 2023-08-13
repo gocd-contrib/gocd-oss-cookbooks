@@ -201,7 +201,7 @@ jobs:
         with:
           dockerfile: windowsservercore.Dockerfile
           image: ${{ env.REGISTRY_IMAGE }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.version }}
           registry: docker.io
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
