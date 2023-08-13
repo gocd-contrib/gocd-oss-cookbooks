@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 env:
-  REGISTRY_IMAGE: ${{ env.REGISTRY_IMAGE }}
+  REGISTRY_IMAGE: gocddev/gocd-dev-build
 
 jobs:
   dind:
