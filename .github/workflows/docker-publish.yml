@@ -12,7 +12,7 @@ jobs:
   dind:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
@@ -54,7 +54,7 @@ jobs:
           - linux/amd64
           - linux/arm64
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
@@ -145,7 +145,7 @@ jobs:
   ubuntu:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
@@ -181,7 +181,7 @@ jobs:
   windows:
     runs-on: windows-2022
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Verify a tag is present
         run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
