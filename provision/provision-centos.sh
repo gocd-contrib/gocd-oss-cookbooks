@@ -63,11 +63,11 @@ function provision() {
   step install_awscli_mimetypes
   step install_awscli
 
-  step setup_postgres_repo
-  step install_postgresql "12"
+  step setup_postgres_repo # See https://endoflife.date/postgresql
   step install_postgresql "13"
   step install_postgresql "14"
   step install_postgresql "15"
+  step install_postgresql "16"
 
   step install_geckodriver
   step install_firefox_dependencies
