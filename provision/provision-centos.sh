@@ -16,10 +16,10 @@ for arg in $@; do
   esac
 done
 
-NSIS_VERSION=3.09-1.el9
-MAVEN_VERSION=3.9.4
-ANT_VERSION=1.10.14
-P4_VERSION=23.1
+NSIS_VERSION=3.09-1.el9 # https://nsis.sourceforge.io/Docs/AppendixF.html
+MAVEN_VERSION=3.9.4 # https://maven.apache.org/docs/history.html
+ANT_VERSION=1.10.14 # https://ant.apache.org/bindownload.cgi
+P4_VERSION=23.1 # https://cdist2.perforce.com/perforce/
 P4D_VERSION=23.1
 
 CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
