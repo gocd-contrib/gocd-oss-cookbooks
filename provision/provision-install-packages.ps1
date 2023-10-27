@@ -1,6 +1,6 @@
 $JAVA_VERSION='17.0.8.10100'
 $JAVA_MAJOR_VERSION=$JAVA_VERSION.Split(".")[0]
-$NODEJS_VERSION='20.8.1'
+$NODEJS_VERSION='20.9.0'
 $RUBY_VERSION='3.1.3.1'
 $NANT_VERSION='0.92.2-gocd'
 $ANT_VERSION='1.10.14'
@@ -34,7 +34,7 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 RefreshEnv
 
 # install packages
-choco install --no-progress -y nodejs --version="${NODEJS_VERSION}"
+choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
