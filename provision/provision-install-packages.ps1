@@ -25,7 +25,8 @@ $env:chocolateyUseWindowsCompression = 'true'
 $ErrorActionPreference = "Stop"
 $progressPreference = 'silentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-Set-ExecutionPolicy Bypass -Scope Process -Force
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
+Set-ExecutionPolicy -ExecutionPolicyBypass -Scope Process -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
@@ -44,7 +45,6 @@ choco install --no-progress -y windows-sdk-11-version-22h2-all --install-argumen
 choco install --no-progress -y googlechrome
 
 RefreshEnv
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
 corepack enable
 yarn --version
 
