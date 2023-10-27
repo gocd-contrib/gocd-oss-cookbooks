@@ -39,11 +39,14 @@ choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VE
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
-choco install --no-progress -y hg yarn sliksvn git p4 gnupg awscli
+choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y googlechrome
 
 RefreshEnv
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
+corepack enable
+yarn --version
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
