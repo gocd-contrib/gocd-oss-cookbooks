@@ -89,7 +89,7 @@ function install_global_ruby_default_gems() {
 }
 
 function install_yarn() {
-  try su - "${PRIMARY_USER:-go}" -c "corepack enable && yarn --version"
+  try su - "${PRIMARY_USER:-go}" -c "corepack enable && asdf reshim nodejs && yarn --version"
 }
 
 function install_gauge() {
