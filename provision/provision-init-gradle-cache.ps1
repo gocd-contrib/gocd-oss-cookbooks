@@ -6,7 +6,7 @@ Write-Host "Building gocd to install gradle and build gradle cache..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
 yarn config set network-timeout 300000
-./gradlew prepare --no-build-cache --quiet
+./gradlew compileAll yarnInstall --no-build-cache --quiet
 yarn config delete network-timeout
 
 Write-Host "Cleaning up build artifacts..."
