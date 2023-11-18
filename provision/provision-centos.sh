@@ -122,7 +122,7 @@ function install_native_build_packages() {
 
   # Ruby dependencies for building grpc due to https://github.com/grpc/grpc/issues/34595 and https://github.com/grpc/grpc/issues/26391
   if [ "$(arch)" == "aarch64" ]; then
-    try dnf -y install libstdc++-static
+    try dnf -y install gcc-c++ libstdc++-static
   fi
 }
 
