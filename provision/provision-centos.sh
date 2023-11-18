@@ -117,8 +117,8 @@ function install_native_build_packages() {
   # Core stuff
   try dnf -y install autoconf automake make patch
 
-  # Ruby-build dependencies for ASDF: https://github.com/rbenv/ruby-build/wiki#centos
-  try dnf -y install gcc patch bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
+  # Ruby-build dependencies for ASDF/RTX: https://github.com/rbenv/ruby-build/wiki#rhelcentos
+  try dnf -y install autoconf gcc patch bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
 
   # Ruby dependencies for building grpc due to https://github.com/grpc/grpc/issues/34595 and https://github.com/grpc/grpc/issues/26391
   if [ "$(arch)" == "aarch64" ]; then
