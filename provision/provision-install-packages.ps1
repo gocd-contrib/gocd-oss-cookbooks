@@ -33,14 +33,18 @@ $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 RefreshEnv
+Get-Process
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
+Get-Process
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
+Get-Process
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
+Get-Process
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
+Get-Process
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
-
 Get-Process
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 Get-Process
