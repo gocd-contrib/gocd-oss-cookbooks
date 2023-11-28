@@ -1,6 +1,6 @@
 $JAVA_VERSION='17.0.9.900'
 $JAVA_MAJOR_VERSION=$JAVA_VERSION.Split(".")[0]
-$NODEJS_VERSION='20.9.0'
+$NODEJS_VERSION='20.10.0'
 $RUBY_VERSION='3.1.3.1'
 $NANT_VERSION='0.92.2-gocd'
 $ANT_VERSION='1.10.14'
@@ -36,24 +36,19 @@ RefreshEnv
 Get-Process
 
 # install packages
-choco install --no-progress -y msys2
-Get-Process
-choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
-Get-Process
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
+Get-Process
+choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}" --verbose
 Get-Process
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 Get-Process
+choco install --no-progress -y msys2
+Get-Process
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
-Get-Process
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
-Get-Process
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
-Get-Process
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
-Get-Process
 choco install --no-progress -y googlechrome
-Get-Process
 
 RefreshEnv
 corepack enable
