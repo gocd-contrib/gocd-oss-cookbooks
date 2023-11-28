@@ -18,3 +18,4 @@ cd \
 cmd /c "rmdir /s /q C:\\gocd"
 
 New-Item C:\\go -ItemType Directory | Out-Null
+Write-Host "Cleaned."
