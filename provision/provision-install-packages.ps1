@@ -43,10 +43,14 @@ choco install --no-progress -y ant -i --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y googlechrome
+choco install --no-progress -y msys2
 
 RefreshEnv
 corepack enable
 yarn --version
+ridk install 3
+ridk enable
+cc --version
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
