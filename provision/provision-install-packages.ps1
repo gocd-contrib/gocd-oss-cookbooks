@@ -43,7 +43,7 @@ Get-Job
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
-choco install --no-progress -y msys2
+choco install --no-progress -y msys2 # For compiling certain native Ruby extensions, introduced for google-protobuf 3.25.0+
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
@@ -62,7 +62,9 @@ taskkill /IM wmiprvse.exe /F
 RefreshEnv
 corepack enable
 yarn --version
-ridk install 3
+ridk install 3 # Install only MSYS2 and MINGW development toolchain (MSYS2 and system update already done by Chocolatey package)
+ridk enable
+cc --version
 
 Get-Process
 tasklist /V
