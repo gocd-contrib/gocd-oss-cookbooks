@@ -44,14 +44,14 @@ choco install --no-progress -y ant -i --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y googlechrome
-choco install --no-progress -y msys2
+choco install --no-progress -y msys2 --params "/NoUpdate"
 
 Get-Process
 
 RefreshEnv
 corepack enable
 yarn --version
-ridk install 3
+ridk install 2 3
 ridk enable
 cc --version
 
