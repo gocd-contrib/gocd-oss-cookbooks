@@ -36,19 +36,17 @@ RefreshEnv
 Get-Process
 
 # install packages
+choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
-Get-Process
-choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}" --verbose
-Get-Process
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
-Get-Process
 choco install --no-progress -y msys2
-Get-Process
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y googlechrome
+
+taskkill /IM msiexec.exe /F # kill occasionally stuck background msiexec processes
 
 RefreshEnv
 corepack enable
