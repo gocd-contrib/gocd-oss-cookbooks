@@ -47,6 +47,8 @@ choco install --no-progress -y windows-sdk-11-version-22h2-all --install-argumen
 choco install --no-progress -y googlechrome
 
 taskkill /IM msiexec.exe /F # kill occasionally stuck background msiexec processes
+taskkill /IM msdtc.exe /F
+taskkill /IM wmiprvse.exe /F
 
 RefreshEnv
 corepack enable
