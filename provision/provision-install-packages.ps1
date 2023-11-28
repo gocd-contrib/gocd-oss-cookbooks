@@ -40,17 +40,21 @@ choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VE
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant -i --version="${ANT_VERSION}"
+
+Get-Process
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
+Get-Process
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
+Get-Process
 choco install --no-progress -y googlechrome
 Get-Process
-choco install -y msys2 --params "/NoUpdate"
+choco install --no-progress -y msys2
 Get-Process
 
 RefreshEnv
 corepack enable
 yarn --version
-ridk install 2 3
+ridk install 3
 ridk enable
 cc --version
 
