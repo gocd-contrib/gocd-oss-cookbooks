@@ -33,6 +33,7 @@ $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 RefreshEnv
+Get-Process
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
@@ -45,12 +46,16 @@ choco install --no-progress -y windows-sdk-11-version-22h2-all --install-argumen
 choco install --no-progress -y googlechrome
 choco install --no-progress -y msys2
 
+Get-Process
+
 RefreshEnv
 corepack enable
 yarn --version
 ridk install 3
 ridk enable
 cc --version
+
+Get-Process
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
