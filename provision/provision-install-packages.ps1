@@ -33,7 +33,6 @@ $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 RefreshEnv
-Get-Process
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
@@ -44,8 +43,8 @@ choco install --no-progress -y ant -i --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y googlechrome
-choco install --no-progress -y msys2 --params "/NoUpdate"
-
+Get-Process
+choco install -y msys2 --params "/NoUpdate"
 Get-Process
 
 RefreshEnv
