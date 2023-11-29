@@ -54,10 +54,10 @@ Get-Process
 tasklist /V
 Get-Job
 
-taskkill /IM msiexec.exe # kill occasionally stuck background msiexec processes
-taskkill /IM dllhost.exe
-taskkill /IM msdtc.exe
-taskkill /IM wmiprvse.exe
+taskkill /IM msiexec.exe /F # kill occasionally stuck background msiexec processes
+taskkill /IM dllhost.exe /F
+taskkill /IM msdtc.exe /F
+taskkill /IM wmiprvse.exe /F
 
 RefreshEnv
 corepack enable
