@@ -57,7 +57,7 @@ yarn --version
 ridk install 3
 
 Get-Process
-tasklist ?V
+tasklist /V
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
