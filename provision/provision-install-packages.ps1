@@ -8,7 +8,7 @@ $ANT_VERSION='1.10.14'
 $GOLANG_BOOTSTRAPPER_VERSION='2.9'
 $P4D_VERSION='23.1'
 
-Get-Jobs
+Get-Job
 
 # Copy over configs
 New-Item "${env:USERPROFILE}\.gradle" -ItemType Directory | Out-Null
@@ -37,7 +37,7 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 RefreshEnv
 Get-Process
 tasklist /V
-Get-Jobs
+Get-Job
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
@@ -52,7 +52,7 @@ choco install --no-progress -y googlechrome
 
 Get-Process
 tasklist /V
-Get-Jobs
+Get-Job
 
 taskkill /IM msiexec.exe # kill occasionally stuck background msiexec processes
 taskkill /IM dllhost.exe
@@ -66,7 +66,7 @@ ridk install 3
 
 Get-Process
 tasklist /V
-Get-Jobs
+Get-Job
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
@@ -85,4 +85,4 @@ $env:Path = $newSystemPath + ";" + [System.Environment]::GetEnvironmentVariable(
 
 Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
 
-Get-Jobs
+Get-Job
