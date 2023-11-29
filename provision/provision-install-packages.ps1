@@ -47,6 +47,12 @@ choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y googlechrome
 
+Get-Process
+tasklist /V
+
+Get-Process -Name dllhost | Select-Object -Property ProcessName,CommandLine,Parent
+Get-Process -Name msiexec | Select-Object -Property ProcessName,CommandLine,Parent
+
 taskkill /IM msiexec.exe /F # kill occasionally stuck background msiexec processes
 taskkill /IM msdtc.exe /F
 taskkill /IM wmiprvse.exe /F
