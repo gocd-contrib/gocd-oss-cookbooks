@@ -34,6 +34,7 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 RefreshEnv
 Get-Process
+tasklist /V
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
@@ -54,10 +55,9 @@ RefreshEnv
 corepack enable
 yarn --version
 ridk install 3
-ridk enable
-cc --version
 
 Get-Process
+tasklist ?V
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
