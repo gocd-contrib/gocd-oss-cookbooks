@@ -35,9 +35,8 @@ $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).path)\..\.."
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
 RefreshEnv
-Get-Process
+
 tasklist /V
-Get-Job
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
@@ -50,9 +49,7 @@ choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y googlechrome
 
-Get-Process
 tasklist /V
-Get-Job
 
 taskkill /IM msiexec.exe /F # kill occasionally stuck background msiexec processes
 taskkill /IM dllhost.exe /F
@@ -66,9 +63,7 @@ ridk install 3 # Install only MSYS2 and MINGW development toolchain (MSYS2 and s
 ridk enable
 cc --version
 
-Get-Process
 tasklist /V
-Get-Job
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
@@ -86,5 +81,3 @@ $env:Path = $newSystemPath + ";" + [System.Environment]::GetEnvironmentVariable(
 [Environment]::SetEnvironmentVariable("Path", $newSystemPath, [EnvironmentVariableTarget]::Machine)
 
 Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
-
-Get-Job
