@@ -14,6 +14,5 @@ ENV TMP=C:\\tmp \
 
 COPY provision C:\\Users\\ContainerAdministrator\\provision
 
-RUN powershell -NonInteractive -File C:\\Users\\ContainerAdministrator\\provision\\provision.ps1 -Verbose
-RUN powershell -Command "Write-Host 'Completed provisioning.'"
+RUN powershell -File C:\\Users\\ContainerAdministrator\\provision\\provision.ps1
 CMD ["C:\\go-agent.exe"]
