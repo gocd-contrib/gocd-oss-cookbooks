@@ -36,18 +36,24 @@ RefreshEnv
 
 # install packages
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
+RefreshEnv
+corepack enable
+yarn --version
+
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
-choco install --no-progress -y ruby --version="${RUBY_VERSION}"
-choco install --no-progress -y msys2 --params "/NoUpdate" # For compiling certain native Ruby extensions, introduced for google-protobuf 3.25.0+
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksums due to package not using repeatable build links to Google downloads
 
+choco install --no-progress -y ruby --version="${RUBY_VERSION}"
+choco install --no-progress -y msys2 --params "/NoUpdate" # For compiling certain native Ruby extensions, introduced for google-protobuf 3.25.0+
 RefreshEnv
-corepack enable
-yarn --version
+msys \"echo >> /etc/pacman.conf\"; \
+msys \"echo '[options]' >> /etc/pacman.conf\"; \
+msys \"echo 'IgnorePkg = msys2-runtime' >> /etc/pacman.conf\"; \
+msys \"echo 'IgnorePkg = pacman' >> /etc/pacman.conf\"; \
 ridk install 2 3 # Install only MSYS2 and MINGW development toolchain (MSYS2 and system update already done by Chocolatey package)
 ridk enable
 cc --version
