@@ -15,4 +15,5 @@ ENV TMP=C:\\tmp \
 COPY provision C:\\Users\\ContainerAdministrator\\provision
 
 RUN powershell -File C:\\Users\\ContainerAdministrator\\provision\\provision.ps1
+
 CMD ["C:\\go-agent.exe"]
