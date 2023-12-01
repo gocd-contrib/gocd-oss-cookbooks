@@ -48,9 +48,9 @@ choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksum
 RefreshEnv
 corepack enable
 yarn --version
-#ridk install 3 # Install only MSYS2 and MINGW development toolchain (MSYS2 and system update already done by Chocolatey package)
-#ridk enable
-#cc --version
+ridk install 2 3 # Install only MSYS2 and MINGW development toolchain (MSYS2 and system update already done by Chocolatey package)
+ridk enable
+cc --version
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
