@@ -42,7 +42,7 @@ choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
-choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
+#choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksums due to package not using repeatable build links to Google downloads
 
 RefreshEnv
