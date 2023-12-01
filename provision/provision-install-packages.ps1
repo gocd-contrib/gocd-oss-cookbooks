@@ -45,17 +45,17 @@ choco install --no-progress -y ant --version="${ANT_VERSION}"
 tasklist /V
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 tasklist /V
-choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
-tasklist /V
-choco install --no-progress -y ruby --version="${RUBY_VERSION}"
-tasklist /V
-choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
-tasklist /V
-choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
-tasklist /V
 choco install --no-progress -y --ignore-checksums googlechrome
 tasklist /V
 choco install --no-progress -y hg sliksvn git p4 gnupg awscli
+tasklist /V
+choco install --no-progress -y ruby --version="${RUBY_VERSION}"
+tasklist /V
+choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
+tasklist /V
+choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
+tasklist /V
+choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 tasklist /V
 
 RefreshEnv
