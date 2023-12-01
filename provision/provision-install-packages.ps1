@@ -50,10 +50,10 @@ choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksum
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 choco install --no-progress -y msys2 --params "/NoUpdate" # For compiling certain native Ruby extensions, introduced for google-protobuf 3.25.0+
 RefreshEnv
-msys \"echo >> /etc/pacman.conf\"; \
-msys \"echo '[options]' >> /etc/pacman.conf\"; \
-msys \"echo 'IgnorePkg = msys2-runtime' >> /etc/pacman.conf\"; \
-msys \"echo 'IgnorePkg = pacman' >> /etc/pacman.conf\"; \
+C:\\tools\\msys64\\msys2 "echo >> /etc/pacman.conf"
+C:\\tools\\msys64\\msys2 "echo '[options]' >> /etc/pacman.conf"
+C:\\tools\\msys64\\msys2 "echo 'IgnorePkg = msys2-runtime' >> /etc/pacman.conf"
+C:\\tools\\msys64\\msys2 "echo 'IgnorePkg = pacman' >> /etc/pacman.conf"
 ridk install 2 3 # Install only MSYS2 and MINGW development toolchain (MSYS2 and system update already done by Chocolatey package)
 ridk enable
 cc --version
