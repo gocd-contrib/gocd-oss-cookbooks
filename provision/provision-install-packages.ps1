@@ -55,8 +55,6 @@ choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VE
 tasklist /V
 choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
 tasklist /V
-choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
-tasklist /V
 
 RefreshEnv
 corepack enable
