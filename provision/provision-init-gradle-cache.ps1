@@ -15,7 +15,7 @@ Write-Host "Stopping Gradle daemons..."
 ./gradlew --stop
 Write-Host "Cleaning up entire gocd clone..."
 cd \
-cmd /c "rmdir /s /q C:\\gocd"
+cmd.exe /c "rmdir /s /q C:\\gocd"
 
 New-Item C:\\go -ItemType Directory | Out-Null
 Write-Host "Cleaned."
