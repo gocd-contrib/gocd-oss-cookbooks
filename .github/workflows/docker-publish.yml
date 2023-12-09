@@ -10,7 +10,7 @@ env:
 
 jobs:
   dind:
-    runs-on: ubuntu-latest
+    runs-on: warp-ubuntu-latest-arm64-4x
     steps:
       - uses: actions/checkout@v4
 
@@ -46,7 +46,7 @@ jobs:
           pull: true
 
   centos-build:
-    runs-on: ${{ matrix.runner }}
+    runs-on: warp-ubuntu-latest-arm64-4x
     strategy:
       fail-fast: false
       matrix:
@@ -102,7 +102,7 @@ jobs:
           retention-days: 1
 
   centos-push:
-    runs-on: ubuntu-latest
+    runs-on: warp-ubuntu-latest-arm64-4x
     needs:
       - centos-build
     steps:
@@ -137,7 +137,7 @@ jobs:
             $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
 
   ubuntu:
-    runs-on: ubuntu-latest
+    runs-on: warp-ubuntu-latest-arm64-4x
     steps:
       - uses: actions/checkout@v4
 
@@ -173,7 +173,7 @@ jobs:
           pull: true
 
   windows:
-    runs-on: windows-2022
+    runs-on: warp-ubuntu-latest-arm64-4x
     steps:
       - uses: actions/checkout@v4
 
