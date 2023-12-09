@@ -46,7 +46,7 @@ jobs:
           pull: true
 
   centos-build:
-    runs-on: ${{ matrix.runner }}
+    runs-on: warp-ubuntu-latest-arm64-4x
     strategy:
       fail-fast: false
       matrix:
