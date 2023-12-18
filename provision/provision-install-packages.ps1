@@ -52,9 +52,10 @@ yarn --version
 choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant --version="${ANT_VERSION}"
-choco install --no-progress -y hg sliksvn git p4 gnupg awscli
+choco install --no-progress -y hg sliksvn git gnupg awscli
+choco install --no-progress -y --ignore-checksums p4  # Ignore checksums due to package not using repeatable build links to downloads
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
-choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksums due to package not using repeatable build links to Google downloads
+choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksums due to package not using repeatable build links to downloads
 
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 # Install MSYS2 and dev toolchain for compiling certain native Ruby extensions, introduced for google-protobuf 3.25.0+
