@@ -96,7 +96,7 @@ jobs:
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
-          name: digests
+          name: digests-${{ matrix.runner }}
           path: /tmp/digests/*
           if-no-files-found: error
           retention-days: 1
@@ -106,10 +106,15 @@ jobs:
     needs:
       - centos-build
     steps:
-      - name: Download digests
+      - name: Download x64 digest
         uses: actions/download-artifact@v4
         with:
-          name: digests
+          name: digests-ubuntu-latest
+          path: /tmp/digests
+      - name: Download arm64 digest
+        uses: actions/download-artifact@v4
+        with:
+          name: digests-warp-ubuntu-latest-arm64-4x
           path: /tmp/digests
 
       - name: Set up Docker Buildx
