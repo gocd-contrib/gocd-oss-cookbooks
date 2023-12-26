@@ -68,9 +68,9 @@ EOF
 }
 
 function install_global_asdf() {
-  local plugin="$1"
+  local tool="$1"
   local version="$2"
-  try su - "${PRIMARY_USER:-go}" -c "asdf install ${plugin} ${version} && asdf global ${plugin} ${version} && echo \"Default ${plugin} version: \$(asdf current ${plugin})\""
+  try su - "${PRIMARY_USER:-go}" -c "ASDF_RUBY_BUILD_VERSION=master asdf install ${tool} ${version} && asdf global ${tool} ${version} && echo \"Default ${tool} version: \$(asdf current ${tool})\""
 }
 
 function install_multi_asdf() {
