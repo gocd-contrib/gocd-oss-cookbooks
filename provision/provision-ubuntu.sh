@@ -1,4 +1,4 @@
-#!/bin/bash
+autoconf#!/bin/bash
 
 PRIMARY_USER="go"
 
@@ -19,8 +19,8 @@ function provision() {
 
   step install_asdf "v0.13.1" "java" "ruby" "nodejs"
 
-  step install_global_asdf "java" "temurin-17.0.9+9"
-  step install_multi_asdf "java" "temurin-17.0.9+9"
+  step install_global_asdf "java" "temurin-17.0.10+7"
+  step install_multi_asdf "java" "temurin-17.0.10+7"
 
   step install_global_asdf "ruby" "3.2.2"
   step install_global_ruby_default_gems
