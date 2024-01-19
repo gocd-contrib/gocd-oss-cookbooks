@@ -1,4 +1,4 @@
-autoconf#!/bin/bash
+#!/bin/bash
 
 PRIMARY_USER="go"
 
