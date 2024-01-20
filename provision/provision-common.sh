@@ -49,47 +49,19 @@ function setup_git_config() {
 
 # devtools
 
-# Install multi-tool version manager ASDF: https://asdf-vm.com/
-function install_asdf() {
-  local version="$1"
-  local plugins=( "${@:2}" )
-
-  cat <<-EOF > /etc/profile.d/asdf.sh
-. \${HOME}/.asdf/asdf.sh
-EOF
-
-  try su - "${PRIMARY_USER:-go}" -c "git clone --depth 1 --branch ${version} https://github.com/asdf-vm/asdf.git \${HOME}/.asdf"
-
-  # See https://asdf-vm.com/manage/configuration.html
-  try su - "${PRIMARY_USER:-go}" -c "echo \"legacy_version_file = yes\" > \${HOME}/.asdfrc"
-  for plugin in "${plugins[@]}"; do
-    try su - "${PRIMARY_USER:-go}" -c "asdf plugin-add ${plugin}"
-  done
+# Install multi-tool version manager mise: https://mise.jdx.dev/
+function install_mise_tools() {
+  try su - "${PRIMARY_USER:-go}" -c "curl https://mise.jdx.dev/install.sh | sh"
+  try su - "${PRIMARY_USER:-go}" -c "mise -v && mise use --global ${*}"
+  try su - "${PRIMARY_USER:-go}" -c "echo \"export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"\" >> ~/.bash_profile"
 }
 
-function install_global_asdf() {
-  local tool="$1"
-  local version="$2"
-  try su - "${PRIMARY_USER:-go}" -c "ASDF_RUBY_BUILD_VERSION=master asdf install ${tool} ${version} && asdf global ${tool} ${version} && echo \"Default ${tool} version: \$(asdf current ${tool})\""
-}
-
-function install_multi_asdf() {
-  if [ $# -lt 1 ]; then
-    die "install_multi_asdf() must be given at least 1 plugin argument and 1 version argument"
-  fi
-
-  local plugin="$1"
-  for version in "${@:2}"; do
-    try su - ${PRIMARY_USER:-go} -c "asdf install ${plugin} ${version}"
-  done
-}
-
-function install_global_ruby_default_gems() {
+function install_ruby_default_gems() {
   try su - "${PRIMARY_USER:-go}" -c "gem install rake --no-document && rake --version"
 }
 
 function install_yarn() {
-  try su - "${PRIMARY_USER:-go}" -c "corepack enable && asdf reshim nodejs && yarn --version"
+  try su - "${PRIMARY_USER:-go}" -c "corepack enable && mise reshim && yarn --version"
 }
 
 function install_gauge() {
@@ -184,7 +156,7 @@ aws --version | pr -to 2
 printf "\n"
 
 printf "Installed JDKs:\n"
-asdf list java
+mise list java
 printf "\n"
 
 if type gauge &> /dev/null; then

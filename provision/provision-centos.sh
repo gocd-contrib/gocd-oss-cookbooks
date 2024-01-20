@@ -41,18 +41,14 @@ function provision() {
     step add_gocd_user
   fi
 
-  # git, in particular, is used in subsequent provisioning so do this before things like `asdf`
+  # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
 
-  step install_asdf "v0.14.0" "java" "ruby" "nodejs"
-
-  step install_global_asdf "java" "temurin-17.0.10+7"
-  step install_multi_asdf "java" "temurin-17.0.10+7"
-
-  step install_global_asdf "ruby" "3.2.2"
-  step install_global_ruby_default_gems
-
-  step install_global_asdf "nodejs" "20.11.0"
+  step install_mise_tools \
+    "java@temurin-17.0.10+7" \
+    "ruby@3.2.2" \
+    "node@20.11.0"
+  step install_ruby_default_gems
   step install_yarn
 
   step install_maven "$MAVEN_VERSION"
@@ -117,7 +113,7 @@ function install_native_build_packages() {
   # Core stuff
   try dnf -y install autoconf automake make patch
 
-  # Ruby-build dependencies for ASDF/Mise: https://github.com/rbenv/ruby-build/wiki#rhelcentos
+  # Ruby-build dependencies for Mise: https://github.com/rbenv/ruby-build/wiki#rhelcentos
   try dnf -y install autoconf gcc patch bzip2 openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel
 }
 
@@ -240,7 +236,7 @@ function build_gocd() {
 
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              asdf install && \
+              mise install && \
               ./gradlew --max-workers 2 compileAll yarnInstall --no-build-cache --quiet ${GRADLE_OPTIONS}"
   try rm -rf /tmp/gocd /${PRIMARY_USER}/.gradle/caches/build-cache-*
 }

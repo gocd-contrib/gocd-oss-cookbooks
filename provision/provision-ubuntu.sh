@@ -14,18 +14,14 @@ function provision() {
 
   step add_gocd_user
 
-  # git, in particular, is used in subsequent provisioning so do this before things like `asdf`
+  # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
 
-  step install_asdf "v0.14.0" "java" "ruby" "nodejs"
-
-  step install_global_asdf "java" "temurin-17.0.10+7"
-  step install_multi_asdf "java" "temurin-17.0.10+7"
-
-  step install_global_asdf "ruby" "3.2.2"
-  step install_global_ruby_default_gems
-
-  step install_global_asdf "nodejs" "20.11.0"
+  step install_mise_tools \
+    "java@temurin-17.0.10+7" \
+    "ruby@3.2.2" \
+    "node@20.11.0"
+  step install_ruby_default_gems
   step install_yarn
 
   step install_awscli_mimetypes
@@ -66,7 +62,7 @@ function install_basic_utils() {
 }
 
 function install_native_build_packages() {
-  # Ruby-build dependencies for ASDF: https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
+  # Ruby-build dependencies for mise: https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
   try apt-get install -y autoconf patch build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libgmp-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev uuid-dev
 }
 
