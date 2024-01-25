@@ -54,7 +54,7 @@ function provision() {
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
-  step install_gauge "1.5.6"
+  step install_gauge "1.5.7"
   step install_installer_tools
   step install_awscli_mimetypes
   step install_awscli
