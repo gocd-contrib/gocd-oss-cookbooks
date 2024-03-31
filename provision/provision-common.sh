@@ -66,10 +66,7 @@ function install_yarn() {
 }
 
 function install_gauge() {
-  local version="$1"
-  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "x86_64"; else echo "arm64"; fi)"
-  try curl --silent --fail --location "https://github.com/getgauge/gauge/releases/download/v$version/gauge-$version-linux.$arch.zip" --output /usr/local/src/gauge.zip
-  try unzip -d /usr/bin /usr/local/src/gauge.zip
+  try bash -c "curl --silent --show-error --location https://downloads.gauge.org/stable | sh -s -- --location=/usr/bin"
 
   for plugin in ruby html-report screenshot; do
     try su - "$PRIMARY_USER" -c "gauge install ${plugin}"
