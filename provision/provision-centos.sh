@@ -16,7 +16,7 @@ for arg in $@; do
   esac
 done
 
-NSIS_VERSION=3.09-1.el9 # https://nsis.sourceforge.io/Docs/AppendixF.html
+NSIS_VERSION=3.10-1.el9 # https://nsis.sourceforge.io/Docs/AppendixF.html / https://github.com/gocd/nsis-rpm/tree/gh-pages/rpms
 MAVEN_VERSION=3.9.6 # https://maven.apache.org/docs/history.html
 ANT_VERSION=1.10.14 # https://ant.apache.org/bindownload.cgi
 P4_VERSION=23.2 # https://cdist2.perforce.com/perforce/
