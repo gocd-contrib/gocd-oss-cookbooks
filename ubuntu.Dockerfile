@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
 
 COPY provision /usr/local/src/provision/
