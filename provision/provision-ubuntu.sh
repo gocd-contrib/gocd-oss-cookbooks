@@ -76,7 +76,7 @@ function install_awscli_mimetypes() {
   # `/etc/mime.types` is required by aws cli so it can generate appropriate `content-type` headers when uploading to s3.
   # Without this file, all files in s3 will have content type `application/octet-stream`
   # See https://github.com/aws/aws-cli/issues/1249
-  try apt-get install -y mime-support
+  try apt-get install -y media-types
 }
 
 function clean() {
