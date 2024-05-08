@@ -59,13 +59,6 @@ jobs:
       - name: Verify a tag is present
         run: if [ $(git tag --points-at HEAD --sort=version:refname | tail -n1 | wc -c) == 0 ]; then echo "Please set a tag pointing to the HEAD"; exit 1; fi
 
-      - name: Setup docker (missing on MacOS)
-        if: runner.os == 'macos'
-        run: |
-          brew install docker
-          colima start
-          docker info
-
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
