@@ -156,7 +156,7 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
             latest=false
-            prefix=ubuntu-22-04-
+            prefix=ubuntu-24-04-
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
