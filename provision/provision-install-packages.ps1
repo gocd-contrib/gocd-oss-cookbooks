@@ -1,5 +1,4 @@
 $JAVA_VERSION='21.0.3.9'
-$JAVA_MAJOR_VERSION=$JAVA_VERSION.Split(".")[0]
 $NODEJS_VERSION='20.14.0'
 $RUBY_VERSION='3.3.1.1'
 $NANT_VERSION='0.92.2-gocd'
@@ -49,7 +48,7 @@ RefreshEnv
 corepack enable
 yarn --version
 
-choco install --no-progress -y temurin${JAVA_MAJOR_VERSION} --version="${JAVA_VERSION}"
+choco install --no-progress -y temurin --version="${JAVA_VERSION}"
 choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
 choco install --no-progress -y ant --version="${ANT_VERSION}"
 choco install --no-progress -y hg sliksvn git gnupg awscli
