@@ -58,14 +58,13 @@ choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksum
 
 choco install --no-progress -y ruby --version="${RUBY_VERSION}"
 # Install MSYS2 and dev toolchain for compiling certain native Ruby extensions, introduced for google-protobuf 3.25.0+
-# Following pattern at https://community.chocolatey.org/packages/msys2#description but disabling the auto-update of
-# msys2-runtime due to mysterious hangs on docker. See https://github.com/msys2/msys2-installer/issues/59#issuecomment-1835720068
+# Following pattern at https://community.chocolatey.org/packages/msys2#description
 $msysInstallDir = "C:\tools\msys64"
 choco install --no-progress -y msys2 --params "/NoUpdate /InstallDir:${msysInstallDir}"
 RefreshEnv
 PrefixToSystemAndCurrentPath("${msysInstallDir}\ucrt64\bin;${msysInstallDir}\usr\bin") # Manually add MSYS2 and tools to path to avoid having to do shell-specific "ridk enable" in builds.
-ridk exec bash.exe -c "echo -e '[options]\nIgnorePkg = msys2-runtime\nIgnorePkg = pacman' >> /etc/pacman.conf"
-ridk install 2 3 # use ruby's ridk to update the system and install development toolchain
+ridk install 2 3 # Update packages and install development toolchain
+ridk exec bash.exe -c 'rm -r -fo "C:\$Recycle.Bin\"' # Clean up weird unicode-named cruft left in recycle bin by pacman after updating msys2-runtime that causes mysterious hangs on docker layer exports. See https://github.com/msys2/msys2-installer/issues/59#issuecomment-2134100558
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
