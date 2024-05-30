@@ -5,7 +5,7 @@ $NANT_VERSION='0.92.2-gocd'
 $ANT_VERSION='1.10.14'
 
 $GOLANG_BOOTSTRAPPER_VERSION='2.15'
-$P4D_VERSION='23.2'
+$P4D_VERSION='24.1'
 
 # Copy over configs
 New-Item "${env:USERPROFILE}\.gradle" -ItemType Directory | Out-Null
