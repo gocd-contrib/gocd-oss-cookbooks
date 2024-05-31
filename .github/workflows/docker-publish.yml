@@ -201,9 +201,8 @@ jobs:
           Invoke-WebRequest -Uri https://download.docker.com/win/static/stable/x86_64/docker-$dockerVersion.zip -OutFile docker.zip
           Expand-Archive docker.zip -DestinationPath $Env:ProgramFiles
           Remove-Item docker.zip
-          &$Env:ProgramFiles\Docker\dockerd --register-service
           Start-Service docker
-          docker info
+          docker --version
 
       - name: Build and push
         id: build
