@@ -194,16 +194,6 @@ jobs:
             latest=false
             prefix=windows2022-
 
-      - name: Upgrade Docker
-        run: |
-          Stop-Service docker
-          $dockerVersion = "25.0.5"
-          Invoke-WebRequest -Uri https://download.docker.com/win/static/stable/x86_64/docker-$dockerVersion.zip -OutFile docker.zip
-          Expand-Archive docker.zip -DestinationPath $Env:ProgramFiles
-          Remove-Item docker.zip
-          Start-Service docker
-          docker --version
-
       - name: Build and push
         id: build
         uses: mr-smithers-excellent/docker-build-push@v6
