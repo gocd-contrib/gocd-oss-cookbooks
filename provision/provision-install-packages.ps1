@@ -1,7 +1,7 @@
 $JAVA_VERSION='21.0.3.9'
 $NODEJS_VERSION='20.14.0'
 $RUBY_VERSION='3.3.3.1'
-$NANT_VERSION='0.92.2-gocd'
+$NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.14'
 
 $GOLANG_BOOTSTRAPPER_VERSION='2.16'
@@ -49,7 +49,7 @@ corepack enable
 yarn --version
 
 choco install --no-progress -y temurin --version="${JAVA_VERSION}"
-choco install --no-progress -y nant --version="${NANT_VERSION}" --prerelease --source="$PSScriptroot"
+choco install --no-progress -y nant --version="${NANT_VERSION}"
 choco install --no-progress -y ant --version="${ANT_VERSION}"
 choco install --no-progress -y git --params "/NoAutoCrlf"
 choco install --no-progress -y hg sliksvn gnupg awscli
