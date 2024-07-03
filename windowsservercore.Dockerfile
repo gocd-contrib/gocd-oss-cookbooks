@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
+LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 # Shamelessly nabbed from https://github.com/gantrior/docker-chrome-windows
 #

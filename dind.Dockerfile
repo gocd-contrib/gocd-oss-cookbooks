@@ -1,4 +1,5 @@
 FROM gocd/gocd-agent-docker-dind:v24.2.0
+LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 USER root
 RUN apk upgrade --no-cache && \

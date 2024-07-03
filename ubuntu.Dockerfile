@@ -1,5 +1,5 @@
 FROM ubuntu:24.04
-MAINTAINER GoCD Team <go-cd-dev@googlegroups.com>
+LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 COPY provision /usr/local/src/provision/
 
@@ -10,8 +10,8 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 USER go
 
 # force encoding
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
 CMD ["/bin/bash", "-lc", "/go/go-agent"]
