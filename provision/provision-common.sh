@@ -47,8 +47,6 @@ function setup_git_config() {
   copy_to_home_dir gitconfig .gitconfig
 }
 
-# devtools
-
 # Install multi-tool version manager mise: https://mise.jdx.dev/
 function install_mise_tools() {
   try su - "${PRIMARY_USER:-go}" -c "curl https://mise.run | MISE_VERSION=v2024.5.12 sh"
