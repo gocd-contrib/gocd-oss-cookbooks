@@ -51,7 +51,7 @@ function setup_git_config() {
 
 # Install multi-tool version manager mise: https://mise.jdx.dev/
 function install_mise_tools() {
-  try su - "${PRIMARY_USER:-go}" -c "curl https://mise.jdx.dev/install.sh | sh"
+  try su - "${PRIMARY_USER:-go}" -c "curl https://mise.run | MISE_VERSION=v2024.5.12 sh"
   try su - "${PRIMARY_USER:-go}" -c "mise -v && mise use --global ${*}"
   try su - "${PRIMARY_USER:-go}" -c "echo \"export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"\" >> ~/.bash_profile"
 }
