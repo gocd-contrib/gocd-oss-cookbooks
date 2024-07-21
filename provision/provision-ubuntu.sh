@@ -18,7 +18,7 @@ function provision() {
   step install_scm_tools
 
   step install_mise_tools \
-    "java@temurin-21.0.3+9.0.LTS" \
+    "java@temurin-21.0.4+7.0.LTS" \
     "ruby@3.3.4" \
     "node@20.15.1"
   step install_ruby_default_gems
