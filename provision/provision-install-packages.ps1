@@ -65,7 +65,6 @@ choco install --no-progress -y msys2 --params "/NoUpdate /InstallDir:${msysInsta
 RefreshEnv
 PrefixToSystemAndCurrentPath("${msysInstallDir}\ucrt64\bin;${msysInstallDir}\usr\bin") # Manually add MSYS2 and tools to path to avoid having to do shell-specific "ridk enable" in builds.
 ridk install 2 3 # Update packages and install development toolchain
-rm -r -fo 'C:\$Recycle.Bin\' # Clean up weird unicode-named cruft left in recycle bin by pacman after updating msys2-runtime that causes mysterious hangs on docker layer exports. See https://github.com/msys2/msys2-installer/issues/59#issuecomment-2134100558
 
 # Remove chocolatey from temp location
 Remove-Item C:\\Users\\ContainerAdministrator\\AppData\\Local\\Temp\\chocolatey -Force -Recurse | Out-Null
