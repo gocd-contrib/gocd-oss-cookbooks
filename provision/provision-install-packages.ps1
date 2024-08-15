@@ -1,5 +1,5 @@
 $JAVA_VERSION='21.0.4.7'
-$NODEJS_VERSION='20.16.0'
+$NODEJS_VERSION='22.6.0'
 $RUBY_VERSION='3.3.4.1'
 $NANT_VERSION='0.92.2'
 $ANT_VERSION='1.10.14'
@@ -43,7 +43,7 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 RefreshEnv
 
 # install packages
-choco install --no-progress -y nodejs-lts --version="${NODEJS_VERSION}"
+choco install --no-progress -y nodejs --version="${NODEJS_VERSION}"
 RefreshEnv
 corepack enable
 yarn --version
