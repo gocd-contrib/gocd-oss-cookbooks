@@ -1,8 +1,6 @@
 $JAVA_VERSION='21.0.4.7'
 $NODEJS_VERSION='22.8.0'
 $RUBY_VERSION='3.3.5.1'
-$NANT_VERSION='0.92.2'
-$ANT_VERSION='1.10.15'
 
 $GOLANG_BOOTSTRAPPER_VERSION='2.19'
 $P4D_VERSION='24.1'
@@ -49,10 +47,8 @@ corepack enable
 yarn --version
 
 choco install --no-progress -y temurin --version="${JAVA_VERSION}"
-choco install --no-progress -y nant --version="${NANT_VERSION}"
-choco install --no-progress -y ant --version="${ANT_VERSION}"
 choco install --no-progress -y git --params "/NoAutoCrlf"
-choco install --no-progress -y hg sliksvn gnupg awscli
+choco install --no-progress -y nant ant hg sliksvn gnupg awscli
 choco install --no-progress -y --ignore-checksums p4  # Ignore checksums due to package not using repeatable build links to downloads
 choco install --no-progress -y windows-sdk-11-version-22h2-all --install-arguments='/features OptionId.SigningTools /ceip off'
 choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksums due to package not using repeatable build links to downloads
