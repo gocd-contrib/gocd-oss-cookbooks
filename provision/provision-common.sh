@@ -82,7 +82,7 @@ function install_awscli() {
 function install_maven() {
   local version="$1"
   try mkdir -p /opt/local/
-  try curl --silent --fail --location http://archive.apache.org/dist/maven/maven-3/${version}/binaries/apache-maven-${version}-bin.zip --output /usr/local/src/apache-maven-${version}-bin.zip
+  try curl --silent --fail --location https://dlcdn.apache.org/maven/maven-3/${version}/binaries/apache-maven-${version}-bin.zip --output /usr/local/src/apache-maven-${version}-bin.zip
   try unzip -q /usr/local/src/apache-maven-${version}-bin.zip -d /opt/local
   try ln -sf /opt/local/apache-maven-${version}/bin/mvn /usr/local/bin/mvn
 }
@@ -90,7 +90,7 @@ function install_maven() {
 function install_ant() {
   local version="$1"
   try mkdir -p /opt/local/
-  try curl --silent --fail --location http://archive.apache.org/dist/ant/binaries/apache-ant-${version}-bin.zip --output /usr/local/src/apache-ant-${version}-bin.zip
+  try curl --silent --fail --location https://dlcdn.apache.org/ant/binaries/apache-ant-${version}-bin.zip --output /usr/local/src/apache-ant-${version}-bin.zip
   try unzip -q /usr/local/src/apache-ant-${version}-bin.zip -d /opt/local
   try ln -sf /opt/local/apache-ant-${version}/bin/ant /usr/local/bin/ant
 }
