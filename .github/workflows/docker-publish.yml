@@ -192,7 +192,7 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
             latest=false
-            prefix=windows2025-
+            prefix=windows2022-
 
       - name: Build and push
         id: build
