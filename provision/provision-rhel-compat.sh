@@ -22,7 +22,7 @@ ANT_VERSION=1.10.15 # https://ant.apache.org/bindownload.cgi
 P4_VERSION=24.1 # https://cdist2.perforce.com/perforce/
 P4D_VERSION=24.1
 
-RHEL_COMPAT_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos|alma|rocky" | cut -d"-" -f4 | cut -d"." -f1)
+RHEL_COMPAT_MAJOR_VERSION=$(rpm -qa \*-release | grep -oiP "(oracle|redhat|centos|alma|rocky).*-release-\K[0-9]+")
 # import functions
 source "$(dirname $0)/provision-common.sh"
 
