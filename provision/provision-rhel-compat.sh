@@ -22,7 +22,7 @@ ANT_VERSION=1.10.15 # https://ant.apache.org/bindownload.cgi
 P4_VERSION=24.1 # https://cdist2.perforce.com/perforce/
 P4D_VERSION=24.1
 
-CENTOS_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos" | cut -d"-" -f4 | cut -d"." -f1)
+RHEL_COMPAT_MAJOR_VERSION=$(rpm -qa \*-release | grep -Ei "oracle|redhat|centos|alma|rocky" | cut -d"-" -f4 | cut -d"." -f1)
 # import functions
 source "$(dirname $0)/provision-common.sh"
 
@@ -92,7 +92,7 @@ function provision() {
 }
 
 function setup_epel() {
-  try dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${CENTOS_MAJOR_VERSION}.noarch.rpm
+  try dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RHEL_COMPAT_MAJOR_VERSION}.noarch.rpm
 }
 
 function setup_external_repos() {
@@ -169,7 +169,7 @@ function install_awscli_mimetypes() {
 }
 
 function setup_postgres_repo() {
-  try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$CENTOS_MAJOR_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm
+  try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$RHEL_COMPAT_MAJOR_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm
 }
 
 function install_postgresql() {
@@ -243,7 +243,7 @@ function build_gocd() {
 }
 
 function install_docker() {
-  try dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  try dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
   try dnf -y install docker-ce containerd.io docker-buildx-plugin
   try usermod -a -G docker ${PRIMARY_USER}
 }

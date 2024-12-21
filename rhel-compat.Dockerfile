@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:stream9
+FROM almalinux:9
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 ARG BUILDARCH
@@ -6,7 +6,7 @@ ARG TARGETARCH
 
 COPY provision /usr/local/src/provision/
 
-RUN /usr/local/src/provision/provision-centos.sh
+RUN /usr/local/src/provision/provision-rhel-compat.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 

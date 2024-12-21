@@ -45,7 +45,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           pull: true
 
-  centos-build:
+  rhel-compat-build:
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -66,7 +66,7 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
             latest=false
-            prefix=centos-9-
+            prefix=rhelcompat-9-
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -82,7 +82,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: centos.Dockerfile
+          file: rhel-compat.Dockerfile
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
           pull: true
@@ -101,10 +101,10 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  centos-push:
+  rhel-compat-push:
     runs-on: ubuntu-latest
     needs:
-      - centos-build
+      - rhel-compat-build
     steps:
       - name: Download x64 digest
         uses: actions/download-artifact@v4
@@ -127,7 +127,7 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
             latest=false
-            prefix=centos-9-
+            prefix=rhelcompat-9-
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
