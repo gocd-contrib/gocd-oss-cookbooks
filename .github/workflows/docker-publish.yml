@@ -178,7 +178,7 @@ jobs:
           pull: true
 
   windows:
-    runs-on: windows-2025
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
 
@@ -192,7 +192,7 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
             latest=false
-            prefix=windows2025-
+            prefix=windows2022-
 
       - name: Build and push
         id: build
