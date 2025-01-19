@@ -52,7 +52,7 @@ jobs:
       matrix:
         runner:
           - ubuntu-latest
-          - warp-ubuntu-latest-arm64-4x
+          - ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
 
@@ -114,7 +114,7 @@ jobs:
       - name: Download arm64 digest
         uses: actions/download-artifact@v4
         with:
-          name: digests-warp-ubuntu-latest-arm64-4x
+          name: digests-ubuntu-24.04-arm
           path: /tmp/digests
 
       - name: Set up Docker Buildx
