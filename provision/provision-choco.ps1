@@ -1,5 +1,5 @@
 Write-Host "Installing packages..."
-&"$PSScriptroot\provision-install-packages.ps1"
+&"$PSScriptroot\provision-install-packages-choco.ps1"
 Write-Host "Initializing Gradle cache for gocd..."
 &"$PSScriptroot\provision-init-gradle-cache.ps1"
 Write-Host "Completed provisioning (layer now exporting...)"

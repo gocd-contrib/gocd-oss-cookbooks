@@ -204,3 +204,31 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  windows-2025:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify a tag is present
+        run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          flavor: |
+            latest=false
+            prefix=windows2025-
+
+      - name: Build and push
+        id: build
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          dockerfile: windowsservercore-2025.Dockerfile
+          image: ${{ env.REGISTRY_IMAGE }}
+          tags: ${{ steps.meta.outputs.version }}
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
