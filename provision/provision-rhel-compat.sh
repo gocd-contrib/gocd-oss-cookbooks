@@ -106,7 +106,7 @@ function setup_external_repos() {
 }
 
 function install_basic_utils() {
-  try dnf -y install procps ncurses file which bzip2 gzip unzip zip sudo curl-minimal wget jq
+  try dnf -y install procps ncurses file which xz bzip2 gzip unzip zip sudo curl-minimal wget jq
 }
 
 function install_native_build_packages() {
@@ -189,8 +189,8 @@ function install_firefox_latest() {
     # latest versions of FF
     try mkdir -p /opt/local/firefox
     try mkdir -p /opt/local/firefox-latest
-    try curl --silent --fail --location 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US' --output /usr/local/src/firefox-latest.tar.bz2
-    try tar -jxf /usr/local/src/firefox-latest.tar.bz2 -C /opt/local/firefox-latest --strip-components=1
+    try curl --silent --fail --location 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US' --output /usr/local/src/firefox-latest.tar.xz
+    try tar -Jxf /usr/local/src/firefox-latest.tar.xz -C /opt/local/firefox-latest --strip-components=1
 
     try ln -sf /opt/local/firefox-latest/firefox /usr/local/bin/firefox
     try /opt/local/firefox-latest/firefox -version
