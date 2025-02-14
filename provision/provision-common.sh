@@ -97,7 +97,7 @@ function install_ant() {
 
 function install_geckodriver() {
   local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "linux64"; else echo "linux-aarch64"; fi)"
-  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/mozilla/geckodriver/releases/latest | jq -r ".assets[] | select(.name | endswith(\"$arch.tar.gz\")) | .browser_download_url")"
+  local URL="$(curl --silent --fail --location https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r ".assets[] | select(.name | endswith(\"$arch.tar.gz\")) | .browser_download_url")"
   try curl --silent --fail --location "${URL}" --output /usr/local/src/geckodriver-latest.tar.gz
   try tar -zxf /usr/local/src/geckodriver-latest.tar.gz -C /usr/local/bin
 }
@@ -106,7 +106,7 @@ function install_geckodriver() {
 
 function install_tini() {
   local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
-  local URL="$(curl --silent --fail --location https://github-api-proxy.gocd.org/repos/krallin/tini/releases/latest | jq -r ".assets[] | select(.name | endswith(\"-static-$arch\")) | .browser_download_url" | grep -v muslc)"
+  local URL="$(curl --silent --fail --location https://api.github.com/repos/krallin/tini/releases/latest | jq -r ".assets[] | select(.name | endswith(\"-static-$arch\")) | .browser_download_url" | grep -v muslc)"
   try curl -fsSL --output /usr/bin/tini "$URL"
   try chmod a+rx /usr/bin/tini
   try tini --version
@@ -114,7 +114,7 @@ function install_tini() {
 
 function add_golang_gocd_bootstrapper() {
   local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
-  local URL="$(curl -fsSL https://github-api-proxy.gocd.org/repos/gocd-contrib/gocd-golang-bootstrapper/releases/latest | jq -r ".assets[] | select(.name | endswith(\"linux.$arch\")) | .browser_download_url")"
+  local URL="$(curl -fsSL https://api.github.com/repos/gocd-contrib/gocd-golang-bootstrapper/releases/latest | jq -r ".assets[] | select(.name | endswith(\"linux.$arch\")) | .browser_download_url")"
   try curl -fsSL --output /go/go-agent "${URL}"
   try chown go:go /go/go-agent
   try chmod a+rx /go/go-agent
