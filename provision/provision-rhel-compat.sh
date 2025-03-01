@@ -19,8 +19,8 @@ done
 NSIS_VERSION=3.10-1.el9 # https://nsis.sourceforge.io/Docs/AppendixF.html / https://github.com/gocd/nsis-rpm/tree/gh-pages/rpms
 MAVEN_VERSION=3.9.9 # https://maven.apache.org/docs/history.html
 ANT_VERSION=1.10.15 # https://ant.apache.org/bindownload.cgi
-P4_VERSION=24.1 # https://cdist2.perforce.com/perforce/
-P4D_VERSION=24.1
+P4_VERSION=24.2 # https://cdist2.perforce.com/perforce/
+P4D_VERSION=24.2
 
 RHEL_COMPAT_MAJOR_VERSION=$(rpm -qa \*-release | grep -oiP "(oracle|redhat|centos|alma|rocky).*-release-\K[0-9]+")
 # import functions
