@@ -38,10 +38,8 @@ yarn --version
 
 Winget-Install EclipseAdoptium.Temurin.21.JDK --version="${JAVA_VERSION}"
 
-Winget-Install Git.Git Mercurial.Mercurial Slik.Subversion GnuPG.GnuPG Amazon.AWSCLI Google.Chrome
+Winget-Install Git.Git Mercurial.Mercurial Slik.Subversion Google.Chrome
 git config --global core.autocrlf false
-
-Winget-Install Microsoft.WindowsSDK --override='/features OptionId.SigningTools /ceip off'
 
 Winget-Install RubyInstallerTeam.RubyWithDevKit.3.2
 ridk install 2 3 # Update packages and install development toolchain
