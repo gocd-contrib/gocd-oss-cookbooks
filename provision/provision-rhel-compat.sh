@@ -127,14 +127,12 @@ function install_scm_tools() {
   try hg --version
   try svn --version
 
-  if [ "$(arch)" == "x86_64" ]; then
-    try mkdir -p /usr/local/bin
-    try curl --silent --fail --location "https://cdist2.perforce.com/perforce/r${P4_VERSION}/bin.linux26x86_64/p4" --output /usr/local/bin/p4
-    try curl --silent --fail --location "https://cdist2.perforce.com/perforce/r${P4D_VERSION}/bin.linux26x86_64/p4d" --output /usr/local/bin/p4d
-    try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
-    try p4 -V
-    try p4d -V
-  fi
+  try mkdir -p /usr/local/bin
+  try curl --silent --fail --location "https://cdist2.perforce.com/perforce/r${P4_VERSION}/bin.linux26$(arch)/p4" --output /usr/local/bin/p4
+  try curl --silent --fail --location "https://cdist2.perforce.com/perforce/r${P4D_VERSION}/bin.linux26$(arch)/p4d" --output /usr/local/bin/p4d
+  try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
+  try p4 -V
+  try p4d -V
 }
 
 function install_git() {
