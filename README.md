@@ -10,8 +10,8 @@ To build a new version of the images, push a new version tag to this repository.
 # Build an image locally
 
 - ```docker build . --pull -t gocddev/gocd-dev-build:dind-SNAPSHOT -f dind.Dockerfile```
-- ```docker build . --pull -t gocddev/gocd-dev-build:rhelcompat-9-SNAPSHOT -f rhel-compat.Dockerfile```
-- ```docker build . --pull -t gocddev/gocd-dev-build:ubuntu-24-04-SNAPSHOT -f ubuntu.Dockerfile```
+- ```docker build . --pull -t gocddev/gocd-dev-build:rhelcompat-9-SNAPSHOT -f rhelcompat-9.Dockerfile```
+- ```docker build . --pull -t gocddev/gocd-dev-build:ubuntu-24-04-SNAPSHOT -f ubuntu-24-04.Dockerfile```
 - ```docker build . --pull -t gocddev/gocd-dev-build:windows2022-SNAPSHOT -f windowsservercore.Dockerfile```
 
 

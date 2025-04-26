@@ -6,7 +6,7 @@ ARG TARGETARCH
 
 COPY provision /usr/local/src/provision/
 
-RUN /usr/local/src/provision/provision-rhel-compat.sh
+RUN /usr/local/src/provision/provision-rhelcompat.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
