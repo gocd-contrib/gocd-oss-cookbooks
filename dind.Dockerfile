@@ -1,4 +1,4 @@
-FROM gocdexperimental/gocd-agent-docker-dind:v25.2.0-20470
+FROM gocd/gocd-agent-docker-dind:v25.2.0
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 USER root
