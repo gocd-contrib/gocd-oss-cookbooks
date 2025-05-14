@@ -48,7 +48,7 @@ yarn --version
 
 choco install --no-progress -y temurin --version="${JAVA_VERSION}"
 choco install --no-progress -y git --params "/NoAutoCrlf"
-choco install --no-progress -y nant ant hg sliksvn awscli
+choco install --no-progress -y nant ant hg sliksvn
 choco install --no-progress -y --ignore-checksums p4  # Ignore checksums due to package not using repeatable build links to downloads
 choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksums due to package not using repeatable build links to downloads
 
