@@ -3,7 +3,7 @@ $NODEJS_VERSION='22.16.0'
 $RUBY_VERSION='3.4.4.2'
 
 $GOLANG_BOOTSTRAPPER_VERSION='2.29'
-$P4D_VERSION='24.2'
+$P4D_VERSION='25.1'
 
 # Copy over configs
 New-Item "${env:USERPROFILE}\.gradle" -ItemType Directory | Out-Null
