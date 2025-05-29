@@ -1,0 +1,5 @@
+Write-Host "Installing packages..."
+&"$PSScriptroot\provision-install-packages-winget.ps1"
+Write-Host "Initializing Gradle cache for gocd..."
+&"$PSScriptroot\provision-init-gradle-cache.ps1"
+Write-Host "Completed provisioning (layer now exporting...)"
