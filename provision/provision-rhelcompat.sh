@@ -66,8 +66,7 @@ function provision() {
   step install_postgresql "17"
 
   step install_geckodriver
-  step install_firefox_dependencies
-  step install_firefox_latest
+  step install_firefox
 
   # On Docker for Mac, make sure you allocate more than 2G of memory or
   # gradle might randomly fail; 6G should be fairly reliable.
@@ -176,26 +175,8 @@ function install_postgresql() {
   try dnf -y install postgresql${package_suffix} postgresql${package_suffix}-server postgresql${package_suffix}-contrib
 }
 
-function install_firefox_dependencies() {
-  # install just the FF dependencies, without FF
-  # shellcheck disable=SC2046
-  try dnf -y install $(dnf deplist -y --arch "$(arch)" --latest-limit=1 firefox | awk '/provider:/ {print $2}' | sort -u)
-}
-
-function install_firefox_latest() {
-  if [ "$(arch)" == "x86_64" ]; then
-    # latest versions of FF
-    try mkdir -p /opt/local/firefox
-    try mkdir -p /opt/local/firefox-latest
-    try curl --silent --fail --location 'https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US' --output /usr/local/src/firefox-latest.tar.xz
-    try tar -Jxf /usr/local/src/firefox-latest.tar.xz -C /opt/local/firefox-latest --strip-components=1
-
-    try ln -sf /opt/local/firefox-latest/firefox /usr/local/bin/firefox
-    try /opt/local/firefox-latest/firefox -version
-  else
-    # Install latest official LTS/ESR release that is available for the platform
-    try dnf -y install firefox
-  fi
+function install_firefox() {
+  try dnf -y install firefox
   try firefox -version
 }
 
