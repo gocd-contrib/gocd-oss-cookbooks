@@ -32,6 +32,9 @@ function PrefixToSystemAndCurrentPath {
 }
 
 # install winget
+Write-Host "Installing winget..."
+Get-WinSystemLocale
+Get-WindowsOptionalFeature -Online | Where-Object FeatureName -like '*winget*'
 Enable-WindowsOptionalFeature -FeatureName WingetSupportOnServerCore -Online -NoRestart
 
 # install packages
