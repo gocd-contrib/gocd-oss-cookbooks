@@ -1,4 +1,4 @@
-FROM almalinux:9
+FROM almalinux:10
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 ARG BUILDARCH

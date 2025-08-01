@@ -22,7 +22,7 @@ jobs:
           - x86_64
           - aarch64
         distro:
-          - rhelcompat-9
+          - rhelcompat-10
           - ubuntu-24-04
           - dind
     steps:
@@ -89,7 +89,7 @@ jobs:
       fail-fast: false
       matrix:
         distro:
-          - rhelcompat-9
+          - rhelcompat-10
           - ubuntu-24-04
           - dind
     steps:
