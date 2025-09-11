@@ -99,9 +99,6 @@ function setup_external_repos() {
   try echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf
 
   setup_epel
-
-  try dnf -y install "dnf-command(config-manager)"
-  try dnf config-manager --set-enabled crb
 }
 
 function install_basic_utils() {
