@@ -182,6 +182,12 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
 
+      - name: Check winget
+        run: |
+          Get-WinSystemLocale
+          Get-WindowsOptionalFeature -Online | Where-Object FeatureName -like '*winget*'
+          Enable-WindowsOptionalFeature -FeatureName WingetSupportOnServerCore -Online -NoRestart
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
