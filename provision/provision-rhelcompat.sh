@@ -46,6 +46,7 @@ function provision() {
 
   step install_mise_tools \
     "java@temurin-21.0.8+9.0.LTS" \
+    "java@temurin-25.0.0+36.0.LTS" \
     "ruby@3.4.6" \
     "node@22.20.0"
   step install_ruby_default_gems
