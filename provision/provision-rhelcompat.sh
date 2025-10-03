@@ -219,7 +219,7 @@ function build_gocd() {
 }
 
 function install_docker() {
-  try dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  try dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
   try dnf -y install docker-ce containerd.io docker-buildx-plugin
   try usermod -a -G docker ${PRIMARY_USER}
 }
