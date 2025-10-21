@@ -20,7 +20,7 @@ function provision() {
   step install_mise_tools \
     "java@temurin-21.0.8+9.0.LTS" \
     "ruby@3.4.7" \
-    "node@22.20.0"
+    "node@22.21.0"
   step install_ruby_default_gems
   step install_yarn
 
