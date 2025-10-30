@@ -1,6 +1,6 @@
-$JAVA_VERSION='21.0.8.9'
-$NODEJS_VERSION='22.21.0'
-$RUBY_VERSION='3.4.7.1'
+$JAVA_VERSION='21'
+$NODEJS_VERSION='22'
+$RUBY_VERSION='3.4'
 
 $GOLANG_BOOTSTRAPPER_VERSION='2.34'
 $P4D_VERSION='25.1'
@@ -26,6 +26,32 @@ function PrefixToSystemAndCurrentPath {
     [Environment]::SetEnvironmentVariable("Path", $newSystemPath, [EnvironmentVariableTarget]::Machine)
 }
 
+# Finds the latest Chocolatey package version starting with a specific version prefix.
+# Useful to restrict updates or installs to a specific major/minor version branch.
+# See https://github.com/chocolatey/choco/issues/800#issuecomment-3065340908
+function Find-ChocoPackageLatestVersionPrefix {
+    param (
+        [Parameter(Mandatory)]
+        [string]$PackageName,
+
+        [Parameter(Mandatory)]
+        [string]$VersionPrefix  # Example: '6.0.' to match all 6.0.x versions
+    )
+
+    $allVersions = choco search $PackageName --exact --all-versions --limit-output | ForEach-Object {
+        ($_ -split '\|')[1]
+    }
+    $filtered = $allVersions | Where-Object { $_.StartsWith($VersionPrefix) }
+    if ($filtered) {
+        $latest = $filtered | Select-Object -First 1
+        Write-Host "Latest version of '$PackageName' matching prefix '$VersionPrefix': $latest" -ForegroundColor DarkCyan
+        return $latest
+    } else {
+        Write-Host "Package '$PackageName' not found with version starting with '$VersionPrefix'." -ForegroundColor DarkRed
+        return $null
+    }
+}
+
 # install chocolatey
 $chocolateyUseWindowsCompression = 'true'
 $env:chocolateyUseWindowsCompression = 'true'
@@ -41,18 +67,18 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 RefreshEnv
 
 # install packages
-choco install --no-progress -y nodejs --version="${NODEJS_VERSION}"
+choco install --no-progress -y nodejs --version=$(Find-ChocoPackageLatestVersionPrefix "nodejs" "${NODEJS_VERSION}")
 RefreshEnv
 corepack enable
 yarn --version
 
-choco install --no-progress -y temurin --version="${JAVA_VERSION}"
+choco install --no-progress -y temurin --version=$(Find-ChocoPackageLatestVersionPrefix "temurin" "${JAVA_VERSION}")
 choco install --no-progress -y git --params "/NoAutoCrlf"
 choco install --no-progress -y nant ant hg sliksvn
 choco install --no-progress -y --ignore-checksums p4  # Ignore checksums due to package not using repeatable build links to downloads
 choco install --no-progress -y --ignore-checksums googlechrome # Ignore checksums due to package not using repeatable build links to downloads
 
-choco install --no-progress -y ruby --version="${RUBY_VERSION}"
+choco install --no-progress -y ruby --version=$(Find-ChocoPackageLatestVersionPrefix "ruby" "${RUBY_VERSION}")
 # Install MSYS2 and dev toolchain for compiling certain native Ruby extensions, introduced for google-protobuf 3.25.0+
 # Following pattern at https://community.chocolatey.org/packages/msys2#description
 $msysInstallDir = "C:\tools\msys64"

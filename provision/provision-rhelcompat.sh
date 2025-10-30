@@ -45,10 +45,10 @@ function provision() {
   step install_scm_tools
 
   step install_mise_tools \
-    "java@temurin-21.0.8+9.0.LTS" \
-    "java@temurin-25.0.0+36.0.LTS" \
-    "ruby@3.4.7" \
-    "node@22.21.0"
+    "java@temurin-21" \
+    "java@temurin-25" \
+    "ruby@3.4" \
+    "node@22"
   step install_ruby_default_gems
   step install_yarn
 
