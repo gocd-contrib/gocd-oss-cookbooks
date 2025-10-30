@@ -5,9 +5,7 @@ $ErrorActionPreference = "Stop"
 Write-Host "Building gocd to install gradle and build gradle cache..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
-yarn config set network-timeout 300000
-./gradlew compileAll yarnInstall downloadChromeDriver --no-build-cache --quiet
-yarn config delete network-timeout
+./gradlew resolveExternalDependencies --no-build-cache --quiet
 
 Write-Host "Cleaning up build artifacts..."
 ./gradlew clean --no-build-cache --quiet

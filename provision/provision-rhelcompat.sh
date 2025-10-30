@@ -215,8 +215,9 @@ function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
               mise install && \
-              ./gradlew compileAll yarnInstall downloadTanukiDeltaPack downloadGeckoDriver downloadAllJres --no-build-cache --max-workers 4 --quiet ${GRADLE_OPTIONS}"
-  try rm -rf /tmp/gocd /${PRIMARY_USER}/.gradle/caches/build-cache-*
+              ./gradlew resolveExternalDependencies --no-build-cache --quiet ${GRADLE_OPTIONS} && \
+              ./gradlew --stop"
+  try rm -rf /tmp/gocd
 }
 
 function install_docker() {
