@@ -53,6 +53,8 @@ function install_mise_tools() {
   try su - "${PRIMARY_USER:-go}" -c "mise -v && mise use --global ${*}"
   try su - "${PRIMARY_USER:-go}" -c "echo \"export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"\" >> ~/.bash_profile"
   try su - "${PRIMARY_USER:-go}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
+
+  try su - "${PRIMARY_USER:-go}" -c "rm -rf /tmp/tmp*" # Remove mise installer mktemp stuff
 }
 
 function install_ruby_default_gems() {
