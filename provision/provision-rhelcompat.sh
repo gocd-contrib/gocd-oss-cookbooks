@@ -48,7 +48,7 @@ function provision() {
     "java@temurin-21" \
     "java@temurin-25" \
     "ruby@3.4" \
-    "node@22"
+    "node@24"
   step install_ruby_default_gems
   step install_yarn
 
