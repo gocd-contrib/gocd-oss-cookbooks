@@ -13,6 +13,7 @@ function provision() {
   step install_native_build_packages
 
   step add_gocd_user
+  step setup_nexus_configs
 
   # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
@@ -26,8 +27,6 @@ function provision() {
 
   step install_awscli_mimetypes
   step install_awscli
-
-  step setup_nexus_configs
 
   step add_golang_gocd_bootstrapper
   step install_tini

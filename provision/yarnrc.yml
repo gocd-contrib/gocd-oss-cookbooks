@@ -1,0 +1,3 @@
+enableGlobalCache: true
+enableTelemetry: false
+npmRegistryServer: "https://nexus.gocd.io/repository/npmjs.org-proxy/"

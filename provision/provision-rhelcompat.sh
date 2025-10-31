@@ -39,6 +39,7 @@ function provision() {
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     # setup gocd user to use internal mirrors for builds
     step add_gocd_user
+    step setup_nexus_configs
   fi
 
   # git, in particular, is used in subsequent provisioning so do this before things like `mise`
@@ -72,7 +73,6 @@ function provision() {
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     step install_docker
     step install_regctl
-    step setup_nexus_configs
     step add_golang_gocd_bootstrapper
   fi
 

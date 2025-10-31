@@ -15,6 +15,7 @@ Copy-Item "$PSScriptroot\init.gradle"         "${env:USERPROFILE}\.gradle\init.g
 Copy-Item "$PSScriptroot\settings.xml"        "${env:USERPROFILE}\.m2\settings.xml"
 Copy-Item "$PSScriptroot\bundle-config"       "${env:USERPROFILE}\.bundle\config"
 Copy-Item "$PSScriptroot\npmrc"               "${env:USERPROFILE}\.npmrc"
+Copy-Item "$PSScriptroot\yarnrc.yml"          "${env:USERPROFILE}\.yarnrc.yml"
 
 function PrefixToSystemAndCurrentPath {
     param (
@@ -70,7 +71,8 @@ RefreshEnv
 choco install --no-progress -y nodejs --version=$(Find-ChocoPackageLatestVersionPrefix "nodejs" "${NODEJS_VERSION}")
 RefreshEnv
 corepack enable
-yarn --version
+yarn set version stable
+yarn config --no-defaults
 
 choco install --no-progress -y temurin --version=$(Find-ChocoPackageLatestVersionPrefix "temurin" "${JAVA_VERSION}")
 choco install --no-progress -y git --params "/NoAutoCrlf"

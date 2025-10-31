@@ -41,6 +41,7 @@ function setup_rubygems_config() {
 
 function setup_npm_config() {
   copy_to_home_dir npmrc .npmrc
+  copy_to_home_dir yarnrc.yml .yarnrc.yml
 }
 
 function setup_git_config() {
@@ -62,7 +63,7 @@ function install_ruby_default_gems() {
 }
 
 function install_yarn() {
-  try su - "${PRIMARY_USER:-go}" -c "corepack enable && mise reshim && yarn --version"
+  try su - "${PRIMARY_USER:-go}" -c "corepack enable && mise reshim && yarn set version stable && yarn config --no-defaults"
 }
 
 function install_gauge() {
