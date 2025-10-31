@@ -91,15 +91,10 @@ function provision() {
   step print_versions_summary
 }
 
-function setup_epel() {
-  try dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-${RHEL_COMPAT_MAJOR_VERSION}.noarch.rpm
-}
-
 function setup_external_repos() {
   try echo 'fastestmirror=1' >> /etc/dnf/dnf.conf
   try echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf
-
-  setup_epel
+  try dnf -y install epel-release
 }
 
 function install_basic_utils() {
