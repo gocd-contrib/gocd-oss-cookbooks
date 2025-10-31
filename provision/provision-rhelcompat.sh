@@ -69,18 +69,18 @@ function provision() {
   step install_geckodriver
   step install_firefox
 
-  # On Docker for Mac, make sure you allocate more than 2G of memory or
-  # gradle might randomly fail; 6G should be fairly reliable.
-  if [ "${BUILDARCH}" == "${TARGETARCH}" ]; then
-    # only do a pre-build to cache dependencies when not cross-compiling
-    step build_gocd
-  fi
-
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     step install_docker
     step install_regctl
     step setup_nexus_configs
     step add_golang_gocd_bootstrapper
+  fi
+
+  # On Docker for Mac, make sure you allocate more than 2G of memory or
+  # gradle might randomly fail; 6G should be fairly reliable.
+  if [ "${BUILDARCH}" == "${TARGETARCH}" ]; then
+    # only do a pre-build to cache dependencies when not cross-compiling
+    step build_gocd
   fi
 
   step install_tini
