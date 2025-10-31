@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 Write-Host "Building gocd to install gradle and build gradle cache..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
-./gradlew resolveExternalDependencies --no-build-cache --quiet
+./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet
 
 Write-Host "Cleaning up build artifacts..."
 ./gradlew clean --no-build-cache --quiet

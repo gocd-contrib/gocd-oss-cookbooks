@@ -215,7 +215,7 @@ function build_gocd() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
               mise install && \
-              ./gradlew resolveExternalDependencies --no-build-cache --quiet ${GRADLE_OPTIONS} && \
+              ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet ${GRADLE_OPTIONS} && \
               ./gradlew --stop"
   try rm -rf /tmp/gocd
 }
