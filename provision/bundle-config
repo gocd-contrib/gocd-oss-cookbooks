@@ -1,6 +1,6 @@
 # This file is managed by automation. Any changes will be lost.
 
 ---
-BUNDLE_RETRY: "3"
 BUNDLE_JOBS: "4"
 BUNDLE_MIRROR__HTTPS://RUBYGEMS__ORG/: "https://nexus.gocd.io/repository/rubygems.org-proxy/"
+BUNDLE_GLOBAL_GEM_CACHE: "true"
