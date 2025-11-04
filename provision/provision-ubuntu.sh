@@ -60,7 +60,7 @@ function install_basic_utils() {
 
 function install_native_build_packages() {
   # Ruby-build dependencies for mise: https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
-  # Also see https://docs.ruby-lang.org/en/3.3/contributing/building_ruby_md.html
+  # Also see https://docs.ruby-lang.org/en/3.4/contributing/building_ruby_md.html
   try apt-get install -y autoconf patch build-essential libssl-dev libyaml-dev zlib1g-dev
 }
 
