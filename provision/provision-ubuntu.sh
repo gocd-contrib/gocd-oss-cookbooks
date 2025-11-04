@@ -43,9 +43,6 @@ function update_apt_cache() {
 
 function setup_external_repos() {
   update_apt_cache
-  DEBIAN_FRONTEND=noninteractive try apt-get -y install software-properties-common
-  try bash -c "yes | add-apt-repository ppa:git-core/ppa"
-  update_apt_cache
 }
 
 function upgrade_os_packages() {
