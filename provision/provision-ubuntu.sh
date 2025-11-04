@@ -54,7 +54,8 @@ function list_installed_packages() {
 }
 
 function install_basic_utils() {
-  try apt-get install -y debsigs gnupg gnupg-agent apt-utils bzip2 gzip unzip zip sudo curl wget jq
+  try apt-get install -y debsigs gnupg gnupg-agent apt-utils bzip2 gzip unzip zip sudo curl wget jq locales
+  try bash -c "echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && /usr/sbin/locale-gen"
 }
 
 function install_native_build_packages() {
