@@ -7,10 +7,9 @@ RUN /usr/local/src/provision/provision-ubuntu.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-# Set where the golang-gocd-bootstrapper will use as work dir (note uses different env vars to normal GoCD agent images)
-ENV GO_EA_ROOT_DIR=/go-working-dir
-RUN mkdir ${GO_EA_ROOT_DIR} && chown go:go ${GO_EA_ROOT_DIR}
-VOLUME ${GO_EA_ROOT_DIR}
+# Create volume where the golang-gocd-bootstrapper will use as work dir
+RUN mkdir -p /go-working-dir && chown go:go /go-working-dir
+VOLUME /go-working-dir
 USER go
 
 # force encoding

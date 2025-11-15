@@ -17,8 +17,7 @@ COPY provision C:\\Users\\ContainerAdministrator\\provision
 
 RUN powershell -File C:\\Users\\ContainerAdministrator\\provision\\provision-choco.ps1
 
-# Set where the golang-gocd-bootstrapper will use as work dir (note uses different env vars to normal GoCD agent images)
-ENV GO_EA_ROOT_DIR=C:\\go-working-dir
-VOLUME ${GO_EA_ROOT_DIR}
+# Create volume where the golang-gocd-bootstrapper will use as work dir
+VOLUME C:\\go-working-dir
 
 CMD ["C:\\go-agent.exe"]
