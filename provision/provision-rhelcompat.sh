@@ -21,7 +21,7 @@ MAVEN_VERSION=3.9.11 # https://maven.apache.org/docs/history.html
 ANT_VERSION=1.10.15 # https://ant.apache.org/bindownload.cgi
 P4_VERSION=25.1 # https://cdist2.perforce.com/perforce/
 P4D_VERSION=25.1
-DOCKER_VERSION=28
+DOCKER_VERSION=29
 
 RHEL_COMPAT_MAJOR_VERSION=$(rpm -qa \*-release | grep -oiP "(oracle|redhat|centos|alma|rocky).*-release-\K[0-9]+")
 # import functions
