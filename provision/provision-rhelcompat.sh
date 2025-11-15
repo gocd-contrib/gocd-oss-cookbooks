@@ -77,12 +77,7 @@ function provision() {
     step add_golang_gocd_bootstrapper
   fi
 
-  # On Docker for Mac, make sure you allocate more than 2G of memory or
-  # gradle might randomly fail; 6G should be fairly reliable.
-  if [ "${BUILDARCH}" == "${TARGETARCH}" ]; then
-    # only do a pre-build to cache dependencies when not cross-compiling
-    step build_gocd
-  fi
+  step cache_gocd_dependencies
 
   step install_tini
 
@@ -188,7 +183,7 @@ function upgrade_os_packages() {
   try dnf -y upgrade --quiet
 }
 
-function build_gocd() {
+function cache_gocd_dependencies() {
   if [ "$(how_much_memory_in_gb)" -lt 6 ]; then
     yellowalert "                                                                                "
     yellowalert "////////////////////////////////////////////////////////////////////////////////"
@@ -212,8 +207,15 @@ function build_gocd() {
               cd /tmp/gocd && \
               mise install && \
               ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet ${GRADLE_OPTIONS} && \
-              ./gradlew --stop"
-  try rm -rf /tmp/gocd
+              ./gradlew --stop && \
+              rm -rf /tmp/gocd"
+
+  for bundle_repo in ruby-functional-tests codesigning; do
+    try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/${bundle_repo} /tmp/${bundle_repo} && \
+                cd /tmp/${bundle_repo} && \
+                bundle install && \
+                rm -rf /tmp/${bundle_repo}"
+  done
 }
 
 function install_docker() {
