@@ -74,7 +74,7 @@ corepack enable
 yarn set version stable
 yarn config --no-defaults
 
-choco install --no-progress -y temurin --version=$(Find-ChocoPackageLatestVersionPrefix "temurin" "${JAVA_VERSION}")
+choco install --no-progress -y "temurin${JAVA_VERSION}"
 choco install --no-progress -y git --params "/NoAutoCrlf"
 choco install --no-progress -y nant ant hg sliksvn
 choco install --no-progress -y --ignore-checksums p4  # Ignore checksums due to package not using repeatable build links to downloads
