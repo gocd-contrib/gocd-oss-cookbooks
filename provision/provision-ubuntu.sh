@@ -6,6 +6,8 @@ PRIMARY_USER="go"
 source "$(dirname $0)/provision-common.sh"
 
 function provision() {
+  export DEBIAN_FRONTEND=noninteractive
+
   step setup_external_repos
   step upgrade_os_packages
 
