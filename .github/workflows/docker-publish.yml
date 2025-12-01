@@ -165,3 +165,44 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           pushImage: ${{ github.event_name != 'pull_request' }}
+
+  windows-2025:
+    runs-on: windows-2025
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Verify a tag is present
+        if: ${{ github.event_name != 'pull_request' }}
+        run: if ($(git tag --points-at HEAD --sort=version:refname | tail -n1).length -eq 0) { echo "Please set a tag pointing to the HEAD"; exit 1; }
+
+      - name: Check winget
+        run: |
+          Get-WinSystemLocale
+          Get-WindowsOptionalFeature -Online | Where-Object FeatureName -like '*winget*'
+          Enable-WindowsOptionalFeature -FeatureName WingetSupportOnServerCore -Online -NoRestart
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          flavor: |
+            latest=false
+            prefix=windows2025-
+
+      - name: Build and push
+        id: build
+        uses: mr-smithers-excellent/docker-build-push@59523c638baec979a74fea99caa9e29d97e5963c # v6.4
+        with:
+          dockerfile: windowsservercore-2025.Dockerfile
+          image: ${{ env.REGISTRY_IMAGE }}
+          tags: ${{ steps.meta.outputs.version }}
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          pushImage: ${{ github.event_name != 'pull_request' }}
