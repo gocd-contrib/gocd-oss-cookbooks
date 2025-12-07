@@ -6,8 +6,4 @@ RUN apk upgrade --no-cache && \
     apk add --no-cache ruby-rake ruby-dev build-base && \
 	gem install bundler json docker-api --no-document
 
-# Set where the golang-gocd-bootstrapper will use as work dir
-ENV VOLUME_DIR=/go-working-dir
-RUN mkdir ${VOLUME_DIR} && chown go:root ${VOLUME_DIR}
-VOLUME ${VOLUME_DIR}
 USER go
