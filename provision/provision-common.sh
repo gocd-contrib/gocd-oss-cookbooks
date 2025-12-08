@@ -66,9 +66,7 @@ function install_yarn() {
   try su - "${PRIMARY_USER:-go}" -c "corepack enable && mise reshim && yarn set version stable && yarn config --no-defaults"
 }
 
-function install_gauge() {
-  try bash -c "curl --silent --show-error --location https://downloads.gauge.org/stable | sh -s -- --location=/usr/bin"
-
+function install_gauge_plugins() {
   for plugin in ruby html-report screenshot; do
     try su - "$PRIMARY_USER" -c "gauge install ${plugin}"
   done

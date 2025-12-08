@@ -50,14 +50,15 @@ function provision() {
     "java@temurin-25" \
     "java@temurin-21" \
     "ruby@3.4" \
-    "node@24"
+    "node@24" \
+    "aqua:getgauge/gauge@1"
   step install_ruby_default_gems
+  step install_gauge_plugins
   step install_yarn
 
   step install_maven "$MAVEN_VERSION"
   step install_ant "$ANT_VERSION"
 
-  step install_gauge
   step install_installer_tools
   step install_awscli_mimetypes
   step install_awscli
