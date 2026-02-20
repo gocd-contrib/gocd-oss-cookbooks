@@ -48,7 +48,7 @@ function provision() {
 
   step install_mise_tools \
     "java@temurin-25" \
-    "ruby@3.4" \
+    "ruby@4.0" \
     "node@24" \
     "aqua:getgauge/gauge@1"
   step install_ruby_default_gems
