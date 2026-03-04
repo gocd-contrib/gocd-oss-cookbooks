@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM mcr.microsoft.com/powershell:lts-windowsservercore-ltsc2022
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 # Shamelessly nabbed from https://github.com/gantrior/docker-chrome-windows
@@ -7,7 +7,7 @@ LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 # does not include fonts, so we need to install them ourselves.
 ADD Files/FontsToAdd.tar /Fonts/
 WORKDIR /Fonts/
-RUN powershell -File .\\Add-Font.ps1 Fonts
+RUN pwsh -File .\\Add-Font.ps1 Fonts
 WORKDIR /
 
 ENV TMP=C:\\tmp \
@@ -15,7 +15,7 @@ ENV TMP=C:\\tmp \
 
 COPY provision C:\\Users\\ContainerAdministrator\\provision
 
-RUN powershell -File C:\\Users\\ContainerAdministrator\\provision\\provision-choco.ps1
+RUN pwsh -File C:\\Users\\ContainerAdministrator\\provision\\provision-choco.ps1
 
 # Create volume where the golang-gocd-bootstrapper will use as work dir
 VOLUME C:\\go-working-dir

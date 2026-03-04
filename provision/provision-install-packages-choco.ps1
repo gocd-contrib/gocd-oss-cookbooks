@@ -56,7 +56,6 @@ function Find-ChocoPackageLatestVersionPrefix {
 # install chocolatey
 $chocolateyUseWindowsCompression = 'true'
 $env:chocolateyUseWindowsCompression = 'true'
-$ErrorActionPreference = "Stop"
 $progressPreference = 'silentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force

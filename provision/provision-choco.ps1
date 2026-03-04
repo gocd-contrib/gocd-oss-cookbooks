@@ -1,3 +1,7 @@
+$PSNativeCommandUseErrorActionPreference = $true
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+
 Write-Host "Installing packages..."
 &"$PSScriptroot\provision-install-packages-choco.ps1"
 Write-Host "Initializing Gradle cache for gocd..."
