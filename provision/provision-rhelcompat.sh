@@ -94,7 +94,7 @@ function setup_external_repos() {
 }
 
 function install_basic_utils() {
-  try dnf -y install procps ncurses file which xz bzip2 gzip unzip zip sudo curl-minimal wget jq glibc-langpack-en
+  try dnf -y install procps gnupg2 ncurses file which xz bzip2 gzip unzip zip sudo curl-minimal wget jq glibc-langpack-en
 }
 
 function install_native_build_packages() {
