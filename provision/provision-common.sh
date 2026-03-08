@@ -21,31 +21,19 @@ function add_gocd_user() {
 }
 
 function setup_nexus_configs() {
-  setup_gradle_config
-  setup_maven_config
-  setup_rubygems_config
-  setup_npm_config
-}
-
-function setup_gradle_config() {
-  copy_to_home_dir init.gradle .gradle/init.gradle
-}
-
-function setup_maven_config() {
-  copy_to_home_dir settings.xml .m2/settings.xml
-}
-
-function setup_rubygems_config() {
-  copy_to_home_dir bundle-config .bundle/config
-}
-
-function setup_npm_config() {
-  copy_to_home_dir npmrc .npmrc
-  copy_to_home_dir yarnrc.yml .yarnrc.yml
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    copy_to_home_dir init.gradle .gradle/init.gradle
+    copy_to_home_dir settings.xml .m2/settings.xml
+    copy_to_home_dir bundle-config .bundle/config
+    copy_to_home_dir npmrc .npmrc
+    copy_to_home_dir yarnrc.yml .yarnrc.yml
+  fi
 }
 
 function setup_git_config() {
-  copy_to_home_dir gitconfig .gitconfig
+  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+    copy_to_home_dir gitconfig .gitconfig
+  fi
 }
 
 # Install multi-tool version manager mise: https://mise.jdx.dev/

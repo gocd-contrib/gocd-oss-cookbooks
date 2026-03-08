@@ -37,11 +37,8 @@ function provision() {
   step install_basic_utils
   step install_native_build_packages
 
-  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-    # setup gocd user to use internal mirrors for builds
-    step add_gocd_user
-    step setup_nexus_configs
-  fi
+  step add_gocd_user
+  step setup_nexus_configs
 
   # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
@@ -107,9 +104,8 @@ function install_native_build_packages() {
 }
 
 function install_scm_tools() {
-  install_git
-  try dnf -y install mercurial
-  try dnf -y install subversion
+  try dnf -y install git-core mercurial subversion
+  setup_git_config
 
   try git --version
   try hg --version
@@ -121,14 +117,6 @@ function install_scm_tools() {
   try chmod 755 /usr/local/bin/p4 /usr/local/bin/p4d
   try p4 -V
   try p4d -V
-}
-
-function install_git() {
-  try dnf -y install git-core
-
-  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-    setup_git_config
-  fi
 }
 
 function install_installer_tools() {
