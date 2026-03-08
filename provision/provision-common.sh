@@ -38,43 +38,13 @@ function setup_git_config() {
 
 # Install multi-tool version manager mise: https://mise.jdx.dev/
 function install_mise_tools() {
+  copy_to_home_dir "${1}" .config/mise/config.toml
   try su - "${PRIMARY_USER:-go}" -c "curl https://mise.run | sh"
-  try su - "${PRIMARY_USER:-go}" -c "mise -v && mise use --global ${*}"
+  try su - "${PRIMARY_USER:-go}" -c "mise settings ruby.compile=false && GITHUB_TOKEN=\$(cat /run/secrets/github_token) mise install"
   try su - "${PRIMARY_USER:-go}" -c "echo \"export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"\" >> ~/.bash_profile"
   try su - "${PRIMARY_USER:-go}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
 
   try su - "${PRIMARY_USER:-go}" -c "rm -rf /tmp/tmp*" # Remove mise installer mktemp stuff
-}
-
-function install_ruby_default_gems() {
-  try su - "${PRIMARY_USER:-go}" -c "gem install rake --no-document && rake --version"
-}
-
-function install_yarn() {
-  try su - "${PRIMARY_USER:-go}" -c "corepack enable && mise reshim && yarn set version stable && yarn config --no-defaults"
-}
-
-function install_gauge_plugins() {
-  for plugin in ruby html-report screenshot; do
-    try su - "$PRIMARY_USER" -c "gauge install ${plugin}"
-  done
-
-  try su - "$PRIMARY_USER" -c "gauge -v"
-}
-
-function install_awscli() {
-  try curl --silent --fail --location "https://awscli.amazonaws.com/awscli-exe-linux-$(arch).zip" --output "/tmp/awscliv2.zip"
-  try unzip -q /tmp/awscliv2.zip
-  try ./aws/install
-  try rm -rf /aws /tmp/awscliv2.zip
-}
-
-function install_maven() {
-  local version="$1"
-  try mkdir -p /opt/local/
-  try curl --silent --fail --location https://dlcdn.apache.org/maven/maven-3/${version}/binaries/apache-maven-${version}-bin.zip --output /usr/local/src/apache-maven-${version}-bin.zip
-  try unzip -q /usr/local/src/apache-maven-${version}-bin.zip -d /opt/local
-  try ln -sf /opt/local/apache-maven-${version}/bin/mvn /usr/local/bin/mvn
 }
 
 function install_ant() {
@@ -85,34 +55,10 @@ function install_ant() {
   try ln -sf /opt/local/apache-ant-${version}/bin/ant /usr/local/bin/ant
 }
 
-function install_geckodriver() {
-  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "linux64"; else echo "linux-aarch64"; fi)"
-  local URL="$(curl --silent --fail --location https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r ".assets[] | select(.name | endswith(\"$arch.tar.gz\")) | .browser_download_url")"
-  try curl --silent --fail --location "${URL}" --output /usr/local/src/geckodriver-latest.tar.gz
-  try tar -zxf /usr/local/src/geckodriver-latest.tar.gz -C /usr/local/bin
-}
-
-# startup services
-
-function install_tini() {
-  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
-  local URL="$(curl --silent --fail --location https://api.github.com/repos/krallin/tini/releases/latest | jq -r ".assets[] | select(.name | endswith(\"-static-$arch\")) | .browser_download_url" | grep -v muslc)"
-  try curl -fsSL --output /usr/bin/tini "$URL"
-  try chmod a+rx /usr/bin/tini
-  try tini --version
-}
-
-function add_golang_gocd_bootstrapper() {
-  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
-  local URL="$(curl -fsSL https://api.github.com/repos/gocd-contrib/gocd-golang-bootstrapper/releases/latest | jq -r ".assets[] | select(.name | endswith(\"linux.$arch\")) | .browser_download_url")"
-  try curl -fsSL --output /go/go-agent "${URL}"
-  try chown go:go /go/go-agent
-  try chmod a+rx /go/go-agent
-}
-
 # helpers
 
 function print_versions_summary() {
+  try su - "${PRIMARY_USER:-go}" -c "mise ls"
   green "$(try su - "${PRIMARY_USER:-go}" <<-EOF
 printf "\n"
 printf "//////////////////////////////\n"
@@ -130,10 +76,6 @@ printf "\n"
 
 printf "node version:\n"
 node --version | pr -to 2
-printf "\n"
-
-printf "yarn version:\n"
-yarn --version | pr -to 2
 printf "\n"
 
 printf "aws version:\n"

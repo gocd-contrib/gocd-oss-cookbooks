@@ -19,24 +19,13 @@ function provision() {
 
   # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
-
-  step install_mise_tools \
-    "java@temurin-25" \
-    "ruby@4.0" \
-    "node@24"
-  step install_ruby_default_gems
-  step install_yarn
-
+  step install_mise_tools "mise-ubuntu.toml"
   step install_awscli_mimetypes
-  step install_awscli
-
-  step add_golang_gocd_bootstrapper
-  step install_tini
 
   step list_installed_packages
-  step clean
-
   step print_versions_summary
+
+  step clean
 }
 
 function update_apt_cache() {

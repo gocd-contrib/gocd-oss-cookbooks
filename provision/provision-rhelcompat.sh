@@ -17,7 +17,6 @@ for arg in $@; do
 done
 
 NSIS_VERSION=3.11-1.el9 # https://nsis.sourceforge.io/Docs/AppendixF.html / https://github.com/gocd/nsis-rpm/tree/gh-pages/rpms
-MAVEN_VERSION=3.9.13    # https://maven.apache.org/docs/history.html
 ANT_VERSION=1.10.15     # https://ant.apache.org/bindownload.cgi
 P4_VERSION=25.2         # https://cdist2.perforce.com/perforce/
 P4D_VERSION=25.2
@@ -42,22 +41,11 @@ function provision() {
 
   # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
-
-  step install_mise_tools \
-    "java@temurin-25" \
-    "ruby@4.0" \
-    "node@24" \
-    "aqua:getgauge/gauge@1"
-  step install_ruby_default_gems
-  step install_gauge_plugins
-  step install_yarn
-
-  step install_maven "$MAVEN_VERSION"
+  step install_mise_tools "mise-rhelcompat.toml"
+  step install_awscli_mimetypes
   step install_ant "$ANT_VERSION"
 
   step install_installer_tools
-  step install_awscli_mimetypes
-  step install_awscli
 
   step setup_postgres_repo # See https://endoflife.date/postgresql
   step install_postgresql "15"
@@ -65,23 +53,17 @@ function provision() {
   step install_postgresql "17"
   step install_postgresql "18"
 
-  step install_geckodriver
   step install_firefox
 
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
     step install_docker
-    step install_regctl
-    step add_golang_gocd_bootstrapper
   fi
 
-  step cache_gocd_dependencies
-
-  step install_tini
-
   step list_installed_packages
-  step clean
-
   step print_versions_summary
+
+  step cache_gocd_dependencies
+  step clean
 }
 
 function setup_external_repos() {
@@ -156,6 +138,12 @@ function install_firefox() {
   try firefox -version
 }
 
+function install_docker() {
+  try dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+  try dnf -y install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin
+  try usermod -a -G docker ${PRIMARY_USER}
+}
+
 function list_installed_packages() {
   try bash -c "rpm -qa | sort"
 }
@@ -203,20 +191,6 @@ function cache_gocd_dependencies() {
                 bundle install && \
                 rm -rf /tmp/${bundle_repo}"
   done
-}
-
-function install_docker() {
-  try dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
-  try dnf -y install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin
-  try usermod -a -G docker ${PRIMARY_USER}
-}
-
-function install_regctl() {
-  local arch="$(if [ "$(arch)" == "x86_64" ]; then echo "amd64"; else echo "arm64"; fi)"
-  try mkdir -p /usr/local/bin
-  try curl --silent --fail --location "https://github.com/regclient/regclient/releases/latest/download/regctl-linux-${arch}" --output /usr/local/bin/regctl
-  try chmod 755 /usr/local/bin/regctl
-  try regctl version
 }
 
 provision
