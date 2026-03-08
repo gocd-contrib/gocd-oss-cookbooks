@@ -85,7 +85,6 @@ function provision() {
 }
 
 function setup_external_repos() {
-  try echo 'fastestmirror=1' >> /etc/dnf/dnf.conf
   try echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf
   try dnf -y install epel-release
 }
