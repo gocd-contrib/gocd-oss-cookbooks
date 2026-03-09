@@ -45,11 +45,7 @@ function provision() {
 
   step install_installer_tools
 
-  step setup_postgres_repo # See https://endoflife.date/postgresql
-  step install_postgresql "15"
-  step install_postgresql "16"
-  step install_postgresql "17"
-  step install_postgresql "18"
+  step install_postgresql "15" "16" "17" "18"
 
   step install_firefox
 
@@ -117,14 +113,16 @@ function install_awscli_mimetypes() {
   try dnf -y install mailcap
 }
 
-function setup_postgres_repo() {
-  try dnf -y install https://download.postgresql.org/pub/repos/yum/reporpms/EL-$RHEL_COMPAT_MAJOR_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm
-}
-
 function install_postgresql() {
-  local pg_version="$1"
-  package_suffix="$(printf "${pg_version}" | sed -e 's/\.//g')"
-  try dnf -y install postgresql${package_suffix} postgresql${package_suffix}-server postgresql${package_suffix}-contrib
+  try dnf -y install "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$RHEL_COMPAT_MAJOR_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm"
+
+  local pg_version
+  local pkgs=()
+  for pg_version in "$@"; do
+    pkgs+=("postgresql${pg_version}" "postgresql${pg_version}-server" "postgresql${pg_version}-contrib")
+  done
+
+  try dnf -y install "${pkgs[@]}"
 }
 
 function install_firefox() {
