@@ -35,7 +35,7 @@ scoop bucket add extras
 scoop install mise extras/vcredist2022
 $env:CLICOLOR_FORCE = 1
 mise install
-RefreshEnv
+PrefixToSystemAndCurrentPath("${env:LOCALAPPDATA}\\mise\\shims")
 
 # install p4 client and p4d / helix-core-server
 New-Item "${env:ProgramFiles}\\Perforce\\bin\\" -ItemType Directory | Out-Null
