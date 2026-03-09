@@ -24,9 +24,10 @@ function PrefixToSystemAndCurrentPath {
 
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+scoop install git mise
 scoop bucket add extras
-scoop install git mise extras/googlechrome
-& "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
+scoop install extras/googlechrome
+pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
 mise install
 mise settings ruby.compile=false
