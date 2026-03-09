@@ -28,7 +28,7 @@ function PrefixToSystemAndCurrentPath {
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 scoop install git
 scoop bucket add extras
-scoop install mise
+scoop install mise extras/vcredist2022
 
 $env:CLICOLOR_FORCE = 1
 mise settings ruby.compile=false
