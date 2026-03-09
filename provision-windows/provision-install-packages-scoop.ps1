@@ -23,10 +23,9 @@ function PrefixToSystemAndCurrentPath {
 }
 
 # install scoop
-irm get.scoop.sh | iex
+iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 scoop bucket add extras
-
-scoop install mise extras/googlechrome
+scoop install git mise extras/googlechrome
 & "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
 mise install
