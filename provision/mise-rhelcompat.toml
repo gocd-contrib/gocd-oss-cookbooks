@@ -9,7 +9,7 @@
 # Test/release tools
 "aqua:getgauge/gauge" = { version = "1", postinstall = "gauge install ruby; gauge install html-report; gauge install screenshot" }
 "aqua:regclient/regclient/regctl" = "latest"
-"aqua:aws/aws-cli" = "latest"
+"aqua:aws/aws-cli" = { version = "latest", symlink_bins = true }
 "github:mozilla/geckodriver" = "latest"
 
 # Bootstrapping
