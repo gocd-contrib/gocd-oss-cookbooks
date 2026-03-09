@@ -28,13 +28,14 @@ function PrefixToSystemAndCurrentPath {
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 scoop install git msys2 ruby
-msys2
+msys2 # initialize msys2
 ridk install 2 3 # Update packages and install development toolchain
 
 scoop bucket add extras
 scoop install mise extras/vcredist2022
 $env:CLICOLOR_FORCE = 1
 mise install
+RefreshEnv
 
 # install p4 client and p4d / helix-core-server
 New-Item "${env:ProgramFiles}\\Perforce\\bin\\" -ItemType Directory | Out-Null
