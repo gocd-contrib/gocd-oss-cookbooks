@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
@@ -22,11 +22,11 @@ function add_gocd_user() {
 
 function setup_nexus_configs() {
   if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
-    copy_to_home_dir init.gradle .gradle/init.gradle
-    copy_to_home_dir settings.xml .m2/settings.xml
+    copy_to_home_dir init.gradle   .gradle/init.gradle
+    copy_to_home_dir settings.xml  .m2/settings.xml
     copy_to_home_dir bundle-config .bundle/config
-    copy_to_home_dir npmrc .npmrc
-    copy_to_home_dir yarnrc.yml .yarnrc.yml
+    copy_to_home_dir npmrc         .npmrc
+    copy_to_home_dir yarnrc.yml    .yarnrc.yml
   fi
 }
 
@@ -39,19 +39,19 @@ function setup_git_config() {
 # Install multi-tool version manager mise: https://mise.jdx.dev/
 function install_mise_tools() {
   copy_to_home_dir "${1}" .config/mise/config.toml
-  try su - "${PRIMARY_USER:-go}" -c "curl https://mise.run | sh"
-  try su - "${PRIMARY_USER:-go}" -c "mise settings ruby.compile=false && GITHUB_TOKEN=\$(cat /run/secrets/github_token) mise install"
-  try su - "${PRIMARY_USER:-go}" -c "echo \"export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"\" >> ~/.bash_profile"
-  try su - "${PRIMARY_USER:-go}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
+  try su - "${PRIMARY_USER}" -c "curl https://mise.run | sh"
+  try su - "${PRIMARY_USER}" -c "mise settings ruby.compile=false && GITHUB_TOKEN=\$(cat /run/secrets/github_token) mise install"
+  try su - "${PRIMARY_USER}" -c "echo \"export PATH=~/.local/share/mise/shims:\$PATH\" >> ~/.bash_profile"
+  try su - "${PRIMARY_USER}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
 
-  try su - "${PRIMARY_USER:-go}" -c "rm -rf /tmp/tmp*" # Remove mise installer mktemp stuff
+  try su - "${PRIMARY_USER}" -c "rm -rf /tmp/tmp*" # Remove mise installer mktemp stuff
 }
 
 # helpers
 
 function print_versions_summary() {
-  try su - "${PRIMARY_USER:-go}" -c "mise ls"
-  green "$(try su - "${PRIMARY_USER:-go}" <<-EOF
+  try su - "${PRIMARY_USER}" -c "mise ls"
+  green "$(try su - "${PRIMARY_USER}" <<-EOF
 printf "\n"
 printf "//////////////////////////////\n"
 printf "// Package versions summary //\n"

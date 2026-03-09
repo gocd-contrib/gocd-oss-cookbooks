@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 PRIMARY_USER="go"
 GRADLE_OPTIONS="--stacktrace --no-daemon"
