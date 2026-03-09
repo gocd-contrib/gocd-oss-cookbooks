@@ -29,6 +29,7 @@ scoop bucket add extras
 scoop install extras/googlechrome
 pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
+Copy-Item "$PSScriptroot\mise-windows.yml" "${env:USERPROFILE}\.config\mise\config.toml"
 mise install
 mise settings ruby.compile=false
 $env:GITHUB_TOKEN = Get-Content C:\ProgramData\Docker\secrets\github_token
