@@ -25,9 +25,6 @@ function PrefixToSystemAndCurrentPath {
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 scoop install git mise
-scoop bucket add extras
-scoop install extras/googlechrome
-pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
 Copy-Item "$PSScriptroot\mise-windows.yml" "${env:USERPROFILE}\.config\mise\config.toml"
 mise install
@@ -49,5 +46,10 @@ Invoke-WebRequest https://onboardcloud.dl.sourceforge.net/project/nant/nant/${NA
 Expand-Archive -Path "${env:TEMP}\\nant.zip" -DestinationPath "C:\\tools"
 PrefixToSystemAndCurrentPath("C:\\tools\\nant-${NANT_VERSION}\\bin")
 Remove-Item "${env:TEMP}\\nant.zip" -Force
+
+# Install chrome
+scoop bucket add extras
+scoop install extras/googlechrome
+pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
 Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
