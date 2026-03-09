@@ -12,7 +12,6 @@ function provision() {
   step upgrade_os_packages
 
   step install_basic_utils
-  step install_native_build_packages
 
   step add_gocd_user
   step setup_nexus_configs
@@ -49,14 +48,8 @@ function install_basic_utils() {
   try bash -c "echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen && /usr/sbin/locale-gen"
 }
 
-function install_native_build_packages() {
-  # Ruby-build dependencies for mise: https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
-  # Also see https://docs.ruby-lang.org/en/3.4/contributing/building_ruby_md.html
-  try apt-get install -y autoconf patch build-essential libssl-dev libyaml-dev zlib1g-dev
-}
-
 function install_scm_tools() {
-  try apt-get install -y git subversion
+  try apt-get install -y git
   setup_git_config
 }
 
