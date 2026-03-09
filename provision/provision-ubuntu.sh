@@ -32,7 +32,7 @@ function upgrade_os_packages() {
 }
 
 function list_installed_packages() {
-  try bash -c "dpkg -l"
+  try dpkg -l
 }
 
 function install_basic_utils() {
