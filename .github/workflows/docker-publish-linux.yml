@@ -43,6 +43,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
+            latest=true
             prefix=${{ matrix.distro }}-
           tags: |
             type=raw,value=${{ env.IMAGE_VERSION }}
@@ -120,6 +121,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
+            latest=true
             prefix=${{ matrix.distro }}-
           tags: |
             type=raw,value=${{ env.IMAGE_VERSION }}

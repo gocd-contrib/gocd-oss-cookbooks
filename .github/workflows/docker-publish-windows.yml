@@ -32,6 +32,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: |
+            latest=true
             prefix=windows2022-
           tags: |
             type=raw,value=${{ env.IMAGE_VERSION }}
