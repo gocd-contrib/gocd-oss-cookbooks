@@ -1,4 +1,5 @@
 $P4_VERSION='25.2'
+$NANT_VERSION='0.92'
 
 # Copy over configs
 New-Item "${env:USERPROFILE}\.config\mise" -ItemType Directory | Out-Null
@@ -26,7 +27,7 @@ function PrefixToSystemAndCurrentPath {
 
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-scoop install git gpg msys2 ruby
+scoop install git msys2 ruby
 msys2
 ridk install 2 3 # Update packages and install development toolchain
 
