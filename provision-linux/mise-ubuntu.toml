@@ -1,0 +1,8 @@
+[tools]
+"ruby" = "4.0"
+
+"aqua:aws/aws-cli" = { version = "latest", symlink_bins = true }
+
+# Bootstrapping
+"aqua:krallin/tini" = "latest"
+"github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }

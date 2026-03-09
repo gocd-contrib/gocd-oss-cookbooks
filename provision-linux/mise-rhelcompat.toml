@@ -1,0 +1,18 @@
+[tools]
+"java" = "temurin-25"
+"ruby" = "4.0"
+"node" = "24"
+
+"aqua:yarnpkg/berry" = "4"
+"aqua:apache/maven" = "3"
+"aqua:apache/ant" = "1"
+
+# Test/release tools
+"aqua:getgauge/gauge" = { version = "1", postinstall = "gauge install ruby; gauge install html-report; gauge install screenshot" }
+"aqua:regclient/regclient/regctl" = "latest"
+"aqua:aws/aws-cli" = { version = "latest", symlink_bins = true }
+"github:mozilla/geckodriver" = "latest"
+
+# Bootstrapping
+"aqua:krallin/tini" = "latest"
+"github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }

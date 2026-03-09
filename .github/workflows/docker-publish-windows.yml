@@ -1,0 +1,49 @@
+name: Build Windows
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - '*linux*'
+      - '**/*linux*'
+  pull_request:
+    branches: [master]
+    paths-ignore:
+      - '*linux*'
+      - '**/*linux*'
+
+env:
+  REGISTRY_IMAGE: gocddev/gocd-dev-build
+  IMAGE_VERSION: "3.27"
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b # v2.15.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+          flavor: |
+            prefix=windows2022-
+          tags: |
+            type=semver,pattern={{version}},value=${{ env.IMAGE_VERSION }}
+
+      - name: Build and push
+        id: build
+        uses: mr-smithers-excellent/docker-build-push@19d2beefef6bcdc202195fdcb9deb79a4fab5c1f # v6.8
+        with:
+          dockerfile: windowsservercore.Dockerfile
+          image: ${{ env.REGISTRY_IMAGE }}
+          tags: ${{ steps.meta.outputs.version }}
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          pushImage: ${{ github.event_name != 'pull_request' }}

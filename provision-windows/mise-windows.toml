@@ -1,0 +1,11 @@
+[tools]
+"java" = "temurin-25"
+"ruby" = "4.0"
+"node" = "24"
+
+"aqua:yarnpkg/berry" = "4"
+"aqua:apache/maven" = "3"
+"aqua:apache/ant" = "1"
+
+# Bootstrapping
+"github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }
