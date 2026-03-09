@@ -38,6 +38,8 @@ mise install
 mise settings auto_install=false
 PrefixToSystemAndCurrentPath("${env:LOCALAPPDATA}\\mise\\shims")
 
+yarn --version
+
 # install p4 client and p4d / helix-core-server
 New-Item "${env:ProgramFiles}\\Perforce\\bin\\" -ItemType Directory | Out-Null
 PrefixToSystemAndCurrentPath("${env:ProgramFiles}\\Perforce\\bin")
