@@ -41,7 +41,7 @@ function install_mise_tools() {
   copy_to_home_dir "${1}" .config/mise/config.toml
   try su - "${PRIMARY_USER}" -c "curl https://mise.run | sh"
   try su - "${PRIMARY_USER}" -c "mise settings ruby.compile=false && GITHUB_TOKEN=\$(cat /run/secrets/github_token) mise install"
-  try su - "${PRIMARY_USER}" -c "echo \"export PATH=~/.local/share/mise/shims:\$PATH\" >> ~/.bash_profile"
+  try su - "${PRIMARY_USER}" -c "echo 'export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"' >> ~/.bashrc"
   try su - "${PRIMARY_USER}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
 }
 
