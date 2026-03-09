@@ -26,7 +26,7 @@ function PrefixToSystemAndCurrentPath {
 
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-scoop install git
+scoop install git gpg
 scoop bucket add extras
 scoop install mise extras/vcredist2022
 
