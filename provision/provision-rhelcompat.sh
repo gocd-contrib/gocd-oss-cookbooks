@@ -153,25 +153,6 @@ function upgrade_os_packages() {
 }
 
 function cache_gocd_dependencies() {
-  if [ "$(how_much_memory_in_gb)" -lt 6 ]; then
-    yellowalert "                                                                                "
-    yellowalert "////////////////////////////////////////////////////////////////////////////////"
-    yellowalert "////                                Warning!                                ////"
-    yellowalert "////////////////////////////////////////////////////////////////////////////////"
-    yellowalert "                                                                                "
-    yellowalert "Your Docker container has less than 6GB of RAM allocated. Building the GoCD     "
-    yellowalert "codebase may intermittently fail. For best results, allocate AT LEAST 4G of RAM "
-    yellowalert "to this container.                                                              "
-    yellowalert "                                                                                "
-    yellowalert "No, really. In fact, I'd recommend 6G to be safe.                               "
-    yellowalert "                                                                                "
-    yellowalert "As Biggie once said: \"Mo' RAM, fewer problems...\"                               "
-    yellowalert "                                                                                "
-    yellowalert "  (he didn't really say that)                                                   "
-    yellowalert "                                                                                "
-    printf "\n"
-  fi
-
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
               mise install && \

@@ -103,10 +103,6 @@ function copy_to_home_dir() {
   try chown go:go -R "$homedir"
 }
 
-function how_much_memory_in_gb() {
-  free -t -g | grep -F Total: | awk '{print $2}'
-}
-
 # output and control
 
 function yell() { redalert "$0: $*" >&2; }
