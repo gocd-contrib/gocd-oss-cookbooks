@@ -22,7 +22,7 @@ env:
 jobs:
   windows:
     name: ${{ matrix.distro }}
-    runs-on: matrix.distro
+    runs-on: ${{ matrix.distro }}
     strategy:
       fail-fast: false
       matrix:
