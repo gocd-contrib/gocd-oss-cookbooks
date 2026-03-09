@@ -17,7 +17,6 @@ for arg in $@; do
 done
 
 NSIS_VERSION=3.11-1.el9 # https://nsis.sourceforge.io/Docs/AppendixF.html / https://github.com/gocd/nsis-rpm/tree/gh-pages/rpms
-ANT_VERSION=1.10.15     # https://ant.apache.org/bindownload.cgi
 P4_VERSION=25.2         # https://cdist2.perforce.com/perforce/
 P4D_VERSION=25.2
 DOCKER_VERSION=29       # https://download.docker.com/linux/rhel/10/x86_64/stable/Packages/
@@ -43,7 +42,6 @@ function provision() {
   step install_scm_tools
   step install_mise_tools "mise-rhelcompat.toml"
   step install_awscli_mimetypes
-  step install_ant "$ANT_VERSION"
 
   step install_installer_tools
 

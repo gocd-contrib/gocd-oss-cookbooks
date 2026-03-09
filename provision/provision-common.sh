@@ -47,14 +47,6 @@ function install_mise_tools() {
   try su - "${PRIMARY_USER:-go}" -c "rm -rf /tmp/tmp*" # Remove mise installer mktemp stuff
 }
 
-function install_ant() {
-  local version="$1"
-  try mkdir -p /opt/local/
-  try curl --silent --fail --location https://dlcdn.apache.org/ant/binaries/apache-ant-${version}-bin.zip --output /usr/local/src/apache-ant-${version}-bin.zip
-  try unzip -q /usr/local/src/apache-ant-${version}-bin.zip -d /opt/local
-  try ln -sf /opt/local/apache-ant-${version}/bin/ant /usr/local/bin/ant
-}
-
 # helpers
 
 function print_versions_summary() {
