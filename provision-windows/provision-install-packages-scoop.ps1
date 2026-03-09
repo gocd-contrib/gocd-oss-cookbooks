@@ -1,4 +1,3 @@
-$RUBY_VERSION='4.0'
 $P4_VERSION='25.2'
 
 # Copy over configs
@@ -27,7 +26,7 @@ function PrefixToSystemAndCurrentPath {
 
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-scoop install git gpg msys2 ruby@$RUBY_VERSION
+scoop install git gpg msys2 ruby
 msys2
 ridk install 2 3 # Update packages and install development toolchain
 
