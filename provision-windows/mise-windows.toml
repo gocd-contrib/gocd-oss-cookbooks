@@ -1,6 +1,5 @@
 [tools]
 "java" = "temurin-25"
-"ruby" = "4.0"
 "node" = "24"
 
 "aqua:yarnpkg/berry" = "4"

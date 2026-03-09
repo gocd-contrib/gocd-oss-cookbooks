@@ -1,3 +1,4 @@
+$RUBY_VERSION='4.0'
 $P4_VERSION='25.2'
 
 # Copy over configs
@@ -26,15 +27,13 @@ function PrefixToSystemAndCurrentPath {
 
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-scoop install git gpg
+scoop install git gpg msys2 ruby@$RUBY_VERSION
+ridk install 2 3 # Update packages and install development toolchain
+
 scoop bucket add extras
 scoop install mise extras/vcredist2022
-
 $env:CLICOLOR_FORCE = 1
-mise settings ruby.compile=false
 mise install
-
-ridk install 2 3 # Update packages and install development toolchain
 
 # install p4 client and p4d / helix-core-server
 New-Item "${env:ProgramFiles}\\Perforce\\bin\\" -ItemType Directory | Out-Null
