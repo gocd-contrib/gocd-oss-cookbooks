@@ -1,16 +1,18 @@
 $P4_VERSION='25.2'
 
 # Copy over configs
-New-Item "${env:USERPROFILE}\.gradle" -ItemType Directory | Out-Null
-New-Item "${env:USERPROFILE}\.m2" -ItemType Directory | Out-Null
-New-Item "${env:USERPROFILE}\.bundle" -ItemType Directory | Out-Null
+New-Item "${env:USERPROFILE}\.config\mise" -ItemType Directory | Out-Null
+New-Item "${env:USERPROFILE}\.gradle"      -ItemType Directory | Out-Null
+New-Item "${env:USERPROFILE}\.m2"          -ItemType Directory | Out-Null
+New-Item "${env:USERPROFILE}\.bundle"      -ItemType Directory | Out-Null
 
-Copy-Item "$PSScriptroot\gitconfig-windows"   "${env:USERPROFILE}\.gitconfig"
-Copy-Item "$PSScriptroot\init.gradle"         "${env:USERPROFILE}\.gradle\init.gradle"
-Copy-Item "$PSScriptroot\maven-settings.xml"  "${env:USERPROFILE}\.m2\settings.xml"
-Copy-Item "$PSScriptroot\bundle-config"       "${env:USERPROFILE}\.bundle\config"
-Copy-Item "$PSScriptroot\npmrc"               "${env:USERPROFILE}\.npmrc"
-Copy-Item "$PSScriptroot\yarnrc.yml"          "${env:USERPROFILE}\.yarnrc.yml"
+Copy-Item "$PSScriptroot\gitconfig-windows"  "${env:USERPROFILE}\.gitconfig"
+Copy-Item "$PSScriptroot\mise-windows.toml"  "${env:USERPROFILE}\.config\mise\config.toml"
+Copy-Item "$PSScriptroot\init.gradle"        "${env:USERPROFILE}\.gradle\init.gradle"
+Copy-Item "$PSScriptroot\maven-settings.xml" "${env:USERPROFILE}\.m2\settings.xml"
+Copy-Item "$PSScriptroot\bundle-config"      "${env:USERPROFILE}\.bundle\config"
+Copy-Item "$PSScriptroot\npmrc"              "${env:USERPROFILE}\.npmrc"
+Copy-Item "$PSScriptroot\yarnrc.yml"         "${env:USERPROFILE}\.yarnrc.yml"
 
 function PrefixToSystemAndCurrentPath {
     param (
@@ -26,7 +28,6 @@ function PrefixToSystemAndCurrentPath {
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 scoop install git mise
 
-Copy-Item "$PSScriptroot\mise-windows.toml" "${env:USERPROFILE}\.config\mise\config.toml"
 mise install
 mise settings ruby.compile=false
 $env:GITHUB_TOKEN = Get-Content C:\ProgramData\Docker\secrets\github_token
