@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 #####################################################################
 # These are functions shared by both CentOS and Ubuntu provisioners #
 #####################################################################
@@ -21,7 +19,7 @@ function add_gocd_user() {
 }
 
 function setup_nexus_configs() {
-  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+  if [ "${SKIP_INTERNAL_CONFIG:-}" != "yes" ]; then
     copy_to_home_dir init.gradle   .gradle/init.gradle
     copy_to_home_dir settings.xml  .m2/settings.xml
     copy_to_home_dir bundle-config .bundle/config
@@ -31,7 +29,7 @@ function setup_nexus_configs() {
 }
 
 function setup_git_config() {
-  if [ "${SKIP_INTERNAL_CONFIG}" != "yes" ]; then
+  if [ "${SKIP_INTERNAL_CONFIG:-}" != "yes" ]; then
     copy_to_home_dir gitconfig .gitconfig
   fi
 }
@@ -40,15 +38,14 @@ function setup_git_config() {
 function install_mise_tools() {
   copy_to_home_dir "${1}" .config/mise/config.toml
   try su - "${PRIMARY_USER}" -c "curl https://mise.run | sh"
-  try su - "${PRIMARY_USER}" -c "mise settings ruby.compile=false && GITHUB_TOKEN=\$(cat /run/secrets/github_token) mise install"
-  try su - "${PRIMARY_USER}" -c "echo 'export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"' >> ~/.bashrc"
+  try su - "${PRIMARY_USER}" -c "mise settings ruby.compile=false && GITHUB_TOKEN=\$(cat /run/secrets/github_token) CLICOLOR_FORCE=1 mise install"
+  try su - "${PRIMARY_USER}" -c "echo 'export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"' | tee -a ~/.bashrc ~/.profile"
   try su - "${PRIMARY_USER}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
 }
 
 # helpers
 
 function print_versions_summary() {
-  try su - "${PRIMARY_USER}" -c "mise ls"
   green "$(try su - "${PRIMARY_USER}" <<-EOF
 printf "\n"
 printf "//////////////////////////////\n"
@@ -56,25 +53,33 @@ printf "// Package versions summary //\n"
 printf "//////////////////////////////\n"
 printf "\n"
 
+printf "mise summary:\n"
+mise list | pr -to 2
+printf "\n"
+
 printf "git version:\n"
 git --version | pr -to 2
-printf "\n"
-
-printf "ruby version:\n"
-ruby --version | pr -to 2
-printf "\n"
-
-printf "node version:\n"
-node --version | pr -to 2
 printf "\n"
 
 printf "aws version:\n"
 aws --version | pr -to 2
 printf "\n"
 
-printf "Installed JDKs:\n"
-mise list java
+printf "ruby version:\n"
+ruby --version | pr -to 2
 printf "\n"
+
+if type node &> /dev/null; then
+  printf "node version:\n"
+  node --version | pr -to 2
+  printf "\n"
+fi
+
+if type yarn &> /dev/null; then
+  printf "yarn version:\n"
+  yarn --version | pr -to 2
+  printf "\n"
+fi
 
 if type gauge &> /dev/null; then
   printf "gauge version:\n"
