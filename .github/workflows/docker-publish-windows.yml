@@ -14,7 +14,7 @@ on:
 
 env:
   REGISTRY_IMAGE: gocddev/gocd-dev-build
-  IMAGE_VERSION: "3.27"
+  IMAGE_VERSION: "v3.27"
 
 jobs:
   windows:
@@ -34,7 +34,7 @@ jobs:
           flavor: |
             prefix=windows2022-
           tags: |
-            type=semver,pattern={{version}},value=${{ env.IMAGE_VERSION }}
+            type=raw,value=${{ env.IMAGE_VERSION }}
 
       - name: Build and push
         id: build
