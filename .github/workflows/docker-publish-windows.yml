@@ -45,7 +45,7 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
-            type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}
+            type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}-
             type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Build and push

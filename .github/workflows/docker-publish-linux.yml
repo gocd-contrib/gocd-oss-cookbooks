@@ -49,7 +49,7 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
-            type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}
+            type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}-
             type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Set up Docker Buildx
@@ -128,6 +128,8 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
+            type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}-
+            type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Login to Docker Hub
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
