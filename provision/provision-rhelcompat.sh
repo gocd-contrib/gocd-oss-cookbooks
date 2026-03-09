@@ -77,11 +77,7 @@ function install_basic_utils() {
 
 function install_native_build_packages() {
   # Core stuff
-  try dnf -y install autoconf automake make patch
-
-  # Ruby-build dependencies for Mise: https://github.com/rbenv/ruby-build/wiki#rhelcentos
-  # Also see https://docs.ruby-lang.org/en/3.4/contributing/building_ruby_md.html
-  try dnf -y install autoconf gcc patch bzip2 openssl-devel libyaml-devel zlib-devel
+  try dnf -y install autoconf automake make patch gcc
 }
 
 function install_scm_tools() {
