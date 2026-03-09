@@ -27,7 +27,7 @@ function PrefixToSystemAndCurrentPath {
 
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-scoop install git msys2 ruby
+scoop install git mercurial sliksvn msys2 ruby
 msys2 # initialize msys2
 ridk install 2 3 # Update packages and install development toolchain
 
