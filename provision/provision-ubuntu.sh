@@ -8,7 +8,6 @@ source "$(dirname $0)/provision-common.sh"
 function provision() {
   export DEBIAN_FRONTEND=noninteractive
 
-  step setup_external_repos
   step upgrade_os_packages
 
   step install_basic_utils
@@ -27,15 +26,8 @@ function provision() {
   step clean
 }
 
-function update_apt_cache() {
-  try apt-get update
-}
-
-function setup_external_repos() {
-  update_apt_cache
-}
-
 function upgrade_os_packages() {
+  try apt-get update
   try apt-get upgrade -y
 }
 
@@ -63,6 +55,7 @@ function install_awscli_mimetypes() {
 function clean() {
   try apt-get clean
   try rm -rf /usr/local/src/*
+  try rm -rf /${PRIMARY_USER}/.cache
 }
 
 provision

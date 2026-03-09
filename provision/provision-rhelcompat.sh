@@ -146,6 +146,7 @@ function clean() {
   try dnf clean all
   try rm -rf /var/cache/dnf
   try rm -rf /usr/local/src/*
+  try rm -rf /${PRIMARY_USER}/.cache
 }
 
 function upgrade_os_packages() {

@@ -43,8 +43,6 @@ function install_mise_tools() {
   try su - "${PRIMARY_USER}" -c "mise settings ruby.compile=false && GITHUB_TOKEN=\$(cat /run/secrets/github_token) mise install"
   try su - "${PRIMARY_USER}" -c "echo \"export PATH=~/.local/share/mise/shims:\$PATH\" >> ~/.bash_profile"
   try su - "${PRIMARY_USER}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
-
-  try su - "${PRIMARY_USER}" -c "rm -rf /tmp/tmp*" # Remove mise installer mktemp stuff
 }
 
 # helpers
