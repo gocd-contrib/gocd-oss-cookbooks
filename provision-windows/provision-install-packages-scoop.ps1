@@ -7,7 +7,7 @@ New-Item "${env:USERPROFILE}\.bundle" -ItemType Directory | Out-Null
 
 Copy-Item "$PSScriptroot\gitconfig-windows"   "${env:USERPROFILE}\.gitconfig"
 Copy-Item "$PSScriptroot\init.gradle"         "${env:USERPROFILE}\.gradle\init.gradle"
-Copy-Item "$PSScriptroot\settings.xml"        "${env:USERPROFILE}\.m2\settings.xml"
+Copy-Item "$PSScriptroot\maven-settings.xml"  "${env:USERPROFILE}\.m2\settings.xml"
 Copy-Item "$PSScriptroot\bundle-config"       "${env:USERPROFILE}\.bundle\config"
 Copy-Item "$PSScriptroot\npmrc"               "${env:USERPROFILE}\.npmrc"
 Copy-Item "$PSScriptroot\yarnrc.yml"          "${env:USERPROFILE}\.yarnrc.yml"
