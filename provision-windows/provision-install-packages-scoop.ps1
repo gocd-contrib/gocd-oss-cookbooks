@@ -52,6 +52,7 @@ Remove-Item "${env:TEMP}\\nant.zip" -Force
 
 # Install chrome
 scoop install extras/googlechrome
+[Environment]::SetEnvironmentVariable("CHROME_BIN", [System.Environment]::GetEnvironmentVariable("CHROME_EXECUTABLE", [EnvironmentVariableTarget]::User), [EnvironmentVariableTarget]::User)
 pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
 Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
