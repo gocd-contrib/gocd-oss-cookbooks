@@ -4,13 +4,13 @@ on:
   push:
     branches: [master]
     paths-ignore:
-      - '*windows*'
       - '**/*windows*'
+      - '**/*windows*/*'
   pull_request:
     branches: [master]
     paths-ignore:
-      - '*windows*'
       - '**/*windows*'
+      - '**/*windows*/*'
 
 env:
   REGISTRY_IMAGE: gocddev/gocd-dev-build

@@ -4,13 +4,13 @@ on:
   push:
     branches: [master]
     paths-ignore:
-      - '*linux*'
       - '**/*linux*'
+      - '**/*linux*/*'
   pull_request:
     branches: [master]
     paths-ignore:
-      - '*linux*'
       - '**/*linux*'
+      - '**/*linux*/*'
 
 env:
   REGISTRY_IMAGE: gocddev/gocd-dev-build
