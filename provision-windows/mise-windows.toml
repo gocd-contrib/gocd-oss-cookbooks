@@ -2,8 +2,7 @@
 "java" = "temurin-25"
 "node" = { version = "24", postinstall = "corepack enable" }
 
-"aqua:apache/maven" = "3"
-"aqua:apache/ant" = "1"
+"ant" = "1"
 
 # Bootstrapping
-"github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }
+"github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent.exe" }

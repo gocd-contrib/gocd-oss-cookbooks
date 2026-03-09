@@ -3,8 +3,8 @@
 "ruby" = "4.0"
 "node" = { version = "24", postinstall = "corepack enable" }
 
-"aqua:apache/maven" = "3"
-"aqua:apache/ant" = "1"
+"maven" = "3"
+"ant" = "1"
 
 # Test/release tools
 "aqua:getgauge/gauge" = { version = "1", postinstall = "gauge install ruby; gauge install html-report; gauge install screenshot" }
