@@ -31,10 +31,9 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: ${{ env.REGISTRY_IMAGE }}
-          flavor: |
-            latest=true
-            prefix=windows2022-
+          flavor: prefix=windows2022-
           tags: |
+            type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
 
       - name: Build and push

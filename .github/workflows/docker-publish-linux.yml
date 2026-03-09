@@ -42,10 +42,9 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: ${{ env.REGISTRY_IMAGE }}
-          flavor: |
-            latest=true
-            prefix=${{ matrix.distro }}-
+          flavor: prefix=${{ matrix.distro }}-
           tags: |
+            type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
 
       - name: Set up Docker Buildx
@@ -120,10 +119,9 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: ${{ env.REGISTRY_IMAGE }}
-          flavor: |
-            latest=true
-            prefix=${{ matrix.distro }}-
+          flavor: prefix=${{ matrix.distro }}-
           tags: |
+            type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
 
       - name: Login to Docker Hub
