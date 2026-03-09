@@ -26,7 +26,7 @@ function PrefixToSystemAndCurrentPath {
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 scoop install git mise
 
-Copy-Item "$PSScriptroot\mise-windows.yml" "${env:USERPROFILE}\.config\mise\config.toml"
+Copy-Item "$PSScriptroot\mise-windows.toml" "${env:USERPROFILE}\.config\mise\config.toml"
 mise install
 mise settings ruby.compile=false
 $env:GITHUB_TOKEN = Get-Content C:\ProgramData\Docker\secrets\github_token
