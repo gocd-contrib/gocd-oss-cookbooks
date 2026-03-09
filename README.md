@@ -3,7 +3,8 @@
 - `gocddev/gocd-dev-build:dind-<github_tag>`
 - `gocddev/gocd-dev-build:rhelcompat-10-<github_tag>`
 - `gocddev/gocd-dev-build:ubuntu-24-04-<github_tag>`
-- `gocddev/gocd-dev-build:windows2022-<github_tag>`
+- `gocddev/gocd-dev-build:windows-2022-<github_tag>`
+- `gocddev/gocd-dev-build:windows-2025-<github_tag>`
 
 To build a new version of the images, push a new version tag to this repository.
 
@@ -12,7 +13,8 @@ To build a new version of the images, push a new version tag to this repository.
 - `docker build . --pull -t gocddev/gocd-dev-build:dind-SNAPSHOT -f linux-dind.Dockerfile`
 - `docker build . --pull -t gocddev/gocd-dev-build:rhelcompat-10-SNAPSHOT -f linux-rhelcompat-10.Dockerfile`
 - `docker build . --pull -t gocddev/gocd-dev-build:ubuntu-24-04-SNAPSHOT -f linux-ubuntu-24-04.Dockerfile`
-- `docker build . --pull -t gocddev/gocd-dev-build:windows2022-SNAPSHOT -f windowsservercore.Dockerfile`
+- `docker build . --pull --build-arg EDITION=ltsc2022 -t gocddev/gocd-dev-build:windows-2022-SNAPSHOT -f windowsservercore.Dockerfile`
+- `docker build . --pull --build-arg EDITION=ltsc2025 -t gocddev/gocd-dev-build:windows-2025-SNAPSHOT -f windowsservercore.Dockerfile`
 
 
 # Publish

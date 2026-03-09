@@ -26,12 +26,12 @@ function PrefixToSystemAndCurrentPath {
 
 # install scoop
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
-scoop install git mise
+scoop install git
+scoop bucket add extras
+scoop install mise
 
-mise install
-mise settings ruby.compile=false
-$env:GITHUB_TOKEN = Get-Content C:\ProgramData\Docker\secrets\github_token
 $env:CLICOLOR_FORCE = 1
+mise settings ruby.compile=false
 mise install
 
 ridk install 2 3 # Update packages and install development toolchain
@@ -49,7 +49,6 @@ PrefixToSystemAndCurrentPath("C:\\tools\\nant-${NANT_VERSION}\\bin")
 Remove-Item "${env:TEMP}\\nant.zip" -Force
 
 # Install chrome
-scoop bucket add extras
 scoop install extras/googlechrome
 pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 

@@ -11,10 +11,13 @@ on:
     paths-ignore:
       - '**/*windows*'
       - '**/*windows*/*'
+  schedule:
+    - cron: '0 2 * * FRI' # Run every Friday at 2:00 AM UTC
+  workflow_dispatch:      # Allow manual trigger
 
 env:
   REGISTRY_IMAGE: gocddev/gocd-dev-build
-  IMAGE_VERSION: "v3.26"
+  IMAGE_VERSION: "v3.27"
 
 jobs:
   linux-build:
@@ -46,6 +49,8 @@ jobs:
           tags: |
             type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
+            type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}
+            type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0

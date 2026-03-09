@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/powershell:lts-windowsservercore-ltsc2022
+ARG EDITION
+FROM mcr.microsoft.com/powershell:lts-windowsservercore-$EDITION
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 ENV TMP=C:\\tmp \

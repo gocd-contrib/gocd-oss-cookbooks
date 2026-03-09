@@ -11,6 +11,9 @@ on:
     paths-ignore:
       - '**/*linux*'
       - '**/*linux*/*'
+  schedule:
+    - cron: '0 2 * * FRI' # Run every Friday at 2:00 AM UTC
+  workflow_dispatch:      # Allow manual trigger
 
 env:
   REGISTRY_IMAGE: gocddev/gocd-dev-build
@@ -18,7 +21,14 @@ env:
 
 jobs:
   windows:
-    runs-on: windows-2022
+    name: ${{ matrix.distro }}
+    runs-on: matrix.distro
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { distro: windows-2022, edition: ltsc2022 }
+          - { distro: windows-2025, edition: ltsc2025 }
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b # v2.15.0
@@ -31,10 +41,12 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: ${{ env.REGISTRY_IMAGE }}
-          flavor: prefix=windows2022-
+          flavor: prefix=${{ matrix.distro }}-
           tags: |
             type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
+            type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}
+            type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Build and push
         id: build
