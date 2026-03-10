@@ -53,22 +53,19 @@ $env:CLICOLOR_FORCE = 1
 mise install --yes
 mise settings auto_install=false
 SetUserEnvironmentVariable "JAVA_HOME" (mise where java)
-PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\\mise\\shims"
-Write-Host "${env:LOCALAPPDATA}"
-Write-Host "${env:LOCALAPPDATA}\\mise\\shims"
+PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\mise\shims"
 Write-Host "${env:Path}"
-Write-Host [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
 Write-Host "Installing additional non-managed tools..."
 # Install nant
-Invoke-WebRequest https://onboardcloud.dl.sourceforge.net/project/nant/nant/${NANT_VERSION}/nant-${NANT_VERSION}-bin.zip?viasf=1 -Outfile "${env:TEMP}\\nant.zip"
-Expand-Archive -Path "${env:TEMP}\\nant.zip" -DestinationPath "C:\\tools"
-PrefixToUserAndCurrentPath "C:\\tools\\nant-${NANT_VERSION}\\bin"
-Remove-Item "${env:TEMP}\\nant.zip" -Force
+Invoke-WebRequest https://onboardcloud.dl.sourceforge.net/project/nant/nant/${NANT_VERSION}/nant-${NANT_VERSION}-bin.zip?viasf=1 -Outfile "${env:TEMP}\nant.zip"
+Expand-Archive -Path "${env:TEMP}\nant.zip" -DestinationPath "C:\tools"
+PrefixToUserAndCurrentPath "C:\tools\nant-${NANT_VERSION}\bin"
+Remove-Item "${env:TEMP}\nant.zip" -Force
 # install p4 client and p4d / helix-core-server
-New-Item "C:\\tools\\Perforce\\bin" -ItemType Directory | Out-Null
-Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4.exe -Outfile "C:\\tools\\Perforce\\bin\\p4.exe"
-Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4d.exe -Outfile "C:\\tools\\Perforce\\bin\\p4d.exe"
-PrefixToUserAndCurrentPath "C:\\tools\\Perforce\\bin"
+New-Item "C:\tools\Perforce\bin" -ItemType Directory | Out-Null
+Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4.exe -Outfile "C:\tools\Perforce\bin\p4.exe"
+Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4d.exe -Outfile "C:\tools\Perforce\bin\p4d.exe"
+PrefixToUserAndCurrentPath "C:\tools\Perforce\bin"
 
 Write-Host "Installing chrome..."
 scoop install extras/googlechrome chromedriver
@@ -82,6 +79,7 @@ Write-Host "Initializing Gradle cache for gocd..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
 mise install --yes
+Write-Host "${env:Path}"
 ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace --no-daemon
 Write-Host "Cleaning up entire gocd clone..."
 ./gradlew clean --no-build-cache --quiet --no-daemon
