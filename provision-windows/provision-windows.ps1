@@ -78,7 +78,8 @@ Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
 Write-Host "Initializing Gradle cache for gocd..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
-./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --no-daemon
+mise install
+./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace --no-daemon
 Write-Host "Cleaning up entire gocd clone..."
 cd \
 cmd.exe /c "rmdir /s /q C:\\gocd"
