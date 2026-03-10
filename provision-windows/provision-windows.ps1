@@ -78,8 +78,8 @@ Write-Host "Initializing Gradle cache for gocd..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
 mise install --yes
-$env:YARN_COMMAND = (mise which yarn)
-Write-Host "Using yarn: $env:YARN_COMMAND"
+$env:GOCD_YARN_COMMAND = (mise which yarn)
+Write-Host "Using yarn: $env:GOCD_YARN_COMMAND"
 ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace --no-daemon
 Write-Host "Cleaning up entire gocd clone..."
 ./gradlew clean --no-build-cache --quiet --no-daemon
