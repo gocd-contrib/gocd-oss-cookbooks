@@ -80,7 +80,8 @@ git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
 mise trust
 mise install
-./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace --no-daemon
+./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace
+./gradlew --stop
 Write-Host "Cleaning up entire gocd clone..."
 cd \
 cmd.exe /c "rmdir /s /q C:\\gocd"
