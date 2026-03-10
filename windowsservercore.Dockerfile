@@ -14,7 +14,7 @@ ENV ProgramFiles="C:\Program Files" `
 COPY --from=powershell "$ProgramFiles\\PowerShell\\latest" "$ProgramFiles\\PowerShell\\latest"
 RUN setx /M PATH "%ProgramFiles%\PowerShell\latest;%PATH%;"
 
-ARG PROVISION_SCRIPTS_DIR="C:\\Users\\ContainerAdministrator\\provision"
+ARG PROVISION_SCRIPTS_DIR="C:\Users\ContainerAdministrator\provision"
 COPY provision $PROVISION_SCRIPTS_DIR
 COPY provision-windows $PROVISION_SCRIPTS_DIR
 
