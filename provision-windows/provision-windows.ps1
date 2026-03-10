@@ -62,6 +62,7 @@ Expand-Archive -Path "${env:TEMP}\\nant.zip" -DestinationPath "C:\\tools"
 PrefixToUserAndCurrentPath "C:\\tools\\nant-${NANT_VERSION}\\bin"
 Remove-Item "${env:TEMP}\\nant.zip" -Force
 # install p4 client and p4d / helix-core-server
+New-Item "C:\\tools\\Perforce\\bin" -ItemType Directory | Out-Null
 Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4.exe -Outfile "C:\\tools\\Perforce\\bin\\p4.exe"
 Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4d.exe -Outfile "C:\\tools\\Perforce\\bin\\p4d.exe"
 PrefixToUserAndCurrentPath "C:\\tools\\Perforce\\bin"
