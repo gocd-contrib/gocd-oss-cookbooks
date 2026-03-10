@@ -54,7 +54,10 @@ mise install --yes
 mise settings auto_install=false
 SetUserEnvironmentVariable "JAVA_HOME" (mise where java)
 PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\\mise\\shims"
-
+Write-Host "${env:LOCALAPPDATA}"
+Write-Host "${env:LOCALAPPDATA}\\mise\\shims"
+Write-Host "${env:Path}"
+Write-Host [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
 Write-Host "Installing additional non-managed tools..."
 # Install nant
 Invoke-WebRequest https://onboardcloud.dl.sourceforge.net/project/nant/nant/${NANT_VERSION}/nant-${NANT_VERSION}-bin.zip?viasf=1 -Outfile "${env:TEMP}\\nant.zip"
