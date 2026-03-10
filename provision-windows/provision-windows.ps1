@@ -81,6 +81,7 @@ cd C:\\gocd
 mise install --yes
 ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace --no-daemon
 Write-Host "Cleaning up entire gocd clone..."
+./gradlew clean --no-build-cache --quiet --no-daemon
 cd \
 cmd.exe /c "rmdir /s /q C:\\gocd"
 
