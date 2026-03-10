@@ -4,8 +4,8 @@ FROM mcr.microsoft.com/powershell:lts-windowsservercore-ltsc2022 as powershell
 FROM mcr.microsoft.com/windows/servercore:$EDITION
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
-ENV TMP=C:\\tmp `
-    TEMP=C:\\tmp
+ENV TMP=C:\tmp `
+    TEMP=C:\tmp
 
 # See https://github.com/PowerShell/PowerShell-Docker/blob/master/release/7-6/windowsservercore2022/docker/Dockerfile
 ENV ProgramFiles="C:\Program Files" `
