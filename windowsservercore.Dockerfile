@@ -11,7 +11,7 @@ ENV TMP=C:\tmp `
 ENV ProgramFiles="C:\Program Files" `
     PSModuleAnalysisCachePath="C:\Users\Public\AppData\Local\Microsoft\Windows\PowerShell\docker\ModuleAnalysisCache" `
     POWERSHELL_TELEMETRY_OPTOUT="1"
-COPY --from=powershell "$ProgramFiles\\PowerShell\\latest" "$ProgramFiles\\PowerShell\\latest"
+COPY --from=powershell "$ProgramFiles\PowerShell\latest" "$ProgramFiles\PowerShell\latest"
 RUN setx /M PATH "%ProgramFiles%\PowerShell\latest;%PATH%;"
 
 ARG PROVISION_SCRIPTS_DIR="C:\Users\ContainerAdministrator\provision"
