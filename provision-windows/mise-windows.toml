@@ -1,8 +1,5 @@
 [tools]
-"java" = "temurin-25"
-"node" = { version = "24", postinstall = "corepack enable" }
-
-"ant" = "1"
+"java" = "microsoft-25"
 
 # Bootstrapping
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent.exe" }
