@@ -15,6 +15,9 @@
 "aqua:regclient/regclient/regctl" = "latest"
 "aqua:aws/aws-cli" = { version = "latest", symlink_bins = true }
 
+# Trial installers / test drive
+"go" = "1"
+
 # Bootstrapping
 "aqua:krallin/tini" = "latest"
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }
