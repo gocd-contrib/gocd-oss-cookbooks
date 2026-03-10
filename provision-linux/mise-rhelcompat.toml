@@ -1,10 +1,12 @@
 [tools]
 "java" = "temurin-25"
-
-# Functional test/release tools
 "ruby" = "4.0"
 "node" = { version = "24", postinstall = "corepack enable" }
+
 "maven" = "3"
+"ant" = "1"
+
+# Test/release tools
 "aqua:getgauge/gauge" = { version = "1", postinstall = "gauge install ruby; gauge install html-report; gauge install screenshot" }
 "aqua:regclient/regclient/regctl" = "latest"
 "aqua:aws/aws-cli" = { version = "latest", symlink_bins = true }
