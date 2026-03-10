@@ -68,7 +68,7 @@ Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4
 PrefixToUserAndCurrentPath "C:\\tools\\Perforce\\bin"
 
 Write-Host "Installing chrome..."
-scoop install extras/googlechrome
+scoop install extras/googlechrome extras/chromedriver
 SetUserEnvironmentVariable "CHROME_BIN" $env:CHROME_EXECUTABLE
 pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
