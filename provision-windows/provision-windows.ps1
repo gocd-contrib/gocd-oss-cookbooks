@@ -1,0 +1,87 @@
+$PSNativeCommandUseErrorActionPreference = $true
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+
+Write-Host "Installing packages..."
+$P4_VERSION='25.2'
+$NANT_VERSION='0.92'
+
+# Copy over configs
+New-Item "${env:USERPROFILE}\.config\mise" -ItemType Directory | Out-Null
+New-Item "${env:USERPROFILE}\.gradle"      -ItemType Directory | Out-Null
+New-Item "${env:USERPROFILE}\.m2"          -ItemType Directory | Out-Null
+New-Item "${env:USERPROFILE}\.bundle"      -ItemType Directory | Out-Null
+
+Copy-Item "$PSScriptroot\gitconfig-windows"  "${env:USERPROFILE}\.gitconfig"
+Copy-Item "$PSScriptroot\mise-windows.toml"  "${env:USERPROFILE}\.config\mise\config.toml"
+Copy-Item "$PSScriptroot\init.gradle"        "${env:USERPROFILE}\.gradle\init.gradle"
+Copy-Item "$PSScriptroot\maven-settings.xml" "${env:USERPROFILE}\.m2\settings.xml"
+Copy-Item "$PSScriptroot\bundle-config"      "${env:USERPROFILE}\.bundle\config"
+Copy-Item "$PSScriptroot\npmrc"              "${env:USERPROFILE}\.npmrc"
+Copy-Item "$PSScriptroot\yarnrc.yml"         "${env:USERPROFILE}\.yarnrc.yml"
+
+function PrefixToUserAndCurrentPath {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$PathPrefix
+    )
+    [Environment]::SetEnvironmentVariable("Path", "$PathPrefix;" + [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User), [EnvironmentVariableTarget]::User)
+    $env:Path = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::Machine) + ";" + [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
+}
+
+function SetUserEnvironmentVariable {
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Name,
+        [Parameter(Mandatory=$true)]
+        [string]$Value
+    )
+    Set-Item -Path "Env:$Name" -Value $value
+    [Environment]::SetEnvironmentVariable($Name, $Value, [EnvironmentVariableTarget]::User)
+}
+
+Write-Host "Installing scoop tools..."
+iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+scoop install git mercurial sliksvn msys2 ruby
+msys2 # initialize msys2
+ridk install 2 3 # Update packages and install development toolchain
+
+Write-Host "Installing mise tools..."
+scoop bucket add extras
+scoop install mise extras/vcredist2022
+$env:CLICOLOR_FORCE = 1
+mise install
+mise settings auto_install=false
+SetUserEnvironmentVariable("JAVA_HOME", (mise where java))
+PrefixToUserAndCurrentPath("${env:LOCALAPPDATA}\\mise\\shims")
+
+Write-Host "Installing additional non-managed tools..."
+# Install nant
+Invoke-WebRequest https://onboardcloud.dl.sourceforge.net/project/nant/nant/${NANT_VERSION}/nant-${NANT_VERSION}-bin.zip?viasf=1 -Outfile "${env:TEMP}\\nant.zip"
+Expand-Archive -Path "${env:TEMP}\\nant.zip" -DestinationPath "C:\\tools"
+PrefixToUserAndCurrentPath("C:\\tools\\nant-${NANT_VERSION}\\bin")
+Remove-Item "${env:TEMP}\\nant.zip" -Force
+# install p4 client and p4d / helix-core-server
+Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4.exe -Outfile "C:\\tools\\Perforce\\bin\\p4.exe"
+Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4d.exe -Outfile "C:\\tools\\Perforce\\bin\\p4d.exe"
+PrefixToUserAndCurrentPath("C:\\tools\\Perforce\\bin")
+
+Write-Host "Installing chrome..."
+scoop install extras/googlechrome
+SetUserEnvironmentVariable("CHROME_BIN", $env:CHROME_EXECUTABLE)
+pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
+
+Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
+
+# Prime local caches for gocd build
+Write-Host "Initializing Gradle cache for gocd..."
+git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
+cd C:\\gocd
+./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --no-daemon
+Write-Host "Cleaning up entire gocd clone..."
+cd \
+cmd.exe /c "rmdir /s /q C:\\gocd"
+
+New-Item C:\\go -ItemType Directory | Out-Null
+Write-Host "Cleaned."
+Write-Host "Completed provisioning (layer now exporting...)"
