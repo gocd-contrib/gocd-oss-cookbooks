@@ -154,7 +154,7 @@ function upgrade_os_packages() {
 function cache_gocd_dependencies() {
   try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
               cd /tmp/gocd && \
-              mise trust && mise install && \
+              mise install --yes && \
               ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet ${GRADLE_OPTIONS} && \
               ./gradlew --stop && \
               rm -rf /tmp/gocd"

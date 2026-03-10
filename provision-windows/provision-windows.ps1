@@ -50,7 +50,7 @@ Write-Host "Installing mise tools..."
 scoop bucket add extras
 scoop install mise extras/vcredist2022
 $env:CLICOLOR_FORCE = 1
-mise install
+mise install --yes
 mise settings auto_install=false
 SetUserEnvironmentVariable "JAVA_HOME" (mise where java)
 PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\\mise\\shims"
@@ -78,8 +78,7 @@ Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
 Write-Host "Initializing Gradle cache for gocd..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
-mise trust
-mise install
+mise install --yes
 ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace
 ./gradlew --stop
 Write-Host "Cleaning up entire gocd clone..."
