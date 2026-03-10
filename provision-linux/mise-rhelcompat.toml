@@ -1,16 +1,19 @@
 [tools]
 "java" = "temurin-25"
-"ruby" = "4.0"
 "node" = { version = "24", postinstall = "corepack enable" }
 
-"maven" = "3"
+# Unit Test tools
 "ant" = "1"
 
-# Test/release tools
+# Functional Test tools
+"ruby" = "4.0"
 "aqua:getgauge/gauge" = { version = "1", postinstall = "gauge install ruby; gauge install html-report; gauge install screenshot" }
+"github:mozilla/geckodriver" = "latest"
+
+# Release / code signing
+"maven" = "3"
 "aqua:regclient/regclient/regctl" = "latest"
 "aqua:aws/aws-cli" = { version = "latest", symlink_bins = true }
-"github:mozilla/geckodriver" = "latest"
 
 # Bootstrapping
 "aqua:krallin/tini" = "latest"
