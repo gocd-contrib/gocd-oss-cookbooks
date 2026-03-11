@@ -4,11 +4,13 @@ on:
   push:
     branches: [master]
     paths-ignore:
+      - 'README.md'
       - '**/*linux*'
       - '**/*linux*/*'
   pull_request:
     branches: [master]
     paths-ignore:
+      - 'README.md'
       - '**/*linux*'
       - '**/*linux*/*'
   schedule:
@@ -41,14 +43,13 @@ jobs:
         with:
           images: ${{ env.REGISTRY_IMAGE }}
           flavor: prefix=${{ matrix.distro }}-
-          tags: |
+          tags: | # only the first value is used on Windows at the moment
             type=raw,value=latest
             type=raw,value=${{ env.IMAGE_VERSION }}
             type=sha,prefix=${{ matrix.distro }}-${{ env.IMAGE_VERSION }}-
             type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Build and push
-        id: build
         uses: mr-smithers-excellent/docker-build-push@19d2beefef6bcdc202195fdcb9deb79a4fab5c1f # v6.8
         with:
           dockerfile: windowsservercore.Dockerfile
