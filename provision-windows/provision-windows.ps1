@@ -1,3 +1,5 @@
+#Requires -PSEdition Core
+#Requires -Version 7.3
 $PSNativeCommandUseErrorActionPreference = $true
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
@@ -40,8 +42,7 @@ function SetUserEnvironmentVariable {
     [Environment]::SetEnvironmentVariable($Name, $Value, [EnvironmentVariableTarget]::User)
 }
 
-Write-Host "Installing scoop tools..."
-iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+Write-Host "Installing tools via scoop..."
 scoop install git mercurial sliksvn msys2 ruby
 Write-Host "Installing ruby with devkit..."
 msys2 # initialize msys2
@@ -79,8 +80,8 @@ Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
 
 # Prime local caches for gocd build
 Write-Host "Initializing Gradle cache for gocd..."
-git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
-cd C:\\gocd
+git clone https://github.com/gocd/gocd --depth 1 "${env:TEMP}\gocd" --quiet
+cd "${env:TEMP}\gocd"
 mise install --yes
 $env:GOCD_YARN_COMMAND = (mise which yarn) # Override yarn command as mise activation seems to change things here
 Write-Host "Using yarn: $env:GOCD_YARN_COMMAND"
@@ -88,8 +89,6 @@ Write-Host "Using yarn: $env:GOCD_YARN_COMMAND"
 Write-Host "Cleaning up entire gocd clone..."
 ./gradlew clean --no-build-cache --quiet --no-daemon
 cd \
-cmd.exe /c "rmdir /s /q C:\\gocd"
-
-New-Item C:\\go -ItemType Directory | Out-Null
+cmd.exe /c "rmdir /s /q ${env:TEMP}\gocd"
 Write-Host "Cleaned."
 Write-Host "Completed provisioning (layer now exporting...)"
