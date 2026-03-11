@@ -43,17 +43,21 @@ function SetUserEnvironmentVariable {
 Write-Host "Installing scoop tools..."
 iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
 scoop install git mercurial sliksvn msys2 ruby
+Write-Host "Installing ruby with devkit..."
 msys2 # initialize msys2
 ridk install 2 3 # Update packages and install development toolchain
 
-Write-Host "Installing mise tools..."
+Write-Host "Installing mise..."
 scoop bucket add extras
 scoop install mise extras/vcredist2022
+
+Write-Host "Installing mise tools..."
 $env:CLICOLOR_FORCE = 1
 mise install --yes
 mise settings auto_install=false
 SetUserEnvironmentVariable "JAVA_HOME" (mise where java)
 PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\mise\shims"
+
 Write-Host "Installing additional non-managed tools..."
 # Install nant
 Invoke-WebRequest https://onboardcloud.dl.sourceforge.net/project/nant/nant/${NANT_VERSION}/nant-${NANT_VERSION}-bin.zip?viasf=1 -Outfile "${env:TEMP}\nant.zip"
@@ -68,7 +72,7 @@ PrefixToUserAndCurrentPath "C:\tools\Perforce\bin"
 
 Write-Host "Installing chrome..."
 scoop install extras/googlechrome chromedriver
-SetUserEnvironmentVariable "CHROME_BIN" $env:CHROME_EXECUTABLE
+SetUserEnvironmentVariable "CHROME_BIN" $env:CHROME_EXECUTABLE # Needed for karma-jasmine-runner only
 pwsh -File "$PSScriptroot\Add-Font.ps1" "$PSScriptroot\Fonts"
 
 Add-LocalGroupMember -Group "Administrators" -Member "ContainerAdministrator"
@@ -78,7 +82,7 @@ Write-Host "Initializing Gradle cache for gocd..."
 git clone https://github.com/gocd/gocd --depth 1 C:\\gocd --quiet
 cd C:\\gocd
 mise install --yes
-$env:GOCD_YARN_COMMAND = (mise which yarn)
+$env:GOCD_YARN_COMMAND = (mise which yarn) # Override yarn command as mise activation seems to change things here
 Write-Host "Using yarn: $env:GOCD_YARN_COMMAND"
 ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace --no-daemon
 Write-Host "Cleaning up entire gocd clone..."
