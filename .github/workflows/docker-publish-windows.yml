@@ -27,7 +27,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { distro: windows-2022, edition: ltsc2022 }
           - { distro: windows-2025, edition: ltsc2025 }
     steps:
       - name: Harden the runner (Audit all outbound calls)
