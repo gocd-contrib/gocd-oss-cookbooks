@@ -56,7 +56,8 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@19d2beefef6bcdc202195fdcb9deb79a4fab5c1f # v6.8
         with:
           dockerfile: windowsservercore.Dockerfile
-          buildArgs: "EDITION=${{ matrix.edition }}"
+          # no secrets/buildkit support for windows, so have to be content with the ephemeral read-only token being in the layer :(
+          buildArgs: "EDITION=${{ matrix.edition }}, GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}"
           labels: ${{ join(fromJSON(steps.meta.outputs.json).labels, ', ') }}
           registry: docker.io
           username: ${{ secrets.DOCKERHUB_USERNAME }}

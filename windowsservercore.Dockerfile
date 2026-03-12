@@ -9,18 +9,13 @@ ENV TMP=C:\tmp `
     POWERSHELL_UPDATECHECK=0
 VOLUME "C:\tmp"
 
-SHELL ["powershell", "-Command"]
-RUN Write-host 'Installing scoop + pwsh...'; `
-    $ErrorActionPreference = 'Stop'; `
-    $ProgressPreference = 'SilentlyContinue'; `
-    iex \"& {$(irm get.scoop.sh)} -RunAsAdmin \"; `
-    scoop install pwsh
-
-SHELL ["pwsh", "-Command"]
 ARG PROVISION_SCRIPTS_DIR="C:\Users\ContainerAdministrator\provision"
-COPY provision $PROVISION_SCRIPTS_DIR
-COPY provision-windows $PROVISION_SCRIPTS_DIR
-RUN & \"$env:PROVISION_SCRIPTS_DIR\provision-windows.ps1\"
+COPY provision provision-windows $PROVISION_SCRIPTS_DIR/
+
+ARG GITHUB_TOKEN
+SHELL ["powershell", "-Command"]
+RUN & \"$env:PROVISION_SCRIPTS_DIR\provision-scoop-pwsh.ps1\" ;`
+    pwsh -File \"$env:PROVISION_SCRIPTS_DIR\provision-windows.ps1\"
 
 # Create volume where the golang-gocd-bootstrapper will use as work dir
 VOLUME "C:\go-working-dir"
