@@ -2,6 +2,7 @@
 #Requires -Version 7.3
 $PSNativeCommandUseErrorActionPreference = $true
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version Latest
 
 Write-Host "Installing packages..."
@@ -91,4 +92,5 @@ Write-Host "Cleaning up entire gocd clone..."
 cd \
 cmd.exe /c "rmdir /s /q ${env:TEMP}\gocd"
 Write-Host "Cleaned."
+scoop config rm gh_token
 Write-Host "Completed provisioning (layer now exporting...)"
