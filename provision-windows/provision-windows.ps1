@@ -91,6 +91,7 @@ Write-Host "Cleaning up entire gocd clone..."
 ./gradlew clean --no-build-cache --quiet --no-daemon
 cd \
 cmd.exe /c "rmdir /s /q ${env:TEMP}\gocd"
-Write-Host "Cleaned."
+Write-Host "Cleaning up scoop caches..."
+scoop cache rm *
 scoop config rm gh_token
 Write-Host "Completed provisioning (layer now exporting...)"
