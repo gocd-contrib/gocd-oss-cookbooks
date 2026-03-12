@@ -142,7 +142,7 @@ function list_installed_packages() {
 
 function clean() {
   try su - "${PRIMARY_USER}" -c "mise cache clear"
-  try su - "${PRIMARY_USER}" -c "rm ~/.cache"
+  try su - "${PRIMARY_USER}" -c "rm -rf ~/.cache"
   try dnf clean all
   try rm -rf /var/cache/dnf
   try rm -rf /usr/local/src/*

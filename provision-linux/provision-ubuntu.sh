@@ -55,7 +55,7 @@ function install_awscli_mimetypes() {
 
 function clean() {
   try su - "${PRIMARY_USER}" -c "mise cache clear"
-  try su - "${PRIMARY_USER}" -c "rm ~/.cache"
+  try su - "${PRIMARY_USER}" -c "rm -rf ~/.cache"
   try apt-get clean
   try rm -rf /usr/local/src/*
 }
