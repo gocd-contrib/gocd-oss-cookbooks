@@ -35,12 +35,23 @@ function setup_git_config() {
 }
 
 # Install multi-tool version manager mise: https://mise.jdx.dev/
-function install_mise_tools() {
+function mise_install_globally() {
   copy_to_home_dir "${1}" .config/mise/config.toml
   try su - "${PRIMARY_USER}" -c "curl https://mise.run | sh"
-  try su - "${PRIMARY_USER}" -c "GITHUB_TOKEN=\$(cat ${GITHUB_TOKEN_FILE}) CLICOLOR_FORCE=1 mise install"
+  try su - "${PRIMARY_USER}" -c "$(cmd_mise_env) mise install --yes"
   try su - "${PRIMARY_USER}" -c "echo 'export PATH=\"\$HOME/.local/share/mise/shims:\$PATH\"' | tee -a ~/.bashrc ~/.profile"
   try su - "${PRIMARY_USER}" -c "ln -s ~/.local/share/mise ~/.asdf" # Workaround lack of Gradle support for discovering mise toolchains https://github.com/gradle/gradle/issues/29355
+}
+
+function cmd_mise_env() {
+  echo "GITHUB_TOKEN=\$(cat ${GITHUB_TOKEN_FILE}) CLICOLOR_FORCE=1"
+}
+
+# $ mise list --local
+#  Tool    Version  Source                                   Requested
+# groovy  3.0.25   ~/Projects/community/gocd/tmp/mise.toml  3
+function cmd_echo_mise_install_globally_from_local() {
+  echo "export $(cmd_mise_env) && (mise list --local --no-header | awk '{print \$1\"@\"\$4}' | xargs mise use --global --yes)"
 }
 
 # helpers

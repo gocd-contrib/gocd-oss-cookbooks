@@ -3,12 +3,11 @@ auto_install = false
 ruby.compile = false
 
 [tools]
-"java" = "temurin-25"
-
-# Release / code signing
+# Core tools used across many builds
+"java" = "temurin-25" # Also Agent runtime JVM
 "ruby" = "4.0"
 "aws-cli" = { version = "latest", symlink_bins = true }
 
-# Bootstrapping
+# Container Bootstrapping
 "aqua:krallin/tini" = "latest"
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }

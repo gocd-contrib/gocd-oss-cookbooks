@@ -18,7 +18,7 @@ function provision() {
 
   # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
-  step install_mise_tools "mise-ubuntu.toml"
+  step mise_install_globally "mise-ubuntu.toml"
   step install_awscli_mimetypes
 
   step list_installed_packages

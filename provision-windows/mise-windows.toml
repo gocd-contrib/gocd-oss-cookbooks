@@ -5,8 +5,5 @@ auto_install = false
 "java" = "microsoft-25"
 "node" = { version = "24", postinstall = "corepack enable" }
 
-# Unit Test tools
-"ant" = "1"
-
 # Bootstrapping
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent.exe" }

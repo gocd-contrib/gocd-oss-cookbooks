@@ -3,25 +3,15 @@ auto_install = false
 ruby.compile = false
 
 [tools]
-"java" = "temurin-25"
-"node" = { version = "24", postinstall = "corepack enable" }
-
-# Unit Test tools
-"ant" = "1"
-
-# Functional Test tools
+# Core tools used across many builds
+"java" = "temurin-25" # Also Agent runtime JVM
 "ruby" = "4.0"
-"aqua:getgauge/gauge" = { version = "1", postinstall = "gauge install ruby; gauge install html-report; gauge install screenshot" }
-"github:mozilla/geckodriver" = "latest"
-
-# Release / code signing
-"maven" = "3"
-"regctl" = "latest"
+"node" = { version = "24", postinstall = "corepack enable" }
 "aws-cli" = { version = "latest", symlink_bins = true }
 
 # Trial installers / test drive
 "go" = "1"
 
-# Bootstrapping
+# Container Bootstrapping
 "aqua:krallin/tini" = "latest"
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }

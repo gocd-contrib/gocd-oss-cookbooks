@@ -39,7 +39,7 @@ function provision() {
 
   # git, in particular, is used in subsequent provisioning so do this before things like `mise`
   step install_scm_tools
-  step install_mise_tools "mise-rhelcompat.toml"
+  step mise_install_globally "mise-rhelcompat.toml"
   step install_awscli_mimetypes
 
   step install_installer_tools
@@ -149,18 +149,21 @@ function upgrade_os_packages() {
 }
 
 function cache_gocd_dependencies() {
-  try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
-              cd /tmp/gocd && \
-              mise install --yes && \
-              ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet ${GRADLE_OPTIONS} && \
-              ./gradlew --stop && \
-              rm -rf /tmp/gocd"
+  try su - ${PRIMARY_USER} -c "set -euo pipefail && \
+    git clone --depth 1 https://github.com/gocd/gocd /tmp/gocd && \
+    cd /tmp/gocd && \
+    $(cmd_echo_mise_install_globally_from_local) && \
+    ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet ${GRADLE_OPTIONS} && \
+    ./gradlew --stop && \
+    rm -rf /tmp/gocd"
 
   for bundle_repo in ruby-functional-tests codesigning; do
-    try su - ${PRIMARY_USER} -c "git clone --depth 1 https://github.com/gocd/${bundle_repo} /tmp/${bundle_repo} && \
-                cd /tmp/${bundle_repo} && \
-                bundle install && \
-                rm -rf /tmp/${bundle_repo}"
+    try su - ${PRIMARY_USER} -c "set -euo pipefail && \
+      git clone --depth 1 https://github.com/gocd/${bundle_repo} /tmp/${bundle_repo} && \
+      cd /tmp/${bundle_repo} && \
+      $(cmd_echo_mise_install_globally_from_local) && \
+      bundle install && \
+      rm -rf /tmp/${bundle_repo}"
   done
 }
 
