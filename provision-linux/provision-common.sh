@@ -44,7 +44,7 @@ function mise_install_globally() {
 }
 
 function cmd_mise_env() {
-  echo "GITHUB_TOKEN=\$(cat ${GITHUB_TOKEN_FILE}) CLICOLOR_FORCE=1"
+  echo "GITHUB_TOKEN=\$(cat ${GITHUB_TOKEN_FILE}) CLICOLOR=1"
 }
 
 # $ mise list --local
