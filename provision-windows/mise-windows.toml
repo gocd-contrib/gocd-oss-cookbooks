@@ -1,3 +1,6 @@
+[settings]
+auto_install = false
+
 [tools]
 "java" = "microsoft-25"
 "node" = { version = "24", postinstall = "corepack enable" }

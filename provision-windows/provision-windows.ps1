@@ -56,7 +56,6 @@ scoop install mise extras/vcredist2022
 Write-Host "Installing mise tools..."
 $env:CLICOLOR_FORCE = 1
 mise install --yes
-mise settings auto_install=false
 SetUserEnvironmentVariable "JAVA_HOME" (mise where java)
 PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\mise\shims"
 

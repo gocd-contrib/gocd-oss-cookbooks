@@ -1,3 +1,7 @@
+[settings]
+auto_install = false
+ruby.compile = false
+
 [tools]
 "java" = "temurin-25"
 "ruby" = "4.0"
