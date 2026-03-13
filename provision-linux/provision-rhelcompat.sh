@@ -53,9 +53,9 @@ function provision() {
   fi
 
   step list_installed_packages
+  step cache_gocd_dependencies
   step print_versions_summary
 
-  step cache_gocd_dependencies
   step clean
 }
 
