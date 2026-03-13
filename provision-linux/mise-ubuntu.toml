@@ -1,5 +1,4 @@
 [settings]
-auto_install = false
 ruby.compile = false
 
 [tools]

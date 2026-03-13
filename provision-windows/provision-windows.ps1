@@ -89,6 +89,7 @@ Write-Host "Cleaning up entire gocd clone..."
 cd \
 cmd.exe /c "rmdir /s /q ${env:TEMP}\gocd"
 Write-Host "Cleaning up caches..."
+mise settings auto_install=false
 mise cache clear
 scoop cache rm *
 scoop config rm gh_token
