@@ -16,8 +16,8 @@ ruby.compile = false
 
 # Release / code signing
 "maven" = "3"
-"aqua:regclient/regclient/regctl" = "latest"
-"aqua:aws/aws-cli" = { version = "latest", symlink_bins = true }
+"regctl" = "latest"
+"aws-cli" = { version = "latest", symlink_bins = true }
 
 # Trial installers / test drive
 "go" = "1"
