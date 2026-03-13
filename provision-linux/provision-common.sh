@@ -51,7 +51,7 @@ function cmd_mise_env() {
 #  Tool    Version  Source                                   Requested
 # groovy  3.0.25   ~/Projects/community/gocd/tmp/mise.toml  3
 function cmd_echo_mise_install_globally_from_local() {
-  echo "export $(cmd_mise_env) && (mise list --local --no-header --yes | awk -F' {2,}' '{print \$1\"@\"\$4}' | xargs mise use --global --yes)"
+  echo "export $(cmd_mise_env) && mise install --yes && (mise list --local --no-header --yes | awk -F' {2,}' '{print \$1\"@\"\$4}' | xargs mise use --global --yes)"
 }
 
 # helpers
