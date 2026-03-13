@@ -27,7 +27,6 @@ source "$(dirname $0)/provision-common.sh"
 
 # Main entrypoint
 function provision() {
-  step setup_external_repos
   step upgrade_os_packages
 
   # these are build prereqs for subsequent things; install
@@ -58,11 +57,6 @@ function provision() {
 
   step cache_gocd_dependencies
   step clean
-}
-
-function setup_external_repos() {
-  try echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf
-  try dnf -y install epel-release
 }
 
 function install_basic_utils() {
@@ -149,7 +143,9 @@ function clean() {
 }
 
 function upgrade_os_packages() {
+  try echo 'install_weak_deps=False' >> /etc/dnf/dnf.conf
   try dnf -y upgrade --quiet
+  try dnf -y install epel-release
 }
 
 function cache_gocd_dependencies() {
