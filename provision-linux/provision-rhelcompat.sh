@@ -126,7 +126,7 @@ function install_firefox() {
 
 function install_docker() {
   try dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
-  try dnf -y install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin
+  try dnf -y install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin docker-compose-plugin
   try usermod -a -G docker ${PRIMARY_USER}
 }
 
