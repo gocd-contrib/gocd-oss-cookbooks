@@ -5,7 +5,7 @@ ruby.compile = false
 [tools]
 # Core tools used across many builds
 "java" = "temurin-25" # Also Agent runtime JVM
-"ruby" = "4.0.1"
+"ruby" = "4.0"
 "node" = { version = "24", postinstall = "corepack enable" }
 "aws-cli" = { version = "latest", symlink_bins = true }
 
