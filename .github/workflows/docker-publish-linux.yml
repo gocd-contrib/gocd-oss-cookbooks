@@ -61,6 +61,7 @@ jobs:
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
 
       - name: Login to Docker Hub
+        if: ${{ github.event_name != 'pull_request' || startsWith(github.ref, 'refs/pull/') }}
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -74,16 +75,18 @@ jobs:
           file: linux-${{ matrix.distro }}.Dockerfile
           secrets: github_token=${{ secrets.GITHUB_TOKEN }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=${{ env.REGISTRY_IMAGE }},name-canonical=true,push=${{ github.event_name != 'pull_request' }},push-by-digest=${{ github.event_name != 'pull_request' }}
           pull: true
 
       - name: Export digest
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           mkdir -p /tmp/digests
           digest="${{ steps.build.outputs.digest }}"
           touch "/tmp/digests/${digest#sha256:}"
           
       - name: Upload digest
+        if: ${{ github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: digests-${{ matrix.distro }}-${{ matrix.arch }}
@@ -92,8 +95,8 @@ jobs:
           retention-days: 1
 
   linux-push:
-    if: ${{ github.event_name != 'pull_request' }}
     name: linux-push-${{ matrix.distro }}
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: ubuntu-latest
     needs:
       - linux-build
