@@ -104,6 +104,7 @@ jobs:
       matrix:
         distro:
           - rhelcompat-10
+          - ubuntu-24-04
           - dind
     steps:
       - name: Harden the runner (Audit all outbound calls)
