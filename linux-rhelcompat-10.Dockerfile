@@ -2,9 +2,9 @@ FROM almalinux:10
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 ARG PROVISION_SCRIPTS_DIR=/usr/local/src/provision
-ARG GITHUB_TOKEN_FILE=/run/secrets/github_token
+ARG GITHUB_TKN_FILE=/run/secrets/github_token
 COPY provision provision-linux $PROVISION_SCRIPTS_DIR
-RUN --mount=type=secret,id=github_token,target=$GITHUB_TOKEN_FILE,mode=0444,required=true \
+RUN --mount=type=secret,id=github_token,target=$GITHUB_TKN_FILE,mode=0444,required=true \
     $PROVISION_SCRIPTS_DIR/provision-rhelcompat.sh
 
 # Create volume where the golang-gocd-bootstrapper will use as work dir
