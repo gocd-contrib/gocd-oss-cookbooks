@@ -4,7 +4,7 @@ https://hub.docker.com/r/gocddev/gocd-dev-build
 
 - `gocddev/gocd-dev-build:dind-<github_tag>`
 - `gocddev/gocd-dev-build:rhelcompat-10-<github_tag>`
-- `gocddev/gocd-dev-build:ubuntu-24-04-<github_tag>`
+- `gocddev/gocd-dev-build:ubuntu-26-04-<github_tag>`
 - `gocddev/gocd-dev-build:windows-2025-<github_tag>`
 
 To build a new version of the images, push a new version tag to this repository.
@@ -13,7 +13,7 @@ To build a new version of the images, push a new version tag to this repository.
 
 - `docker build --secret id=github_token,env=GITHUB_TOKEN . --pull -t gocddev/gocd-dev-build:dind-SNAPSHOT -f linux-dind.Dockerfile`
 - `docker build --secret id=github_token,env=GITHUB_TOKEN . --pull -t gocddev/gocd-dev-build:rhelcompat-10-SNAPSHOT -f linux-rhelcompat-10.Dockerfile`
-- `docker build --secret id=github_token,env=GITHUB_TOKEN . --pull -t gocddev/gocd-dev-build:ubuntu-24-04-SNAPSHOT -f linux-ubuntu-24-04.Dockerfile`
+- `docker build --secret id=github_token,env=GITHUB_TOKEN . --pull -t gocddev/gocd-dev-build:ubuntu-26-04-SNAPSHOT -f linux-ubuntu-26-04.Dockerfile`
 
 # Publish
 

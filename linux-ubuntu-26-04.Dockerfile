@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 LABEL org.opencontainers.image.authors="GoCD Team <go-cd-dev@googlegroups.com>"
 
 ARG PROVISION_SCRIPTS_DIR=/usr/local/src/provision
@@ -17,5 +17,5 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 ENV PATH="/go/.local/share/mise/shims:/go/.local/bin:${PATH}"
-ENTRYPOINT ["tini", "--"]
+ENTRYPOINT ["tini-static", "--"]
 CMD ["go-agent"]

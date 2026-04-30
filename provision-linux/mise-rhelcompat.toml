@@ -13,5 +13,4 @@ ruby.compile = false
 "go" = "1"
 
 # Container Bootstrapping
-"aqua:krallin/tini" = "latest"
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }

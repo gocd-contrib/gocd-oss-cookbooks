@@ -9,5 +9,4 @@ ruby.compile = false
 "aws-cli" = { version = "latest", symlink_bins = true }
 
 # Container Bootstrapping
-"aqua:krallin/tini" = "latest"
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent" }

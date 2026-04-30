@@ -36,7 +36,7 @@ jobs:
           - aarch64
         distro:
           - rhelcompat-10
-          - ubuntu-24-04
+          - ubuntu-26-04
           - dind
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -105,7 +105,7 @@ jobs:
       matrix:
         distro:
           - rhelcompat-10
-          - ubuntu-24-04
+          - ubuntu-26-04
           - dind
     steps:
       - name: Harden the runner (Audit all outbound calls)
