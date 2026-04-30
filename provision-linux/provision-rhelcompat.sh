@@ -60,7 +60,10 @@ function provision() {
 }
 
 function install_basic_utils() {
-  try dnf -y install procps gnupg2 ncurses file which xz bzip2 gzip unzip zip sudo curl-minimal wget jq glibc-langpack-en tini
+  try dnf -y install procps gnupg2 ncurses file which xz bzip2 gzip unzip zip sudo curl-minimal wget jq glibc-langpack-en
+  try printf '[epel9]\nname=Extra Packages for Enterprise Linux 9 - $basearch\nbaseurl=https://download.fedoraproject.org/pub/epel/9/Everything/$basearch/\nenabled=0\ngpgcheck=1\ngpgkey=https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-9' > /etc/yum.repos.d/epel9.repo
+  try dnf -y --enablerepo=epel9 install -y tini-static
+  try rm /etc/yum.repos.d/epel9.repo
 }
 
 function install_native_build_packages() {
