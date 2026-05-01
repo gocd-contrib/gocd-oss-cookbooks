@@ -4,6 +4,7 @@ auto_install = false
 [tools]
 "java" = "microsoft-25"
 "node" = { version = "24", postinstall = "corepack enable" }
+"github:nant2/nant2" = { version = "0-92", version_prefix = "rel-" }
 
 # Bootstrapping
 "github:gocd-contrib/gocd-golang-bootstrapper" = { version = "latest", bin = "go-agent.exe" }

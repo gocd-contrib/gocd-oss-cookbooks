@@ -58,12 +58,7 @@ mise install --yes
 SetUserEnvironmentVariable "JAVA_HOME" (mise where java)
 PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\mise\shims"
 
-Write-Host "Installing additional non-managed tools..."
-# Install nant
-Invoke-WebRequest https://github.com/NAnt2/NAnt2/releases/download/rel-0-92/nant-0.92-bin.zip -Outfile "${env:TEMP}\nant.zip"
-Expand-Archive -Path "${env:TEMP}\nant.zip" -DestinationPath "C:\tools"
-PrefixToUserAndCurrentPath "C:\tools\nant-0.92\bin"
-Remove-Item "${env:TEMP}\nant.zip" -Force
+Write-Host "Installing perforce client/server..."
 # install p4 client and p4d / helix-core-server
 New-Item "C:\tools\Perforce\bin" -ItemType Directory | Out-Null
 Invoke-WebRequest https://cdist2.perforce.com/perforce/r$P4_VERSION/bin.ntx64/p4.exe -Outfile "C:\tools\Perforce\bin\p4.exe"
