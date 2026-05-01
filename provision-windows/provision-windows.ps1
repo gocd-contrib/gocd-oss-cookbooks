@@ -7,7 +7,6 @@ Set-StrictMode -Version Latest
 
 Write-Host "Installing packages..."
 $P4_VERSION='25.2'
-$NANT_VERSION='0.92'
 
 # Copy over configs
 New-Item "${env:USERPROFILE}\.config\mise" -ItemType Directory | Out-Null
@@ -61,9 +60,9 @@ PrefixToUserAndCurrentPath "${env:LOCALAPPDATA}\mise\shims"
 
 Write-Host "Installing additional non-managed tools..."
 # Install nant
-Invoke-WebRequest https://onboardcloud.dl.sourceforge.net/project/nant/nant/${NANT_VERSION}/nant-${NANT_VERSION}-bin.zip?viasf=1 -Outfile "${env:TEMP}\nant.zip"
+Invoke-WebRequest https://github.com/NAnt2/NAnt2/releases/download/rel-0-92/nant-0.92-bin.zip -Outfile "${env:TEMP}\nant.zip"
 Expand-Archive -Path "${env:TEMP}\nant.zip" -DestinationPath "C:\tools"
-PrefixToUserAndCurrentPath "C:\tools\nant-${NANT_VERSION}\bin"
+PrefixToUserAndCurrentPath "C:\tools\nant-0.92\bin"
 Remove-Item "${env:TEMP}\nant.zip" -Force
 # install p4 client and p4d / helix-core-server
 New-Item "C:\tools\Perforce\bin" -ItemType Directory | Out-Null
