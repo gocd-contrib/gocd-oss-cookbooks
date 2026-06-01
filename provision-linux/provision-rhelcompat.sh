@@ -17,8 +17,8 @@ for arg in $@; do
 done
 
 NSIS_VERSION=3.11-1.el9 # https://nsis.sourceforge.io/Docs/AppendixF.html / https://github.com/gocd/nsis-rpm/tree/gh-pages/rpms
-P4_VERSION=26.1         # https://cdist2.perforce.com/perforce/
-P4D_VERSION=26.1
+P4_VERSION=25.2         # https://cdist2.perforce.com/perforce/
+P4D_VERSION=25.2
 DOCKER_VERSION=29       # https://download.docker.com/linux/rhel/10/x86_64/stable/Packages/
 
 RHEL_COMPAT_MAJOR_VERSION=$(rpm -qa \*-release | grep -oiP "(oracle|redhat|centos|alma|rocky).*-release-\K[0-9]+")
