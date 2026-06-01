@@ -6,7 +6,7 @@ $ProgressPreference = 'SilentlyContinue'
 Set-StrictMode -Version Latest
 
 Write-Host "Installing packages..."
-$P4_VERSION='25.2'
+$P4_VERSION='26.1'
 
 # Copy over configs
 New-Item "${env:USERPROFILE}\.config\mise" -ItemType Directory | Out-Null
