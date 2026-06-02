@@ -83,6 +83,9 @@ Write-Host "Cleaning up entire gocd clone..."
 ./gradlew clean --no-build-cache --quiet --no-daemon
 cd \
 cmd.exe /c "rmdir /s /q ${env:TEMP}\gocd"
+# see https://github.com/ruby/rubygems/issues/9271 - only fixed in Bundler 4.0.6+ https://github.com/ruby/rubygems/releases/tag/bundler-v4.0.6
+# Unfortunately means it is broken for the embedded bundler in JRuby 9.4.x, 10.0.x and 10.1.0
+cmd.exe /c "rmdir /s /q ${env:USERPROFILE}\.bundle\cache\compact_index"
 Write-Host "Cleaning up caches..."
 mise cache clear
 scoop cache rm *
