@@ -168,6 +168,10 @@ function cache_gocd_dependencies() {
       bundle install && \
       rm -rf /tmp/${bundle_repo}"
   done
+
+  # see https://github.com/ruby/rubygems/issues/9271 - only fixed in Bundler 4.0.6+ https://github.com/ruby/rubygems/releases/tag/bundler-v4.0.6
+  # Unfortunately means it is broken for the embedded bundler in JRuby 9.4.x, 10.0.x and 10.1.0
+  try su - "${PRIMARY_USER}" -c "rm -rf ~/.bundle/cache/compact_index"
 }
 
 provision
