@@ -4,12 +4,13 @@
 
 gradle.settingsEvaluated { settings ->
   settings.pluginManagement.repositories {
-    clear()
+    clear() // replace, don't shadow, any repositories the build's own settings declares
     maven { url = 'https://nexus.gocd.io/repository/internal' }
   }
   settings.dependencyResolutionManagement {
     repositoriesMode = org.gradle.api.initialization.resolve.RepositoriesMode.PREFER_SETTINGS
     repositories {
+      clear() // replace, don't shadow, any repositories the build's own settings declares
       maven { url = 'https://nexus.gocd.io/repository/internal' }
     }
   }
