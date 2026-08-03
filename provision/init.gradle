@@ -12,6 +12,18 @@ gradle.settingsEvaluated { settings ->
     repositories {
       clear() // replace, don't shadow, any repositories the build's own settings declares
       maven { url = 'https://nexus.gocd.io/repository/internal' }
+
+      // Escape hatch for builds that consume artifacts published to mavenLocal, which can opt in via
+      // `allowMavenLocalForGroups=<group>,...` in their gradle.properties. Scoped to the declared
+      // groups so nothing else resolves from local state.
+      def localGroups = settings.providers.gradleProperty('allowMavenLocalForGroups')
+      if (localGroups.present) {
+        mavenLocal { repo ->
+          repo.content {
+            localGroups.get().split(',').each { includeGroupAndSubgroups(it.trim()) }
+          }
+        }
+      }
     }
   }
 }
