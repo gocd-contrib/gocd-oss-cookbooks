@@ -1,0 +1,25 @@
+#!/bin/bash
+# Launcher for agents that need docker-in-docker: starts dockerd, (re-)registers
+# qemu binfmt handlers for emulated multi-arch builds, then hands over to the GoCD agent.
+#
+# Intended as the container command in place of plain `go-agent`, configured via environment:
+#   START_DOCKERD           "false" to skip dockerd startup entirely (default: true)
+#   DOCKERD_ADDITIONAL_ARGS extra dockerd args, e.g. --registry-mirror=https://my-mirror.example.com
+#   DOCKERD_MAX_WAIT_SECS   how long to wait for dockerd readiness (default: 60)
+set -eu
+
+if [ "${START_DOCKERD:-true}" = "true" ]; then
+  sudo su - -c "cd / ; setsid nohup dockerd --host=unix:///var/run/docker.sock ${DOCKERD_ADDITIONAL_ARGS:-} > /var/log/dockerd.log 2>&1 &"
+
+  if ! timeout "${DOCKERD_MAX_WAIT_SECS:-60}" bash -c 'until docker info > /dev/null 2>&1; do sleep 1; done'; then
+    echo "dockerd did not become ready within ${DOCKERD_MAX_WAIT_SECS:-60}s, log follows..." >&2
+    sudo cat /var/log/dockerd.log >&2 || true
+    exit 1
+  fi
+
+  # Handlers are registered in the (host-global) kernel and stick until reboot.
+  docker run --privileged --rm "docker.io/tonistiigi/binfmt:latest" --install "arm64,amd64" ||
+  echo "WARNING: binfmt registration for [arm64,amd64] failed; emulated builds may not work" >&2
+fi
+
+exec go-agent
