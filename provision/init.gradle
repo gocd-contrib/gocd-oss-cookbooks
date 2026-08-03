@@ -2,27 +2,15 @@
 // This file is managed by automation. Any changes will be lost.
 //
 
-import org.gradle.util.GradleVersion
-
-addListener new BuildAdapter() {
-  def void projectsLoaded(Gradle gradle) {
-
-    // As soon as the projects are loaded, we add our repository before any other repositories
-    gradle.rootProject {
-      buildscript.repositories {
-        maven { url = "https://nexus.gocd.io/repository/internal" }
-      }
-      repositories {
-        maven { url = "https://nexus.gocd.io/repository/internal" }
-      }
-    }
-    gradle.rootProject.allprojects {
-      buildscript.repositories {
-        maven { url = "https://nexus.gocd.io/repository/internal" }
-      }
-      repositories {
-        maven { url = "https://nexus.gocd.io/repository/internal" }
-      }
+gradle.settingsEvaluated { settings ->
+  settings.pluginManagement.repositories {
+    clear()
+    maven { url = 'https://nexus.gocd.io/repository/internal' }
+  }
+  settings.dependencyResolutionManagement {
+    repositoriesMode = org.gradle.api.initialization.resolve.RepositoriesMode.PREFER_SETTINGS
+    repositories {
+      maven { url = 'https://nexus.gocd.io/repository/internal' }
     }
   }
 }
