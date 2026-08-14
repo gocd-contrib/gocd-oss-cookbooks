@@ -40,6 +40,14 @@ jobs:
           egress-policy: audit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      # workaround for https://github.com/actions/runner-images/issues/13729#issuecomment-4183956802
+      - name: Ensure Docker service started
+        run: |
+          $dockerSvc = Get-Service -Name "docker"
+          if ($dockerSvc.Status -ne "Running") {
+            Start-Service -Name "docker"
+          }
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
