@@ -77,7 +77,7 @@ Write-Host "Initializing Gradle cache for gocd..."
 git clone https://github.com/gocd/gocd --depth 1 "${env:TEMP}\gocd" --quiet
 cd "${env:TEMP}\gocd"
 mise install --yes
-mise list --local --no-header --yes | % { $p = $_ -split '\s{2,}'; mise use --global --yes "$($p[0])@$($p[3])" }
+mise use --global --yes ((mise list --local --json | ConvertFrom-Json).PSObject.Properties | % { "$($_.Name)@$($_.Value.requested_version)" })
 ./gradlew resolveExternalDependencies compileAll --no-build-cache --quiet --stacktrace --no-daemon
 Write-Host "Cleaning up entire gocd clone..."
 ./gradlew clean --no-build-cache --quiet --no-daemon
