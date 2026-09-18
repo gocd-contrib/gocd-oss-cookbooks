@@ -16,10 +16,6 @@ if [ "${START_DOCKERD:-true}" = "true" ]; then
     sudo cat /var/log/dockerd.log >&2 || true
     exit 1
   fi
-
-  # Handlers are registered in the (host-global) kernel and stick until reboot.
-  docker run --privileged --rm "docker.io/tonistiigi/binfmt:latest" --install "arm64,amd64" ||
-  echo "WARNING: binfmt registration for [arm64,amd64] failed; emulated builds may not work" >&2
 fi
 
 exec go-agent
