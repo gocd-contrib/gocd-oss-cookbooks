@@ -35,7 +35,7 @@ jobs:
           - { distro: windows-2025, edition: ltsc2025 }
     steps:
       - name: Harden the runner (Audit all outbound calls)
-        uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           egress-policy: audit
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -61,7 +61,7 @@ jobs:
             type=schedule,pattern={{date 'YYYYMMDD'}}
 
       - name: Build and push
-        uses: mr-smithers-excellent/docker-build-push@ef432483bd0252dd948d1d11e60c96a1c93646a9 # v7.0
+        uses: mr-smithers-excellent/docker-build-push@3714eb54de0c1b0f96899c36190090b21cd44a6e # v7.1
         with:
           dockerfile: windowsservercore.Dockerfile
           # no secrets/buildkit support for windows, so have to be content with the ephemeral read-only token being in the layer :(
