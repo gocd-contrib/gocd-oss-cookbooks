@@ -68,7 +68,7 @@ function install_basic_utils() {
 
 function install_native_build_packages() {
   # Core stuff
-  try dnf -y install autoconf automake make patch gcc
+  try dnf -y install autoconf automake make patch gcc libatomic
 }
 
 function install_scm_tools() {
