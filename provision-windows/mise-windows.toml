@@ -3,7 +3,7 @@ auto_install = false
 
 [tools]
 "java" = "microsoft-25"
-"node" = { version = "26", postinstall = "corepack enable" }
+"node" = { version = "26", postinstall = "npm install -g corepack && corepack enable" }
 "github:nant2/nant2" = { version = "0-92", version_prefix = "rel-" }
 
 # Bootstrapping
