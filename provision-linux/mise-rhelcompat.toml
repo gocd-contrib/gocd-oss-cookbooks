@@ -6,7 +6,8 @@ ruby.compile = false
 # Core tools used across many builds
 "java" = "temurin-25" # Also Agent runtime JVM
 "ruby" = "4.0"
-"node" = { version = "26", postinstall = "npm install -g corepack && corepack enable" }
+"node" = "26"
+"npm:corepack" = "latest"
 "aws-cli" = { version = "latest", symlink_bins = true }
 
 # Trial installers / test drive
