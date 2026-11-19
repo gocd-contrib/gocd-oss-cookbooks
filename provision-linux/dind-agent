@@ -11,23 +11,10 @@
 #   DOCKERHUB_MIRROR_PASSWORD password for the dockerhub mirror
 set -eu
 
-configure_dockerhub_mirror() (
-  auth=""
-  if [ -n "${DOCKERHUB_MIRROR_USERNAME:-}" ] && [ -n "${DOCKERHUB_MIRROR_PASSWORD:-}" ]; then
-    auth="[header]
-  Authorization = \"Basic $(printf '%s' "${DOCKERHUB_MIRROR_USERNAME}:${DOCKERHUB_MIRROR_PASSWORD}" | base64 | tr -d '\n')\""
-  fi
+source "$(cd `dirname $0` && pwd)/dind-configure-mirror"
 
-  sudo install -d -m 755 /etc/docker/certs.d/docker.io
-  sudo sh -c 'umask 077; cat > /etc/docker/certs.d/docker.io/hosts.toml' <<EOF
-server = "${DOCKERHUB_MIRROR}"
-capabilities = ["pull", "resolve"]
-
-${auth}
-EOF
-)
-
-start_dockerd() (
+if [ "${START_DOCKERD:-true}" = "true" ]; then
+  echo "Starting dockerd..."
   sudo su - -c "cd / ; setsid nohup dockerd --host=unix:///var/run/docker.sock ${DOCKERD_ADDITIONAL_ARGS:-} > /var/log/dockerd.log 2>&1 &"
 
   if ! timeout "${DOCKERD_MAX_WAIT_SECS:-60}" bash -c 'until docker info > /dev/null 2>&1; do sleep 1; done'; then
@@ -35,16 +22,6 @@ start_dockerd() (
     sudo cat /var/log/dockerd.log >&2 || true
     exit 1
   fi
-)
-
-if [ -n "${DOCKERHUB_MIRROR:-}" ]; then
-  echo "Configuring dockerhub mirror: $DOCKERHUB_MIRROR"
-  configure_dockerhub_mirror
-fi
-
-if [ "${START_DOCKERD:-true}" = "true" ]; then
-  echo "Starting dockerd..."
-  start_dockerd
 fi
 
 echo "Starting go agent..."

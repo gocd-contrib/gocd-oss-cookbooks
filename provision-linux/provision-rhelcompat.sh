@@ -132,6 +132,7 @@ function install_docker() {
   try dnf -y install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin docker-compose-plugin
   try usermod -a -G docker ${PRIMARY_USER}
   try install -m 0755 $(dirname $0)/dind-agent /usr/local/bin/dind-agent
+  try install -m 0755 $(dirname $0)/dind-configure-mirror /usr/local/bin/dind-configure-mirror
 }
 
 function list_installed_packages() {

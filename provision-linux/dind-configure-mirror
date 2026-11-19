@@ -1,0 +1,24 @@
+#!/bin/bash
+# Configures a mirror for use by dockerd using containerd image snapshotter based on passed env vars:
+#
+#   DOCKERHUB_MIRROR          https URL to a dockerhub mirror to ALWAYS use rather than registry-1.docker.io/index.docker.io
+#   DOCKERHUB_MIRROR_USERNAME username for the dockerhub mirror
+#   DOCKERHUB_MIRROR_PASSWORD password for the dockerhub mirror
+
+if [ -n "${DOCKERHUB_MIRROR:-}" ]; then
+  echo "Configuring dockerhub mirror: $DOCKERHUB_MIRROR"
+  auth=""
+  if [ -n "${DOCKERHUB_MIRROR_USERNAME:-}" ] && [ -n "${DOCKERHUB_MIRROR_PASSWORD:-}" ]; then
+    auth="[header]
+  Authorization = \"Basic $(printf '%s' "${DOCKERHUB_MIRROR_USERNAME}:${DOCKERHUB_MIRROR_PASSWORD}" | base64 | tr -d '\n')\""
+  fi
+
+  sudo install -d -m 755 /etc/docker/certs.d/docker.io
+  sudo sh -c 'umask 077; cat > /etc/docker/certs.d/docker.io/hosts.toml' <<EOF
+server = "${DOCKERHUB_MIRROR}"
+capabilities = ["pull", "resolve"]
+
+${auth}
+EOF
+
+fi
