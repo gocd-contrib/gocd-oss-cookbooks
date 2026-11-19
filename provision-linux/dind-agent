@@ -3,12 +3,31 @@
 # qemu binfmt handlers for emulated multi-arch builds, then hands over to the GoCD agent.
 #
 # Intended as the container command in place of plain `go-agent`, configured via environment:
-#   START_DOCKERD           "false" to skip dockerd startup entirely (default: true)
-#   DOCKERD_ADDITIONAL_ARGS extra dockerd args, e.g. --registry-mirror=https://my-mirror.example.com
-#   DOCKERD_MAX_WAIT_SECS   how long to wait for dockerd readiness (default: 60)
+#   START_DOCKERD             "false" to skip dockerd startup entirely (default: true)
+#   DOCKERD_ADDITIONAL_ARGS   extra dockerd args
+#   DOCKERD_MAX_WAIT_SECS     how long to wait for dockerd readiness (default: 60)
+#   DOCKERHUB_MIRROR          https URL to a dockerhub mirror to ALWAYS use rather than registry-1.docker.io/index.docker.io
+#   DOCKERHUB_MIRROR_USERNAME username for the dockerhub mirror
+#   DOCKERHUB_MIRROR_PASSWORD password for the dockerhub mirror
 set -eu
 
-if [ "${START_DOCKERD:-true}" = "true" ]; then
+configure_dockerhub_mirror() (
+  auth=""
+  if [ -n "${DOCKERHUB_MIRROR_USERNAME:-}" ] && [ -n "${DOCKERHUB_MIRROR_PASSWORD:-}" ]; then
+    auth="[header]
+  Authorization = \"Basic $(printf '%s' "${DOCKERHUB_MIRROR_USERNAME}:${DOCKERHUB_MIRROR_PASSWORD}" | base64 | tr -d '\n')\""
+  fi
+
+  sudo install -d -m 755 /etc/docker/certs.d/docker.io
+  sudo sh -c 'umask 077; cat > /etc/docker/certs.d/docker.io/hosts.toml' <<EOF
+server = "${DOCKERHUB_MIRROR}"
+capabilities = ["pull", "resolve"]
+
+${auth}
+EOF
+)
+
+start_dockerd() (
   sudo su - -c "cd / ; setsid nohup dockerd --host=unix:///var/run/docker.sock ${DOCKERD_ADDITIONAL_ARGS:-} > /var/log/dockerd.log 2>&1 &"
 
   if ! timeout "${DOCKERD_MAX_WAIT_SECS:-60}" bash -c 'until docker info > /dev/null 2>&1; do sleep 1; done'; then
@@ -16,6 +35,17 @@ if [ "${START_DOCKERD:-true}" = "true" ]; then
     sudo cat /var/log/dockerd.log >&2 || true
     exit 1
   fi
+)
+
+if [ -n "${DOCKERHUB_MIRROR:-}" ]; then
+  echo "Configuring dockerhub mirror: $DOCKERHUB_MIRROR"
+  configure_dockerhub_mirror
 fi
 
+if [ "${START_DOCKERD:-true}" = "true" ]; then
+  echo "Starting dockerd..."
+  start_dockerd
+fi
+
+echo "Starting go agent..."
 exec go-agent
