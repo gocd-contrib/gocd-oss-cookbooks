@@ -19,7 +19,7 @@ done
 NSIS_VERSION=3.13-1.el10 # https://nsis.sourceforge.io/Docs/AppendixF.html / https://github.com/gocd/nsis-rpm/tree/gh-pages/rpms
 P4_VERSION=26.1          # https://cdist2.perforce.com/perforce/
 P4D_VERSION=26.1
-DOCKER_VERSION=29        # https://download.docker.com/linux/rhel/10/x86_64/stable/Packages/
+DOCKER_VERSION=29        # https://download.docker.com/linux/alma/10/x86_64/stable/Packages/
 
 RHEL_COMPAT_MAJOR_VERSION=$(rpm -qa \*-release | grep -oiP "(oracle|redhat|centos|alma|rocky).*-release-\K[0-9]+")
 # import functions
@@ -128,7 +128,7 @@ function install_firefox() {
 }
 
 function install_docker() {
-  try dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+  try dnf config-manager --add-repo https://download.docker.com/linux/alma/docker-ce.repo
   try dnf -y install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin docker-compose-plugin
   try usermod -a -G docker ${PRIMARY_USER}
   try install -m 0755 $(dirname $0)/dind-agent /usr/local/bin/dind-agent
