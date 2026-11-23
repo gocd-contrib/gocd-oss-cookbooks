@@ -45,7 +45,7 @@ function provision() {
   step install_installer_tools
 
   # For functional tests
-  step install_postgresql "15" "16" "17" "18"
+  step install_postgresql "16" "17" "18" "19"
   step install_firefox
 
   if [ "${SKIP_INTERNAL_CONFIG:-}" != "yes" ]; then
