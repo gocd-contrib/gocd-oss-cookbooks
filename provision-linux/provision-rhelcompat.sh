@@ -129,7 +129,7 @@ function install_firefox() {
 
 function install_docker() {
   try dnf config-manager --add-repo https://download.docker.com/linux/alma/docker-ce.repo
-  try dnf -y --setopt=install_weak_deps=True install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin docker-compose-plugin
+  try dnf -y install docker-ce-${DOCKER_VERSION}* containerd.io docker-buildx-plugin docker-compose-plugin iptables-nft
   try usermod -a -G docker ${PRIMARY_USER}
   try install -m 0755 $(dirname $0)/dind-agent /usr/local/bin/dind-agent
   try install -m 0755 $(dirname $0)/dind-configure-mirror /usr/local/bin/dind-configure-mirror
